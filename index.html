@@ -48,6 +48,14 @@
 
     /* ── Home Screen ── */
     #homeScreen { position:relative;z-index:1;min-height:100vh;padding-bottom:32px; }
+    .below-title-bg {
+      min-height: calc(100vh - 132px);
+      background-image: url('./firework-bg.jpg');
+      background-size: 100% auto;
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-color: #071d56;
+    }
     .app-header {
       position:relative;overflow:hidden;
       padding: 48px 20px 32px; text-align:center;
@@ -346,7 +354,8 @@
     <div class="app-title" data-i18n="appTitle">⭐ 寶貝成長紀錄 ⭐</div>
     <div class="app-subtitle" data-i18n="appSubtitle">寶貝的成長冒險日記</div>
   </div>
-  <div style="padding:48px 24px;max-width:380px;margin:0 auto;">
+  <div class="below-title-bg" style="padding:48px 24px;">
+    <div style="max-width:380px;margin:0 auto;">
     <div style="background:var(--card);border:4px solid var(--ink);border-radius:20px;padding:32px 24px;box-shadow:6px 6px 0 var(--ink);text-align:center;">
       <div style="font-size:3.2em;margin-bottom:16px;">👑</div>
       <div style="font-family:var(--pixel);font-size:0.6em;color:var(--ink);line-height:2.2;margin-bottom:8px;" data-i18n="loginTitle">登入你的帳號</div>
@@ -355,6 +364,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
         <span data-i18n="googleBtn">使用 Google 帳號登入</span>
       </button>
+    </div>
     </div>
   </div>
 </div>
@@ -374,7 +384,9 @@
       <button onclick="deleteAccount()" style="background:none;border:none;color:rgba(255,160,160,0.75);font-size:0.48em;cursor:pointer;text-decoration:underline;font-weight:700;font-family:var(--pixel);padding:2px 0;letter-spacing:0.3px;" data-i18n="deleteAccountBtn">⚠ 刪除帳號 &amp; 所有資料</button>
     </div>
   </div>
-  <div class="child-grid" id="childGrid"></div>
+  <main class="below-title-bg">
+    <div class="child-grid" id="childGrid"></div>
+  </main>
 </div>
 
 <!-- ══ CHILD SCREEN ══ -->
