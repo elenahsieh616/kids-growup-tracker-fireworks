@@ -32,6 +32,13 @@
       background-attachment: fixed;
       color: var(--ink); min-height: 100vh; position: relative;
     }
+    .main-bg {
+      background-image: url('./整體背景.jpg');
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
     body::before {
       content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
       background-image: radial-gradient(circle, rgba(255,255,255,0.18) 1.5px, transparent 1.5px);
@@ -416,21 +423,24 @@
       --shadow-card:0 14px 32px rgba(38,27,72,0.16),0 3px 0 rgba(244,213,139,0.42),inset 0 1px 0 rgba(255,255,255,0.78);
     }
     body {
-      background:
-        radial-gradient(ellipse at 18% 18%,rgba(247,185,200,0.20),transparent 34%),
-        radial-gradient(ellipse at 78% 30%,rgba(244,213,139,0.18),transparent 30%),
-        linear-gradient(180deg,#1B255C 0%,#263473 38%,#3C3A83 68%,#6B5B98 100%);
+      background-color:#1B255C;
       color:var(--ink);
     }
+    body.main-bg {
+      background-image: url('./整體背景.jpg');
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
     body::before {
-      z-index:0;opacity:0.58;mix-blend-mode:soft-light;
+      z-index:0;opacity:0.72;mix-blend-mode:screen;
       background-image:
-        url("%E6%95%B4%E9%AB%94%E8%83%8C%E6%99%AF.jpg"),
-        radial-gradient(circle at 22% 28%,rgba(255,255,255,0.46) 0 1px,transparent 1.6px),
-        radial-gradient(circle at 70% 18%,rgba(255,244,205,0.42) 0 1px,transparent 1.7px),
+        radial-gradient(circle at 22% 28%,rgba(255,255,255,0.42) 0 1px,transparent 1.6px),
+        radial-gradient(circle at 70% 18%,rgba(255,244,205,0.38) 0 1px,transparent 1.7px),
         linear-gradient(115deg,rgba(255,255,255,0.055) 25%,transparent 25% 50%,rgba(255,255,255,0.04) 50% 75%,transparent 75%);
-      background-size:cover,106px 106px,148px 148px,9px 9px;
-      background-position:center bottom,0 0,26px 18px,0 0;
+      background-size:106px 106px,148px 148px,9px 9px;
+      background-position:0 0,26px 18px,0 0;
       animation:nightBreath 18s ease-in-out infinite;
     }
     body::after {
@@ -440,7 +450,7 @@
         radial-gradient(ellipse at 82% 30%,rgba(168,203,235,0.13),transparent 30%),
         radial-gradient(ellipse at 50% 105%,rgba(255,204,138,0.20),transparent 36%),
         radial-gradient(ellipse at 8% 75%,rgba(180,197,231,0.14),transparent 28%),
-        linear-gradient(180deg,rgba(15,21,58,0.26) 0%,transparent 28% 70%,rgba(31,24,63,0.38) 100%);
+        linear-gradient(180deg,rgba(15,21,58,0.08) 0%,transparent 28% 70%,rgba(31,24,63,0.18) 100%);
     }
     @keyframes nightBreath {
       0%,100% { opacity:0.36;filter:saturate(0.9) blur(0.15px); }
@@ -448,11 +458,13 @@
     }
     .app-header,.hero {
       background:
-        radial-gradient(ellipse at 15% 0%,rgba(255,224,196,0.46),transparent 36%),
-        radial-gradient(ellipse at 86% 16%,rgba(244,190,209,0.42),transparent 34%),
-        linear-gradient(160deg,rgba(160,83,119,0.90) 0%,rgba(103,74,141,0.82) 48%,rgba(38,51,112,0.78) 100%);
+        radial-gradient(ellipse at 15% 0%,rgba(255,224,196,0.52),transparent 36%),
+        radial-gradient(ellipse at 86% 16%,rgba(244,190,209,0.48),transparent 34%),
+        linear-gradient(160deg,rgba(202,106,126,0.72) 0%,rgba(175,103,139,0.54) 54%,rgba(90,76,139,0.34) 100%);
       border-bottom:1px solid rgba(244,213,139,0.72);
-      box-shadow:0 12px 42px rgba(36,28,76,0.24);
+      box-shadow:0 12px 42px rgba(36,28,76,0.18);
+      backdrop-filter:blur(2px) saturate(1.03);
+      -webkit-backdrop-filter:blur(2px) saturate(1.03);
     }
     .app-header::before,.hero::before {
       background:
@@ -477,7 +489,7 @@
     .app-subtitle,.hero-sub,.user-email { color:rgba(255,238,226,0.82); }
     .card,.child-card,.modal-box,.loading-box,#loginScreen > div:nth-of-type(2) > div {
       background:
-        linear-gradient(145deg,rgba(255,253,235,0.90),rgba(250,239,226,0.78)),
+        linear-gradient(145deg,rgba(255,253,235,0.82),rgba(250,239,226,0.68)),
         radial-gradient(ellipse at 12% 0%,rgba(246,213,231,0.28),transparent 48%);
       border:1px solid rgba(244,213,139,0.80);
       box-shadow:var(--shadow-card);
@@ -492,7 +504,7 @@
     .add-card {
       position:relative;overflow:hidden;
       background:
-        linear-gradient(145deg,rgba(255,255,246,0.20),rgba(244,213,139,0.12)),
+        linear-gradient(145deg,rgba(255,255,246,0.28),rgba(244,213,139,0.14)),
         radial-gradient(ellipse at 50% 35%,rgba(255,225,174,0.22),transparent 48%);
       border:1px solid rgba(248,223,162,0.92);
       box-shadow:0 18px 48px rgba(31,24,70,0.24),0 0 0 1px rgba(255,255,255,0.18) inset,0 0 34px rgba(244,190,209,0.12);
@@ -649,17 +661,18 @@
     .b-tower::after { content:'';width:3px;height:3px;border-radius:50%;top:12px;background:rgba(255,216,150,0.76);box-shadow:0 22px 0 rgba(255,216,150,0.62),0 44px 0 rgba(255,216,150,0.46); }
     #bgHillsFar {
       background:radial-gradient(ellipse 290px 92px at 10% 100%,rgba(22,34,76,0.86) 99%,transparent 100%),radial-gradient(ellipse 360px 112px at 36% 100%,rgba(25,39,86,0.88) 99%,transparent 100%),radial-gradient(ellipse 320px 102px at 68% 100%,rgba(23,36,80,0.84) 99%,transparent 100%),radial-gradient(ellipse 260px 92px at 96% 100%,rgba(20,32,72,0.86) 99%,transparent 100%);
-      opacity:0.76;
+      opacity:0.38;
     }
     #bgHillsNear {
       background:radial-gradient(ellipse 330px 118px at 12% 100%,rgba(22,30,68,0.92) 99%,transparent 100%),radial-gradient(ellipse 410px 132px at 48% 100%,rgba(25,34,75,0.94) 99%,transparent 100%),radial-gradient(ellipse 350px 120px at 86% 100%,rgba(21,30,68,0.92) 99%,transparent 100%);
-      opacity:0.82;
+      opacity:0.42;
     }
     #bgGround {
-      height:58px;border-top:1px solid rgba(244,213,139,0.22);
+      height:58px;border-top:1px solid rgba(244,213,139,0.14);
       background:
         linear-gradient(90deg,transparent 0 4%,rgba(255,205,135,0.50) 4.4% 4.8%,transparent 5.2% 14%,rgba(255,226,167,0.42) 14.4% 14.8%,transparent 15.2% 38%,rgba(255,197,128,0.38) 38.3% 38.7%,transparent 39.2% 63%,rgba(255,230,168,0.46) 63.4% 63.8%,transparent 64.2%),
         linear-gradient(180deg,rgba(32,32,74,0.86),rgba(20,24,58,0.94));
+      opacity:0.48;
       box-shadow:inset 0 12px 24px rgba(255,219,159,0.08);
     }
     @media (prefers-reduced-motion:reduce) {
@@ -701,7 +714,7 @@
 
   </style>
 </head>
-<body>
+<body class="main-bg">
 
 <!-- ══ PIXEL BACKGROUND ══ -->
 <div id="pixelBg" aria-hidden="true">
