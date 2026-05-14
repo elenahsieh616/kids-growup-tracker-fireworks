@@ -31,6 +31,7 @@
       font-family: 'Noto Serif TC', -apple-system, BlinkMacSystemFont, '微軟正黑體', serif;
       background: #0a0d2e url('images/content-bg.jpg') top center / 100% auto no-repeat;
       color: var(--ink); min-height: 100vh; position: relative;
+      animation: sk-bg-breathe 14s ease-in-out infinite;
     }
 
     /* ── Loading Overlay ── */
@@ -89,10 +90,10 @@
     .share-add-row { display:flex;gap:8px; }
     .share-add-row input { flex:1; }
     .share-note { font-size:0.72em;color:var(--muted);font-weight:600;margin-top:10px;line-height:1.5; }
-    .add-card { border:4px dashed rgba(26,15,58,0.55);border-radius:20px;padding:22px 16px 18px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;transition:background 0.15s,transform 0.15s cubic-bezier(0.34,1.56,0.64,1); }
-    .add-card:hover { background:rgba(255,255,255,0.28);transform:translate(-2px,-2px); }
+    .add-card { background:rgba(255,248,200,0.08);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:2px solid rgba(255,210,80,0.6);border-radius:20px;padding:22px 16px 18px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;transition:background 0.2s,transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s;box-shadow:0 0 20px rgba(255,210,60,0.3),0 0 40px rgba(255,160,80,0.15),inset 0 0 28px rgba(255,255,255,0.06); }
+    .add-card:hover { background:rgba(255,248,200,0.16);transform:translate(-2px,-4px);box-shadow:0 0 28px rgba(255,210,60,0.5),0 0 56px rgba(255,160,80,0.25),inset 0 0 28px rgba(255,255,255,0.1); }
     .add-card-icon { font-size:2.6em;margin-bottom:8px; }
-    .add-card-text { font-size:0.58em;font-family:var(--pixel);font-weight:900;color:rgba(26,15,58,0.75);letter-spacing:1px;line-height:2; }
+    .add-card-text { font-size:0.58em;font-family:var(--pixel);font-weight:900;color:rgba(255,240,160,0.92);letter-spacing:1px;line-height:2;text-shadow:0 0 8px rgba(255,200,80,0.6); }
 
     /* ── Child Screen ── */
     #childScreen { display:none;position:relative;z-index:1;padding-bottom:calc(var(--nav-h)+200px+env(safe-area-inset-bottom,0px)); }
@@ -164,7 +165,8 @@
     .tab-content.active { display:block; }
 
     /* ── Card ── */
-    .card { background:var(--card);border:4px solid var(--ink);box-shadow:var(--shadow-card);border-radius:var(--r-card);padding:15px;margin-bottom:16px; }
+    .card { background:var(--card);border:4px solid var(--ink);box-shadow:var(--shadow-card);border-radius:var(--r-card);padding:15px;margin-bottom:16px;transition:transform 0.28s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.28s; }
+    .card:not(.no-float):hover { transform:translateY(-5px) rotate(0.2deg);box-shadow:8px 14px 0 var(--ink),inset 0 -3px 0 rgba(0,0,0,0.1); }
     .card-chart { padding:18px;margin-bottom:18px;box-shadow:7px 7px 0 var(--ink),inset 0 -4px 0 rgba(0,0,0,0.12); }
     .card-title { font-size:0.68em;font-weight:900;color:var(--ink);margin-bottom:16px;display:flex;align-items:center;gap:8px;font-family:var(--pixel);letter-spacing:0.3px;line-height:1.8; }
     .badge { background:linear-gradient(160deg,var(--yellow) 0%,#F0C500 100%);color:var(--ink);font-size:0.8em;padding:3px 10px;border-radius:8px;font-weight:900;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);font-family:-apple-system,BlinkMacSystemFont,'微軟正黑體',sans-serif; }
@@ -316,10 +318,60 @@
     .num-bounce { animation:num-bounce 0.45s cubic-bezier(0.34,1.56,0.64,1); }
     @media (prefers-reduced-motion:reduce) { .cel-star,.cel-coin,.cel-ring,.num-bounce { animation:none!important; } }
 
+    /* ══ Sky Ambient Layer ══ */
+    #skyBg { position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;overflow:hidden; }
+
+    /* Stars */
+    .sk-star { position:absolute;border-radius:50%;background:#fff;animation:sk-twinkle ease-in-out infinite; }
+    @keyframes sk-twinkle { 0%,100%{opacity:0.1;transform:scale(0.5)} 50%{opacity:1;transform:scale(1.3)} }
+
+    /* Clouds — pink-purple glow & fireworks reflection */
+    .sk-cloud { position:absolute;border-radius:50%;filter:blur(38px);animation:sk-cloud-drift linear infinite; }
+    @keyframes sk-cloud-drift { from{transform:translateX(-160%)} to{transform:translateX(calc(100vw + 160%))} }
+
+    /* Shooting star tails */
+    .sk-shoot { position:absolute;height:2px;border-radius:50%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.95),rgba(255,230,180,0.7),transparent);
+      animation:sk-shoot linear infinite; }
+    @keyframes sk-shoot {
+      0%   { transform:translateX(0) translateY(0) rotate(-32deg);opacity:0; }
+      8%   { opacity:1; }
+      85%  { opacity:0.5; }
+      100% { transform:translateX(68vw) translateY(38vh) rotate(-32deg);opacity:0; }
+    }
+
+    /* Fireflies */
+    .sk-fly { position:absolute;width:5px;height:5px;border-radius:50%;
+      background:rgba(195,255,140,0.9);
+      animation:sk-fly-move ease-in-out infinite,sk-fly-glow ease-in-out infinite; }
+    @keyframes sk-fly-move {
+      0%  { transform:translate(0,0); }      30% { transform:translate(20px,-16px); }
+      60% { transform:translate(-14px,-24px); }
+      80% { transform:translate(16px,-9px); }
+      100%{ transform:translate(0,0); }
+    }
+    @keyframes sk-fly-glow {
+      0%,100%{ opacity:0.07;box-shadow:0 0 2px 1px rgba(160,255,80,0.2); }
+      45%    { opacity:0.95;box-shadow:0 0 9px 5px rgba(160,255,80,0.7),0 0 20px 10px rgba(200,255,80,0.28); }
+    }
+
+    /* Night sky breathing */
+    @keyframes sk-bg-breathe { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.06)} }
+
+    /* Fireworks save particles */
+    .fw-p { position:fixed;border-radius:50%;pointer-events:none;z-index:3500;transform:translate(-50%,-50%); }
+
+    @media (prefers-reduced-motion:reduce) {
+      .sk-star,.sk-cloud,.sk-shoot,.sk-fly,.fw-p { animation:none!important; }
+      body { animation:none!important; }
+      .card:not(.no-float):hover { transform:none!important; }
+    }
+
   </style>
 </head>
 <body>
 
+<div id="skyBg" aria-hidden="true"></div>
 
 <!-- ══ LOADING ══ -->
 <div id="loadingOverlay" class="hidden">
@@ -410,7 +462,7 @@
           <div class="form-group"><label data-i18n="t1Weight">體重 (kg)</label><input type="number" id="measureWeight" placeholder="13.2" step="0.1" min="2" max="100" inputmode="decimal" autocomplete="off"></div>
         </div>
         <div class="form-group" style="margin-bottom:12px;"><label data-i18n="t1Note">備註（選填）</label><input type="text" id="measureNote" data-i18n-placeholder="t1NotePlaceholder" placeholder="例：診所量測、在家量測" autocomplete="off"></div>
-        <button class="btn btn-primary btn-full" onclick="addMeasurement()" data-i18n="t1Save">🎆 儲存量測</button>
+        <button class="btn btn-primary btn-full" onclick="addMeasurement();burstFireworks(this)" data-i18n="t1Save">🎆 儲存量測</button>
       </div>
     </div>
     <div class="card collapsed" id="batchCard">
@@ -535,7 +587,7 @@
         </div>
         <div class="form-group" style="margin-bottom:10px;"><label data-i18n="t3Name">品名</label><input type="text" id="suppName" placeholder="例：Appeton 成長奶粉、兒童維生素D3" data-i18n-placeholder="t3NamePlaceholder"></div>
         <div class="form-group" style="margin-bottom:12px;"><label data-i18n="t3Note">備註（選填）</label><textarea id="suppNote" data-i18n-placeholder="t3NotePlaceholder" placeholder="例：每天睡前一匙" rows="2" style="resize:vertical;"></textarea></div>
-        <button class="btn btn-primary btn-full" onclick="addSupplement()" data-i18n="t3Save">🎆 儲存記錄</button>
+        <button class="btn btn-primary btn-full" onclick="addSupplement();burstFireworks(this)" data-i18n="t3Save">🎆 儲存記錄</button>
       </div>
     </div>
     <div class="card collapsed" id="suppListCard">
@@ -594,7 +646,7 @@
     </div>
     <div class="modal-btns">
       <button class="btn btn-secondary" onclick="closeModal()" data-i18n="childCancel">取消</button>
-      <button class="btn btn-primary" onclick="saveChild()" data-i18n="childSave">🎆 儲存</button>
+      <button class="btn btn-primary" onclick="saveChild();burstFireworks(this)" data-i18n="childSave">🎆 儲存</button>
     </div>
     <button class="btn btn-danger btn-full" id="deleteChildBtn" onclick="deleteChildConfirm()" style="display:none;margin-top:10px;" data-i18n="childDelete">刪除此寶貝的所有資料</button>
   </div>
@@ -2257,6 +2309,70 @@ async function removeShare(shareId){
     await db_removeShare(shareId);
     await refreshShareList();
   }catch(e){alert(t('shareRemoveFail')+(e.message||e));}
+}
+
+/* ══ Sky Ambient ══ */
+(function initSky(){
+  var bg=document.getElementById('skyBg');
+  if(!bg)return;
+  /* Stars */
+  for(var i=0;i<88;i++){
+    var s=document.createElement('div');s.className='sk-star';
+    var sz=0.8+Math.random()*2.4;
+    s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;top:'+Math.random()*65+'%;animation-duration:'+(1.8+Math.random()*4.5)+'s;animation-delay:'+(-Math.random()*5)+'s;';
+    bg.appendChild(s);
+  }
+  /* Clouds — pink-purple glow, fireworks reflection */
+  [[280,95,'255,200,230',0.30,56],[190,68,'210,190,255',0.26,44],[320,105,'255,190,220',0.22,72],[220,78,'195,200,255',0.28,51],[250,88,'255,215,235',0.18,63]].forEach(function(c,idx){
+    var cl=document.createElement('div');cl.className='sk-cloud';
+    cl.style.cssText='width:'+c[0]+'px;height:'+c[1]+'px;top:'+(2+idx*4.5)+'%;background:rgba('+c[2]+','+c[3]+');box-shadow:0 0 55px 18px rgba('+c[2]+',0.22);animation-duration:'+c[4]+'s;animation-delay:'+(-c[4]*(idx*0.22))+'s;';
+    bg.appendChild(cl);
+  });
+  /* Shooting stars */
+  for(var sh=0;sh<5;sh++){
+    var ss=document.createElement('div');ss.className='sk-shoot';
+    var w=90+Math.random()*110;
+    ss.style.cssText='width:'+w+'px;left:'+Math.random()*25+'%;top:'+(2+Math.random()*30)+'%;animation-duration:'+(8+Math.random()*10)+'s;animation-delay:'+(-Math.random()*16)+'s;';
+    bg.appendChild(ss);
+  }
+  /* Fireflies — lower half */
+  for(var f=0;f<14;f++){
+    var fly=document.createElement('div');fly.className='sk-fly';
+    fly.style.cssText='left:'+(3+Math.random()*94)+'%;top:'+(50+Math.random()*44)+'%;animation-duration:'+(5+Math.random()*8)+'s,'+(1.2+Math.random()*2.8)+'s;animation-delay:'+(-Math.random()*9)+'s,'+(-Math.random()*3)+'s;';
+    bg.appendChild(fly);
+  }
+})();
+
+/* ══ Fireworks Save Burst ══ */
+function burstFireworks(srcEl){
+  var r=srcEl?srcEl.getBoundingClientRect():{left:window.innerWidth/2,top:window.innerHeight/2,width:0,height:0};
+  var cx=r.left+r.width/2, cy=r.top+r.height/2;
+  var cols=['#FFD700','#FF6BAE','#80AAFF','#AAFFB8','#FFB347','#FF85D2','#85FFED','#FFF176','#FFB3C6'];
+  /* Particles */
+  for(var i=0;i<38;i++){
+    var p=document.createElement('div');p.className='fw-p';
+    var a=(i/38)*Math.PI*2+(Math.random()-0.5)*0.3;
+    var d=55+Math.random()*80;
+    var col=cols[i%cols.length];
+    var sz=2.5+Math.random()*4;
+    p.style.cssText='left:'+cx+'px;top:'+cy+'px;width:'+sz+'px;height:'+sz+'px;background:'+col+';box-shadow:0 0 '+(sz*2.5)+'px '+col+';';
+    document.body.appendChild(p);
+    var dx=Math.cos(a)*d, dy=Math.sin(a)*d;
+    var anim=p.animate([
+      {transform:'translate(-50%,-50%) scale(1)',opacity:1},
+      {transform:'translate(calc(-50% + '+dx+'px),calc(-50% + '+dy+'px)) scale(0.15)',opacity:0}
+    ],{duration:650+Math.random()*450,easing:'cubic-bezier(0,0.9,0.57,1)',fill:'forwards'});
+    anim.onfinish=function(){if(this.effect&&this.effect.target)this.effect.target.remove();};
+  }
+  /* Ring */
+  var ring=document.createElement('div');
+  ring.style.cssText='position:fixed;left:'+cx+'px;top:'+cy+'px;width:64px;height:64px;border-radius:50%;border:3px solid #FFD700;pointer-events:none;z-index:3500;transform:translate(-50%,-50%) scale(0.1);';
+  document.body.appendChild(ring);
+  var ra=ring.animate([
+    {transform:'translate(-50%,-50%) scale(0.1)',opacity:0.95,borderWidth:'4px'},
+    {transform:'translate(-50%,-50%) scale(3.2)',opacity:0,borderWidth:'1px'}
+  ],{duration:580,easing:'ease-out',fill:'forwards'});
+  ra.onfinish=function(){ring.remove();};
 }
 </script>
 </body>
