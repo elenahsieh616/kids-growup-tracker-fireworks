@@ -154,7 +154,7 @@
     .hero-name { font-size:1.2em;font-weight:700;color:#FFD166;font-family:var(--pixel);letter-spacing:5px;text-shadow:3px 3px 0 rgba(10,5,30,0.85),0 0 16px rgba(255,210,80,0.5); }
     .hero-sub { font-size:0.78em;color:#FFD6D5;margin-top:8px;font-weight:500; }
     .hero-stats { display:flex;justify-content:center;margin-top:20px;gap:10px; }
-    .hero-stat { flex:1;max-width:130px;background:rgba(255,248,200,0.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:2px solid rgba(255,218,80,0.72);box-shadow:3px 3px 0 rgba(8,4,24,0.8),0 0 18px rgba(255,210,80,0.28);border-radius:12px;padding:13px 6px; }
+    .hero-stat { flex:1;max-width:130px;background:linear-gradient(160deg,rgba(12,8,42,0.92),rgba(25,14,62,0.88));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:2px solid rgba(255,218,80,0.72);box-shadow:0 4px 20px rgba(0,0,0,0.5),0 0 25px rgba(255,200,60,0.2);border-radius:12px;padding:13px 6px; }
     .hero-stat-val { font-size:1.45em;font-weight:700;color:#FFD166;font-family:var(--font-ui);text-shadow:0 0 12px rgba(255,200,60,0.5); }
     .hero-stat-lbl { font-size:0.76em;color:rgba(255,240,210,0.92);margin-top:6px;font-weight:500;letter-spacing:0.3px; }
 
@@ -172,10 +172,10 @@
     .tab-content.active { display:block; }
 
     /* ── Card ── */
-    .card { background:rgba(22,12,65,0.78);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid rgba(180,150,255,0.28);box-shadow:6px 6px 0 rgba(50,40,80,0.55),0 0 22px rgba(0,0,0,0.3),inset 0 0 16px rgba(255,255,255,0.04);border-radius:var(--r-card);padding:15px;margin-bottom:16px;color:rgba(255,250,230,0.92);transition:transform 0.28s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.28s;
+    .card { background:rgba(22,12,65,0.78);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1.5px solid rgba(180,150,255,0.28);box-shadow:0 4px 30px rgba(100,70,220,0.35),0 0 60px rgba(80,50,200,0.15),inset 0 0 16px rgba(255,255,255,0.04);border-radius:var(--r-card);padding:15px;margin-bottom:16px;color:rgba(255,250,230,0.92);transition:transform 0.28s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.28s;
       --ink:rgba(255,250,228,0.92); --muted:rgba(210,195,255,0.88); }
     .card input,.card select,.card textarea { color:#1a0f3a; --ink:#1a0f3a; }
-    .card:not(.no-float):hover { transform:translateY(-5px) rotate(0.2deg);box-shadow:8px 14px 0 rgba(50,40,80,0.55),0 0 38px rgba(140,100,255,0.25),inset 0 0 18px rgba(255,255,255,0.06); }
+    .card:not(.no-float):hover { transform:translateY(-5px) rotate(0.2deg);box-shadow:0 8px 40px rgba(120,80,255,0.45),0 0 80px rgba(100,60,220,0.25),inset 0 0 18px rgba(255,255,255,0.06); }
     .card-chart { padding:18px;margin-bottom:18px; }
     .card-title { font-size:0.72em;font-weight:700;color:rgba(255,248,200,0.98);margin-bottom:16px;display:flex;align-items:center;gap:8px;font-family:var(--pixel);letter-spacing:0.3px;line-height:1.8;text-shadow:0 0 8px rgba(255,210,80,0.3); }
     .badge { background:linear-gradient(160deg,var(--yellow) 0%,#F0C500 100%);color:var(--ink);font-size:0.8em;padding:3px 10px;border-radius:8px;font-weight:900;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);font-family:-apple-system,BlinkMacSystemFont,'微軟正黑體',sans-serif; }
@@ -227,10 +227,10 @@
     /* ── Chart ── */
     .chart-wrap { position:relative;height:282px;margin-top:8px; }
     .chart-range-btns { display:flex;gap:6px;justify-content:center;margin-top:10px; }
-    .crb { padding:5px 13px;border:2px solid var(--ink);border-radius:8px;font-size:0.75em;font-weight:900;cursor:pointer;background:var(--card);color:var(--ink);transition:background 0.15s,transform 0.12s,box-shadow 0.12s;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','微軟正黑體',sans-serif;box-shadow:2px 2px 0 var(--ink);line-height:1.5; }
-    .crb.active { background:var(--blue);color:#fff;box-shadow:2px 2px 0 var(--ink); }
-    .crb:hover:not(.active) { background:var(--yellow); }
-    .crb:active { transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink); }
+    .crb { padding:5px 13px;border:1.5px solid rgba(180,150,255,0.5);border-radius:8px;font-size:0.75em;font-weight:900;cursor:pointer;background:rgba(60,40,120,0.55);color:rgba(255,245,220,0.9);transition:background 0.15s,transform 0.12s,box-shadow 0.12s;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','微軟正黑體',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.3);line-height:1.5; }
+    .crb.active { background:var(--blue);color:#fff;border-color:rgba(4,156,216,0.7);box-shadow:0 0 12px rgba(4,156,216,0.5); }
+    .crb:hover:not(.active) { background:rgba(90,60,170,0.7);color:#fff; }
+    .crb:active { transform:translate(1px,1px); }
 
     /* ── Supplement ── */
     .supp-item { padding:13px 0;border-bottom:1px solid rgba(180,150,255,0.18); }
@@ -342,9 +342,6 @@
     .sk-cloud { position:absolute;border-radius:50%;filter:blur(38px);animation:sk-cloud-drift linear infinite; }
     @keyframes sk-cloud-drift { from{transform:translateX(-160%)} to{transform:translateX(calc(100vw + 160%))} }
 
-    /* Ambient fireworks particles */
-    .amb-fw { position:absolute;border-radius:50%;pointer-events:none; }
-
     /* Fireflies */
     .sk-fly { position:absolute;width:5px;height:5px;border-radius:50%;
       background:rgba(195,255,140,0.9);
@@ -381,7 +378,7 @@
 
 <!-- ══ LOADING ══ -->
 <div id="loadingOverlay" class="hidden">
-  <div class="loading-box" data-i18n="loading">成長魔法啟動中 🎆</div>
+  <div class="loading-box" data-i18n="loading">⭐ 成長魔法啟動中</div>
 </div>
 
 <!-- ══ LOGIN SCREEN ══ -->
@@ -391,12 +388,12 @@
       <button class="lang-opt" id="loginLangZh" onclick="setLang('zh')">繁中</button>
       <button class="lang-opt" id="loginLangEn" onclick="setLang('en')">EN</button>
     </div>
-    <div class="app-title" data-i18n="appTitle">🎆 寶貝成長紀錄 🎆</div>
+    <div class="app-title" data-i18n="appTitle">⭐ 寶貝成長紀錄 ⭐</div>
     <div class="app-subtitle" data-i18n="appSubtitle">寶貝的成長冒險日記</div>
   </div>
   <div style="padding:48px 24px;max-width:380px;margin:0 auto;">
     <div style="background:var(--card);border:4px solid var(--ink);border-radius:20px;padding:32px 24px;box-shadow:6px 6px 0 var(--ink);text-align:center;">
-      <div style="font-size:3.2em;margin-bottom:16px;">🎆</div>
+      <div style="font-size:3.2em;margin-bottom:16px;">⭐</div>
       <div style="font-family:var(--pixel);font-size:0.6em;color:var(--ink);line-height:2.2;margin-bottom:8px;" data-i18n="loginTitle">登入你的帳號</div>
       <div style="font-size:0.84em;color:var(--muted);font-weight:700;margin-bottom:28px;line-height:1.7;" data-i18n-html="loginDesc">資料儲存在雲端<br>換裝置也不怕資料不見！</div>
       <button onclick="signIn()" class="google-btn">
@@ -415,7 +412,7 @@
       <button class="lang-opt" id="homeLangEn" onclick="setLang('en')">EN</button>
     </div>
     <button class="logout-btn" onclick="signOut()" data-i18n="logoutBtn">登出</button>
-    <div class="app-title" data-i18n="appTitle">🎆 寶貝成長紀錄 🎆</div>
+    <div class="app-title" data-i18n="appTitle">⭐ 寶貝成長紀錄 ⭐</div>
     <div class="app-subtitle" data-i18n="homeSubtitle">選擇寶貝查看成長資料</div>
     <div class="user-email" id="userEmail"></div>
     <div style="text-align:center;margin-top:6px;">
@@ -438,11 +435,11 @@
     <div class="hero-content">
       <div class="photo-ring" id="photoRing">
         <div class="photo-placeholder" id="photoPlaceholder">
-          <span class="ph-emoji" id="heroEmoji">🎆</span>
+          <span class="ph-emoji" id="heroEmoji">⭐</span>
           <span class="ph-hint" data-i18n-html="uploadHint">點我<br>上傳照片</span>
         </div>
         <img id="heroPhoto" alt="">
-        <div class="edit-layer">✨</div>
+        <div class="edit-layer">⭐</div>
       </div>
       <div class="hero-name" id="heroName">—</div>
       <div class="hero-sub" id="heroAge">—</div>
@@ -458,7 +455,7 @@
   <div class="tab-content active" id="tab-records">
     <div class="card" id="addMeasureCard">
       <div class="collapse-header" onclick="toggleCollapse('addMeasureCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t1Title">🎆 新增量測</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t1Title">⭐ 新增量測</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -468,12 +465,12 @@
           <div class="form-group"><label data-i18n="t1Weight">體重 (kg)</label><input type="number" id="measureWeight" placeholder="13.2" step="0.1" min="2" max="100" inputmode="decimal" autocomplete="off"></div>
         </div>
         <div class="form-group" style="margin-bottom:12px;"><label data-i18n="t1Note">備註（選填）</label><input type="text" id="measureNote" data-i18n-placeholder="t1NotePlaceholder" placeholder="例：診所量測、在家量測" autocomplete="off"></div>
-        <button class="btn btn-primary btn-full" onclick="addMeasurement();burstFireworks(this)" data-i18n="t1Save">🎆 儲存量測</button>
+        <button class="btn btn-primary btn-full" onclick="addMeasurement();burstFireworks(this)" data-i18n="t1Save">⭐ 儲存量測</button>
       </div>
     </div>
     <div class="card collapsed" id="batchCard">
       <div class="collapse-header" onclick="toggleCollapse('batchCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="batchTitle">🎇 多筆匯入</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="batchTitle">⭐ 多筆匯入</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -495,7 +492,7 @@
     </div>
     <div class="card collapsed" id="historyCard">
       <div class="collapse-header" onclick="toggleCollapse('historyCard')">
-        <div class="card-title" style="margin-bottom:0;" data-i18n="historyTitle">🎇 歷史量測紀錄</div>
+        <div class="card-title" style="margin-bottom:0;" data-i18n="historyTitle">⭐ 歷史量測紀錄</div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -524,7 +521,7 @@
     </div>
     <div class="card" id="growthCard">
       <div class="collapse-header" onclick="toggleCollapse('growthCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2GrowthTitle">🎇 年增長分析</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2GrowthTitle">⭐ 年增長分析</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -533,7 +530,7 @@
     </div>
     <div class="card card-chart collapsed" id="heightChartCard">
       <div class="collapse-header" onclick="toggleCollapse('heightChartCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2HeightChart">🎆 身高生長曲線</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2HeightChart">⭐ 身高生長曲線</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -548,7 +545,7 @@
     </div>
     <div class="card card-chart collapsed" id="weightChartCard">
       <div class="collapse-header" onclick="toggleCollapse('weightChartCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2WeightChart">✨ 體重生長曲線</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2WeightChart">⭐ 體重生長曲線</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -562,7 +559,7 @@
     </div>
     <div class="card card-chart collapsed" id="corrCard">
       <div class="collapse-header" onclick="toggleCollapse('corrCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2CorrTitle">🎇 保健品 × 生長速度對比</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2CorrTitle">⭐ 保健品 × 生長速度對比</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -575,7 +572,7 @@
   <div class="tab-content" id="tab-supplements">
     <div class="card" id="addSuppCard">
       <div class="collapse-header" onclick="toggleCollapse('addSuppCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t3AddTitle">🎆 新增保健品 / 配方奶</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t3AddTitle">⭐ 新增保健品 / 配方奶</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -593,12 +590,12 @@
         </div>
         <div class="form-group" style="margin-bottom:10px;"><label data-i18n="t3Name">品名</label><input type="text" id="suppName" placeholder="例：Appeton 成長奶粉、兒童維生素D3" data-i18n-placeholder="t3NamePlaceholder"></div>
         <div class="form-group" style="margin-bottom:12px;"><label data-i18n="t3Note">備註（選填）</label><textarea id="suppNote" data-i18n-placeholder="t3NotePlaceholder" placeholder="例：每天睡前一匙" rows="2" style="resize:vertical;"></textarea></div>
-        <button class="btn btn-primary btn-full" onclick="addSupplement();burstFireworks(this)" data-i18n="t3Save">🎆 儲存記錄</button>
+        <button class="btn btn-primary btn-full" onclick="addSupplement();burstFireworks(this)" data-i18n="t3Save">⭐ 儲存記錄</button>
       </div>
     </div>
     <div class="card collapsed" id="suppListCard">
       <div class="collapse-header" onclick="toggleCollapse('suppListCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t3ListTitle">✨ 保健品紀錄</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t3ListTitle">⭐ 保健品紀錄</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -608,9 +605,9 @@
   </div>
 
   <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('records',this)"><span class="nav-icon">🎆</span><span data-i18n="tabRecords">成長紀錄</span></button>
-    <button class="nav-btn" onclick="switchTab('chart',this)"><span class="nav-icon">🎇</span><span data-i18n="tabChart">生長曲線</span></button>
-    <button class="nav-btn" onclick="switchTab('supplements',this)"><span class="nav-icon">✨</span><span data-i18n="tabSupp">保健紀錄</span></button>
+    <button class="nav-btn active" onclick="switchTab('records',this)"><span class="nav-icon">⭐</span><span data-i18n="tabRecords">成長紀錄</span></button>
+    <button class="nav-btn" onclick="switchTab('chart',this)"><span class="nav-icon">⭐</span><span data-i18n="tabChart">生長曲線</span></button>
+    <button class="nav-btn" onclick="switchTab('supplements',this)"><span class="nav-icon">⭐</span><span data-i18n="tabSupp">保健紀錄</span></button>
   </nav>
 </div>
 
@@ -652,7 +649,7 @@
     </div>
     <div class="modal-btns">
       <button class="btn btn-secondary" onclick="closeModal()" data-i18n="childCancel">取消</button>
-      <button class="btn btn-primary" onclick="saveChild();burstFireworks(this)" data-i18n="childSave">🎆 儲存</button>
+      <button class="btn btn-primary" onclick="saveChild();burstFireworks(this)" data-i18n="childSave">⭐ 儲存</button>
     </div>
     <button class="btn btn-danger btn-full" id="deleteChildBtn" onclick="deleteChildConfirm()" style="display:none;margin-top:10px;" data-i18n="childDelete">刪除此寶貝的所有資料</button>
   </div>
@@ -735,8 +732,8 @@ var CHILD_BG=[['#E52521','#AA1A18'],['#049CD8','#0270A0'],['#3A9D23','#1E6B10'],
 var currentLang=localStorage.getItem('growLang')||'zh';
 var LANG={
   zh:{
-    loading:'成長魔法啟動中 🎆',
-    appTitle:'🎆 寶貝成長紀錄 🎆',appSubtitle:'寶貝的成長冒險日記',
+    loading:'⭐ 成長魔法啟動中',
+    appTitle:'⭐ 寶貝成長紀錄 ⭐',appSubtitle:'寶貝的成長冒險日記',
     loginTitle:'登入你的帳號',loginDesc:'資料儲存在雲端<br>換裝置也不怕資料不見！',
     googleBtn:'使用 Google 帳號登入',
     homeSubtitle:'選擇寶貝查看成長資料',logoutBtn:'登出',
@@ -745,19 +742,19 @@ var LANG={
     uploadHint:'點我<br>上傳照片',
     maleBadge:'♂︎ 男生',femaleBadge:'♀︎ 女生',male:'男生',female:'女生',
     tabRecords:'成長紀錄',tabChart:'生長曲線',tabSupp:'保健紀錄',
-    t1Title:'🎆 新增量測',t1Date:'量測日期',t1Height:'身高 (cm)',t1Weight:'體重 (kg)',
-    t1Note:'備註（選填）',t1NotePlaceholder:'例：診所量測、在家量測',t1Save:'🎆 儲存量測',
-    batchTitle:'🎇 多筆匯入',
+    t1Title:'⭐ 新增量測',t1Date:'量測日期',t1Height:'身高 (cm)',t1Weight:'體重 (kg)',
+    t1Note:'備註（選填）',t1NotePlaceholder:'例：診所量測、在家量測',t1Save:'⭐ 儲存量測',
+    batchTitle:'⭐ 多筆匯入',
     batchDesc:'逐筆填入量測紀錄，資料來源欄位可選填（如：愛託付、診所、在家量）。',
     batchAddRow:'＋ 新增一行',batchImportBtn:'匯入所有資料',batchSrcPlaceholder:'資料來源（選填）',
-    historyTitle:'🎇 歷史量測紀錄',
-    t2GrowthTitle:'🎇 生長速度分析',t2HeightChart:'🎆 身高生長曲線',
-    t2WeightChart:'✨ 體重生長曲線',t2CorrTitle:'🎇 保健品 × 生長速度對比',
+    historyTitle:'⭐ 歷史量測紀錄',
+    t2GrowthTitle:'⭐ 生長速度分析',t2HeightChart:'⭐ 身高生長曲線',
+    t2WeightChart:'⭐ 體重生長曲線',t2CorrTitle:'⭐ 保健品 × 生長速度對比',
     whoSource:'資料來源：衛福部國健署（WHO 生長標準 0–7 歲）',
-    t3AddTitle:'🎆 新增保健品 / 配方奶',t3Date:'開始日期',t3Type:'類型',
+    t3AddTitle:'⭐ 新增保健品 / 配方奶',t3Date:'開始日期',t3Type:'類型',
     t3Name:'品名',t3NamePlaceholder:'例：Appeton 成長奶粉、兒童維生素D3',
     t3Note:'備註（選填）',t3NotePlaceholder:'例：每天睡前一匙',
-    t3Save:'🎆 儲存記錄',t3ListTitle:'✨ 保健品紀錄',
+    t3Save:'⭐ 儲存記錄',t3ListTitle:'⭐ 保健品紀錄',
     suppTypes:['保健品','營養品','成長飲品','配方奶','其他'],
     shareModalTitleBase:'👥 共享設定',shareEmailPlaceholder:'家人的 Gmail',
     shareInvite:'邀請',shareNote:'對方用自己的 Google 帳號登入後，即可查看並新增此寶貝的成長紀錄。',
@@ -765,12 +762,12 @@ var LANG={
     shareRemove:'移除',shareRemoveConfirm:'確定移除共享？',shareRemoveFail:'移除失敗：',
     shareAddFail:'新增失敗：',shareEmailInvalid:'請輸入正確的 Email',
     shareSelf:'無法共享給自己',shareDuplicate:'已共享給此帳號',
-    addChildTitle:'🎆 新增寶貝',editChildTitle:'🎇 編輯寶貝',
+    addChildTitle:'⭐ 新增寶貝',editChildTitle:'⭐ 編輯寶貝',
     childNameLabel:'寶貝名字',childNamePlaceholder:'例：Boss Baby',
     childBirthdayLabel:'生日',childGenderLabel:'性別',
     parentHeightHint:'👨‍👩‍👧 輸入父母身高以計算遺傳預測身高（選填）',
     fatherHeightLabel:'爸爸身高 cm',motherHeightLabel:'媽媽身高 cm',
-    childCancel:'取消',childSave:'🎆 儲存',childDelete:'刪除此寶貝的所有資料',
+    childCancel:'取消',childSave:'⭐ 儲存',childDelete:'刪除此寶貝的所有資料',
     childSaveRequire:'請填入名字和生日',childSaveFail:'儲存失敗：',
     childDeleteFail:'刪除失敗：',
     mRequire:'請填入日期、身高、體重',mHeightRange:'身高請輸入合理數值（40–200 cm）',
@@ -825,8 +822,8 @@ var LANG={
     importFail:'匯入失敗：',importReadFail:'讀取檔案失敗：'
   },
   en:{
-    loading:'Loading Growth Magic… 🎆',
-    appTitle:'🎆 Baby Growth Tracker 🎆',appSubtitle:"Your Baby's Growth Adventure",
+    loading:'⭐ Loading Growth Magic…',
+    appTitle:'⭐ Baby Growth Tracker ⭐',appSubtitle:"Your Baby's Growth Adventure",
     loginTitle:'Sign in to your account',loginDesc:'Data stored in the cloud<br>Access from any device!',
     googleBtn:'Sign in with Google',
     homeSubtitle:'Select a child to view growth data',logoutBtn:'Log Out',
@@ -835,19 +832,19 @@ var LANG={
     uploadHint:'Tap to<br>Upload Photo',
     maleBadge:'♂︎ Boy',femaleBadge:'♀︎ Girl',male:'Boy',female:'Girl',
     tabRecords:'Records',tabChart:'Charts',tabSupp:'Supplements',
-    t1Title:'🎆 Add Measurement',t1Date:'Date',t1Height:'Height (cm)',t1Weight:'Weight (kg)',
-    t1Note:'Note (optional)',t1NotePlaceholder:'e.g. Clinic, Home',t1Save:'🎆 Save',
-    batchTitle:'🎇 Batch Import',
+    t1Title:'⭐ Add Measurement',t1Date:'Date',t1Height:'Height (cm)',t1Weight:'Weight (kg)',
+    t1Note:'Note (optional)',t1NotePlaceholder:'e.g. Clinic, Home',t1Save:'⭐ Save',
+    batchTitle:'⭐ Batch Import',
     batchDesc:'Enter multiple records. Source field is optional (e.g. Clinic, Home).',
     batchAddRow:'＋ Add Row',batchImportBtn:'Import All',batchSrcPlaceholder:'Source (optional)',
-    historyTitle:'🎇 Measurement History',
-    t2GrowthTitle:'🎇 Growth Rate',t2HeightChart:'🎆 Height Growth Chart',
-    t2WeightChart:'✨ Weight Growth Chart',t2CorrTitle:'🎇 Growth Impact',
+    historyTitle:'⭐ Measurement History',
+    t2GrowthTitle:'⭐ Growth Rate',t2HeightChart:'⭐ Height Growth Chart',
+    t2WeightChart:'⭐ Weight Growth Chart',t2CorrTitle:'⭐ Growth Impact',
     whoSource:'Source: WHO Child Growth Standards (0–7 years)',
-    t3AddTitle:'🎆 Add Supplement / Formula',t3Date:'Start Date',t3Type:'Type',
+    t3AddTitle:'⭐ Add Supplement / Formula',t3Date:'Start Date',t3Type:'Type',
     t3Name:'Product Name',t3NamePlaceholder:'e.g. Vitamin D3, Growth Formula',
     t3Note:'Note (optional)',t3NotePlaceholder:'e.g. One scoop before bed',
-    t3Save:'🎆 Save Record',t3ListTitle:'✨ Supplement Records',
+    t3Save:'⭐ Save Record',t3ListTitle:'⭐ Supplement Records',
     suppTypes:['Supplement','Nutrition','Growth Drink','Formula','Other'],
     shareModalTitleBase:'👥 Sharing Settings',shareEmailPlaceholder:"Family member's Gmail",
     shareInvite:'Invite',shareNote:'Once invited, they can sign in with their own Google account to view and add records.',
@@ -855,12 +852,12 @@ var LANG={
     shareRemove:'Remove',shareRemoveConfirm:'Remove this share?',shareRemoveFail:'Remove failed: ',
     shareAddFail:'Failed to add: ',shareEmailInvalid:'Please enter a valid email',
     shareSelf:'Cannot share with yourself',shareDuplicate:'Already shared with this account',
-    addChildTitle:'🎆 Add Child',editChildTitle:'🎇 Edit Child',
+    addChildTitle:'⭐ Add Child',editChildTitle:'⭐ Edit Child',
     childNameLabel:"Child's Name",childNamePlaceholder:'e.g. Boss Baby',
     childBirthdayLabel:'Birthday',childGenderLabel:'Gender',
     parentHeightHint:'👨‍👩‍👧 Enter parent heights for genetic height prediction (optional)',
     fatherHeightLabel:"Father's Height cm",motherHeightLabel:"Mother's Height cm",
-    childCancel:'Cancel',childSave:'🎆 Save',childDelete:'Delete all data for this child',
+    childCancel:'Cancel',childSave:'⭐ Save',childDelete:'Delete all data for this child',
     childSaveRequire:'Please enter name and birthday',childSaveFail:'Save failed: ',
     childDeleteFail:'Delete failed: ',
     mRequire:'Please enter date, height and weight',mHeightRange:'Height must be 40–200 cm',
@@ -1664,7 +1661,7 @@ function renderSupplements(){
   var ts={'保健品':'background:#BFEFB2;color:#1A6B0A','營養品':'background:#C4ECFF;color:#0270A0','成長飲品':'background:#FFE0B2;color:#C45000','配方奶':'background:#FFD6D5;color:#B01010','其他':'background:#F0EACF;color:#6B4C2A'};
   var typeLabels={};['保健品','營養品','成長飲品','配方奶','其他'].forEach(function(k,i){typeLabels[k]=t('suppTypes')[i]||k;});
   el.innerHTML=supplements.map(function(s){
-    return '<div class="supp-item"><div class="supp-row1"><div><span class="supp-tag" style="'+(ts[s.type]||ts['其他'])+'">'+(typeLabels[s.type]||s.type)+'</span><span class="supp-name">'+esc(s.name)+'</span></div><button class="btn btn-danger" onclick="deleteSupplement(\''+s.id+'\')">'+t('tDelete')+'</button></div><div class="supp-date">🎆 '+fmtDate(s.date)+'</div>'+(s.note?'<div class="supp-note">🎇 '+esc(s.note)+'</div>':'')+'</div>';
+    return '<div class="supp-item"><div class="supp-row1"><div><span class="supp-tag" style="'+(ts[s.type]||ts['其他'])+'">'+(typeLabels[s.type]||s.type)+'</span><span class="supp-name">'+esc(s.name)+'</span></div><button class="btn btn-danger" onclick="deleteSupplement(\''+s.id+'\')">'+t('tDelete')+'</button></div><div class="supp-date">⭐ '+fmtDate(s.date)+'</div>'+(s.note?'<div class="supp-note">'+esc(s.note)+'</div>':'')+'</div>';
   }).join('');
 }
 function renderGrowthAnalysis(){
@@ -1892,7 +1889,7 @@ function buildReportHTML(hImg,wImg){
       var diff2=bRate!==null&&aRate!==null?(parseFloat(aRate)-parseFloat(bRate)).toFixed(1):null;
       var pos2=diff2!==null&&parseFloat(diff2)>0;
       scHTML+='<div style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid #E8D8A0;flex-wrap:wrap;">'+
-        '<span style="font-weight:900;font-size:0.88em;flex-shrink:0;">🎇 '+esc(s.name)+'</span>'+
+        '<span style="font-weight:900;font-size:0.88em;flex-shrink:0;">⭐ '+esc(s.name)+'</span>'+
         '<span style="font-size:0.78em;color:#6B4C2A;font-weight:700;flex-shrink:0;">'+(isEn?'since '+fmtDate(s.date):'自 '+fmtDate(s.date))+'</span>'+
         '<span style="flex:1;min-width:8px;"></span>'+
         '<span style="font-size:0.82em;background:#F0EACF;border-radius:6px;padding:4px 10px;font-weight:900;white-space:nowrap;">'+(isEn?'Before: ':'前：')+(bRate!==null?bRate+cmYr.trim():(isEn?'—':'資料不足'))+'</span>'+
@@ -2037,7 +2034,7 @@ function buildReportHTML(hImg,wImg){
           (wImg?'<div class="chart-box"><div class="chart-head" style="background:linear-gradient(160deg,#BFEFB2,#A0E090);">🍄 '+(isEn?'Weight Chart':'體重曲線')+'</div><img src="'+wImg+'" alt="Weight Chart"></div>':'')+
         '</div>'+
       '</div>'+
-      (supplements.length&&sorted.length>=2?'<div style="margin-bottom:22px;"><div class="sec-title">🎇 '+(isEn?'Supplement × Growth Correlation':'保健品 × 生長對比')+'</div><div style="border:3px solid #231203;border-radius:12px;overflow:hidden;box-shadow:4px 4px 0 #231203;background:var(--card);">'+scHTML+'</div></div>':'')+
+      (supplements.length&&sorted.length>=2?'<div style="margin-bottom:22px;"><div class="sec-title">⭐ '+(isEn?'Supplement × Growth Correlation':'保健品 × 生長對比')+'</div><div style="border:3px solid #231203;border-radius:12px;overflow:hidden;box-shadow:4px 4px 0 #231203;background:var(--card);">'+scHTML+'</div></div>':'')+
       '<div class="rmsec">'+
         '<div class="rmsec-head">📋 '+(isEn?'Report Reminders':'報告提醒')+'</div>'+
         '<div class="rmsec-body"><ul>'+rmBullets.join('')+'</ul></div>'+
@@ -2180,7 +2177,7 @@ function renderSuppCorrelation(){
     var bRate=null,aRate=null;
     if(before.length>=2){var days=(new Date(before[before.length-1].date)-new Date(before[0].date))/86400000;if(days>=14)bRate=((before[before.length-1].height-before[0].height)/days*365).toFixed(1);}
     if(after.length>=2){var days2=(new Date(after[after.length-1].date)-new Date(after[0].date))/86400000;if(days2>=14)aRate=((after[after.length-1].height-after[0].height)/days2*365).toFixed(1);}
-    html+='<div class="supp-item"><div class="supp-row1"><div><span class="supp-name">🎇 '+esc(s.name)+'</span><span style="font-size:0.78em;color:var(--muted);font-weight:700;margin-left:8px;">'+fmtDate(s.date)+(currentLang==='en'?' (since '+fmtAgeFull(currentChild.birthday,s.date)+')':'（'+fmtAgeFull(currentChild.birthday,s.date)+'起）')+'</span></div></div>';
+    html+='<div class="supp-item"><div class="supp-row1"><div><span class="supp-name">⭐ '+esc(s.name)+'</span><span style="font-size:0.78em;color:var(--muted);font-weight:700;margin-left:8px;">'+fmtDate(s.date)+(currentLang==='en'?' (since '+fmtAgeFull(currentChild.birthday,s.date)+')':'（'+fmtAgeFull(currentChild.birthday,s.date)+'起）')+'</span></div></div>';
     html+='<div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
     var cmYr2=currentLang==='en'?' cm/yr':' cm/年';
     html+='<div style="background:#F0EACF;border-radius:4px;padding:10px;text-align:center;border:3px solid #DDD;"><div style="font-size:0.7em;color:var(--muted);font-weight:900;margin-bottom:5px;">'+t('corrBefore')+'</div>';
@@ -2322,7 +2319,7 @@ async function removeShare(shareId){
   var bg=document.getElementById('skyBg');
   if(!bg)return;
   /* Stars — small & dense for starry-sky effect */
-  for(var i=0;i<360;i++){
+  for(var i=0;i<520;i++){
     var s=document.createElement('div');s.className='sk-star';
     var sz=0.6+Math.random()*1.9; /* 0.6–2.5px, all small */
     var glow=sz*5.5;
@@ -2335,40 +2332,6 @@ async function removeShare(shareId){
     cl.style.cssText='width:'+c[0]+'px;height:'+c[1]+'px;top:'+(2+idx*4.5)+'%;background:rgba('+c[2]+','+c[3]+');box-shadow:0 0 55px 18px rgba('+c[2]+',0.22);animation-duration:'+c[4]+'s;animation-delay:'+(-c[4]*(idx*0.22))+'s;';
     bg.appendChild(cl);
   });
-  /* Ambient background fireworks */
-  var fwCols=['#FFD700','#FF6BAE','#80AAFF','#AAFFB8','#FFB347','#FF85D2','#CE93D8','#FFF176','#FFB3C6','#85FFED','#FFCC80'];
-  function spawnAmbientFirework(){
-    var bg2=document.getElementById('skyBg');if(!bg2)return;
-    var cx=Math.round((0.08+Math.random()*0.84)*window.innerWidth);
-    var cy=Math.round((0.06+Math.random()*0.48)*window.innerHeight);
-    var baseCol=fwCols[Math.floor(Math.random()*fwCols.length)];
-    var cnt=18+Math.round(Math.random()*14);
-    for(var i=0;i<cnt;i++){
-      (function(){
-        var p=document.createElement('div');p.className='amb-fw';
-        var a=(i/cnt)*Math.PI*2+(Math.random()-0.5)*0.4;
-        var d=28+Math.random()*52;
-        var col=fwCols[Math.floor(Math.random()*fwCols.length)];
-        var sz=1.2+Math.random()*2.2;
-        p.style.cssText='left:'+cx+'px;top:'+cy+'px;width:'+sz+'px;height:'+sz+'px;background:'+col+';box-shadow:0 0 '+(sz*3)+'px '+col+';transform:translate(-50%,-50%);';
-        bg2.appendChild(p);
-        var dx=Math.cos(a)*d,dy=Math.sin(a)*d;
-        p.animate([
-          {transform:'translate(-50%,-50%) scale(1)',opacity:0.9},
-          {transform:'translate(calc(-50% + '+dx+'px),calc(-50% + '+dy+'px)) scale(0.05)',opacity:0}
-        ],{duration:900+Math.random()*500,easing:'cubic-bezier(0,0.85,0.6,1)',fill:'forwards'}).onfinish=function(){p.remove();};
-      })();
-    }
-    var ring=document.createElement('div');
-    ring.style.cssText='position:absolute;left:'+cx+'px;top:'+cy+'px;width:36px;height:36px;border-radius:50%;border:2px solid '+baseCol+';transform:translate(-50%,-50%) scale(0.1);box-shadow:0 0 8px '+baseCol+';';
-    bg2.appendChild(ring);
-    ring.animate([
-      {transform:'translate(-50%,-50%) scale(0.1)',opacity:0.92},
-      {transform:'translate(-50%,-50%) scale(3)',opacity:0}
-    ],{duration:600,easing:'ease-out',fill:'forwards'}).onfinish=function(){ring.remove();};
-    setTimeout(spawnAmbientFirework,4500+Math.random()*5500);
-  }
-  setTimeout(spawnAmbientFirework,3000+Math.random()*3000);
   /* Fireflies — lower half */
   for(var f=0;f<14;f++){
     var fly=document.createElement('div');fly.className='sk-fly';
