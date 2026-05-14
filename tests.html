@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>Baby Growth Tracker — Unit Tests</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','微軟正黑體',sans-serif;background:#1e1e2e;color:#cdd6f4;padding:24px;margin:0;}
+    h1{color:#cba6f7;font-size:1.1em;margin-bottom:4px;}
+    .sub{color:#6c7086;font-size:0.82em;margin-bottom:20px;}
+    .suite{margin-bottom:28px;}
+    .suite-title{font-size:0.9em;font-weight:900;color:#89b4fa;margin-bottom:8px;border-bottom:2px solid #313244;padding-bottom:4px;}
+    .test{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:6px;margin-bottom:4px;font-size:0.84em;}
+    .test.pass{background:#1e3a2e;color:#a6e3a1;}
+    .test.fail{background:#3a1e1e;color:#f38ba8;}
+    .badge{font-weight:900;font-size:0.78em;padding:2px 8px;border-radius:4px;flex-shrink:0;}
+    .pass .badge{background:#40a02b;color:white;}
+    .fail .badge{background:#d20f39;color:white;}
+    .detail{font-size:0.8em;color:#f9e2af;margin-left:auto;}
+    .summary{margin-top:20px;padding:14px 18px;border-radius:10px;font-weight:900;font-size:0.95em;}
+    .summary.all-pass{background:#1e3a2e;color:#a6e3a1;}
+    .summary.has-fail{background:#3a1e1e;color:#f38ba8;}
+    .err{color:#fab387;font-size:0.78em;margin-left:20px;font-family:monospace;}
+  </style>
+</head>
+<body>
+<h1>🧪 Baby Growth Tracker — Unit Tests</h1>
+<div class="sub">Core algorithm tests: getMinGrowth · fmtAgeFull · getPctScore · predictAdultHeight · calcMidParentalHeight</div>
+<div id="results"></div>
+<script>
+
+/* ── Paste core functions (no DOM/Supabase deps) ── */
+
+var WHO_H_BOY=[
+  [0,46.3,48.2,49.9,51.8,53.4],[1,50.8,53.0,54.7,56.5,58.1],[2,54.4,56.5,58.4,60.2,62.0],
+  [3,57.3,59.6,61.4,63.2,65.0],[6,63.3,65.7,67.6,69.5,71.6],[12,71.0,73.5,75.7,77.9,80.2],
+  [24,82.3,85.2,87.8,90.5,93.4],[36,91.1,94.6,97.6,100.9,104.3],[48,98.4,102.7,106.4,110.4,114.6],
+  [60,104.9,109.9,114.3,118.9,123.8],[72,110.2,115.4,120.2,125.2,130.3],[84,115.3,121.0,125.7,131.3,137.0]
+];
+var WHO_H_GIRL=[
+  [0,45.6,47.3,49.1,50.9,52.5],[1,49.8,51.7,53.5,55.3,56.9],[2,53.0,55.0,56.8,58.6,60.3],
+  [3,55.6,57.7,59.5,61.4,63.2],[6,61.2,63.3,65.3,67.3,69.2],[12,68.9,71.3,73.7,76.0,78.4],
+  [24,80.8,83.5,86.0,88.7,91.2],[36,88.6,91.4,94.1,97.0,99.9],[48,95.5,98.7,101.6,104.7,107.7],
+  [60,101.5,104.9,108.0,111.2,114.4],[72,107.0,110.5,113.8,117.1,120.4],[84,112.2,115.8,119.2,122.7,126.2]
+];
+var ADULT_H_REF={
+  boy:{p3:161.5,p15:167.0,p50:176.5,p85:183.5,p97:188.0},
+  girl:{p3:150.0,p15:155.5,p50:163.5,p85:170.0,p97:174.5}
+};
+
+function getMinGrowth(m){
+  if(m<12)return{min:20,max:40};
+  if(m<24)return{min:9,max:15};
+  if(m<36)return{min:7,max:11};
+  return{min:5,max:8};
+}
+
+function fmtAgeFull(birthdayStr,toDateStr){
+  var b=new Date(birthdayStr),d=toDateStr?new Date(toDateStr):new Date();
+  var y=d.getFullYear()-b.getFullYear(),mo=d.getMonth()-b.getMonth(),da=d.getDate()-b.getDate();
+  if(da<0){mo--;da+=new Date(d.getFullYear(),d.getMonth(),0).getDate();}
+  if(mo<0){y--;mo+=12;}
+  return(y?y+'Y':'')+(mo||y?mo+'M':'')+(da+'D');
+}
+
+function getAgeMonths(birthdayStr,dateStr){
+  var b=new Date(birthdayStr),d=new Date(dateStr);
+  var m=(d.getFullYear()-b.getFullYear())*12+(d.getMonth()-b.getMonth());
+  if(d.getDate()<b.getDate())m--;
+  return Math.max(0,m);
+}
+
+function getPctScore(am,val,data){
+  var lo=data[0],hi=data[data.length-1];
+  for(var i=0;i<data.length-1;i++){if(data[i][0]<=am&&data[i+1][0]>=am){lo=data[i];hi=data[i+1];break;}}
+  var fr=lo[0]===hi[0]?0:(am-lo[0])/(hi[0]-lo[0]);
+  var p=function(k){return lo[k]+fr*(hi[k]-lo[k]);};
+  var refs=[{pct:3,v:p(1)},{pct:15,v:p(2)},{pct:50,v:p(3)},{pct:85,v:p(4)},{pct:97,v:p(5)}];
+  if(val<=refs[0].v)return 3;if(val>=refs[4].v)return 97;
+  for(var j=0;j<4;j++){if(val>=refs[j].v&&val<=refs[j+1].v){var t=(val-refs[j].v)/(refs[j+1].v-refs[j].v);return refs[j].pct+t*(refs[j+1].pct-refs[j].pct);}}
+  return 50;
+}
+
+function predictAdultHeightFn(gender,ageMonths,heightCm){
+  var whoH=gender==='女'?WHO_H_GIRL:WHO_H_BOY;
+  var rawPct=getPctScore(ageMonths,heightCm,whoH);
+  var isExtreme=rawPct<=3||rawPct>=97;
+  var pct=Math.max(3,Math.min(97,rawPct));
+  var ref=gender==='女'?ADULT_H_REF.girl:ADULT_H_REF.boy;
+  var pcts=[3,15,50,85,97],vals=[ref.p3,ref.p15,ref.p50,ref.p85,ref.p97];
+  var adultH=ref.p50;
+  if(pct<=3)adultH=ref.p3;
+  else if(pct>=97)adultH=ref.p97;
+  else for(var i=0;i<4;i++){if(pct>=pcts[i]&&pct<=pcts[i+1]){var t=(pct-pcts[i])/(pcts[i+1]-pcts[i]);adultH=vals[i]+t*(vals[i+1]-vals[i]);break;}}
+  return{cm:Math.round(adultH*10)/10,pct:Math.round(rawPct),isExtreme:isExtreme};
+}
+
+function calcMidParentalHeightFn(gender,fatherH,motherH){
+  if(!fatherH||!motherH)return null;
+  var target=gender==='女'?(fatherH+motherH-13)/2:(fatherH+motherH+13)/2;
+  return{target:Math.round(target*10)/10,low:Math.round((target-8.5)*10)/10,high:Math.round((target+8.5)*10)/10};
+}
+
+/* ── Test Runner ── */
+var results=[];
+var currentSuite='';
+function suite(name){currentSuite=name;results.push({suite:name,tests:[]});}
+function test(desc,fn){
+  var s=results[results.length-1];
+  try{
+    var info=fn();
+    s.tests.push({desc:desc,pass:true,detail:info||''});
+  }catch(e){
+    s.tests.push({desc:desc,pass:false,detail:e.message});
+  }
+}
+function expect(actual){
+  return{
+    toBe:function(expected){
+      if(actual!==expected)throw new Error('Expected '+JSON.stringify(expected)+' but got '+JSON.stringify(actual));
+    },
+    toBeCloseTo:function(expected,dp){
+      var d=Math.pow(10,dp||2);
+      if(Math.round(actual*d)/d!==Math.round(expected*d)/d)
+        throw new Error('Expected ~'+expected+' but got '+actual);
+    },
+    toBeGreaterThan:function(v){if(actual<=v)throw new Error(actual+' is not > '+v);},
+    toBeLessThan:function(v){if(actual>=v)throw new Error(actual+' is not < '+v);},
+    toBeTrue:function(){if(!actual)throw new Error('Expected truthy, got '+actual);},
+    toBeFalse:function(){if(actual)throw new Error('Expected falsy, got '+actual);},
+    toContain:function(sub){if(String(actual).indexOf(sub)<0)throw new Error('"'+actual+'" does not contain "'+sub+'"');},
+  };
+}
+
+/* ══ Test Suites ══ */
+
+suite('getMinGrowth — growth thresholds by age');
+test('< 12 months: min=20 cm/yr', function(){expect(getMinGrowth(6).min).toBe(20);});
+test('12–23 months: min=9 cm/yr', function(){expect(getMinGrowth(18).min).toBe(9);});
+test('24–35 months: min=7 cm/yr', function(){expect(getMinGrowth(30).min).toBe(7);});
+test('≥ 36 months: min=5 cm/yr', function(){expect(getMinGrowth(48).min).toBe(5);});
+test('boundary 12 months returns 9 not 20', function(){expect(getMinGrowth(12).min).toBe(9);});
+test('boundary 24 months returns 7 not 9', function(){expect(getMinGrowth(24).min).toBe(7);});
+test('boundary 36 months returns 5 not 7', function(){expect(getMinGrowth(36).min).toBe(5);});
+
+suite('fmtAgeFull — age string formatting');
+test('exactly 2 years = 2Y0M0D', function(){expect(fmtAgeFull('2022-01-01','2024-01-01')).toBe('2Y0M0D');});
+test('2 years 3 months 15 days', function(){expect(fmtAgeFull('2020-01-01','2022-04-16')).toBe('2Y3M15D');});
+test('under 1 year = 0Y omitted', function(){expect(fmtAgeFull('2023-06-01','2023-09-15')).toContain('M');});
+test('month rollover handled correctly', function(){
+  var r=fmtAgeFull('2021-03-31','2021-04-30');
+  expect(r).toContain('M');
+});
+test('same day = 0D', function(){
+  var r=fmtAgeFull('2020-05-15','2020-05-15');
+  expect(r).toBe('0D');
+});
+
+suite('getAgeMonths — age in months');
+test('24 months for exactly 2 years', function(){expect(getAgeMonths('2020-01-01','2022-01-01')).toBe(24);});
+test('11 months when day not yet reached', function(){expect(getAgeMonths('2021-01-15','2022-01-14')).toBe(11);});
+test('12 months when same day next year', function(){expect(getAgeMonths('2021-01-15','2022-01-15')).toBe(12);});
+test('never returns negative', function(){expect(getAgeMonths('2025-01-01','2024-01-01')).toBe(0);});
+
+suite('getPctScore — WHO percentile interpolation');
+test('boy 24m P50 height ≈ 50th percentile', function(){
+  var pct=getPctScore(24,87.8,WHO_H_BOY);
+  expect(Math.round(pct)).toBe(50);
+});
+test('boy 24m P3 height returns exactly 3', function(){
+  var pct=getPctScore(24,82.3,WHO_H_BOY);
+  expect(Math.round(pct)).toBe(3);
+});
+test('boy 24m P97 height returns exactly 97', function(){
+  var pct=getPctScore(24,93.4,WHO_H_BOY);
+  expect(Math.round(pct)).toBe(97);
+});
+test('below P3 clamps to 3', function(){
+  var pct=getPctScore(24,70,WHO_H_BOY);
+  expect(pct).toBe(3);
+});
+test('above P97 clamps to 97', function(){
+  var pct=getPctScore(24,110,WHO_H_BOY);
+  expect(pct).toBe(97);
+});
+test('girl 12m P50 height returns ~50', function(){
+  var pct=getPctScore(12,73.7,WHO_H_GIRL);
+  expect(Math.abs(pct-50)).toBeLessThan(2);
+});
+test('interpolates correctly between months', function(){
+  var p24=getPctScore(24,87.8,WHO_H_BOY);
+  var p36=getPctScore(36,97.6,WHO_H_BOY);
+  var pMid=getPctScore(30,(87.8+97.6)/2,WHO_H_BOY);
+  expect(pMid).toBeGreaterThan(30);
+  expect(pMid).toBeLessThan(70);
+});
+
+suite('predictAdultHeight — trend-based adult height prediction');
+test('boy at P50 (24m, 87.8 cm) predicts near 176.5 cm', function(){
+  var r=predictAdultHeightFn('男',24,87.8);
+  expect(Math.abs(r.cm-176.5)).toBeLessThan(2);
+  return 'got '+r.cm+' cm';
+});
+test('boy at P3 (24m, 82.3 cm) predicts 161.5 cm', function(){
+  var r=predictAdultHeightFn('男',24,82.3);
+  expect(r.cm).toBe(161.5);
+});
+test('boy at P97 (24m, 93.4 cm) predicts 188.0 cm', function(){
+  var r=predictAdultHeightFn('男',24,93.4);
+  expect(r.cm).toBe(188.0);
+});
+test('extreme below P3 sets isExtreme=true', function(){
+  var r=predictAdultHeightFn('男',24,70);
+  expect(r.isExtreme).toBeTrue();
+  return 'pct='+r.pct+', cm='+r.cm;
+});
+test('extreme above P97 sets isExtreme=true', function(){
+  var r=predictAdultHeightFn('男',24,110);
+  expect(r.isExtreme).toBeTrue();
+});
+test('P50 child is not flagged as extreme', function(){
+  var r=predictAdultHeightFn('男',24,87.8);
+  expect(r.isExtreme).toBeFalse();
+});
+test('girl at P50 (24m, 86.0 cm) predicts near 163.5 cm', function(){
+  var r=predictAdultHeightFn('女',24,86.0);
+  expect(Math.abs(r.cm-163.5)).toBeLessThan(2);
+  return 'got '+r.cm+' cm';
+});
+test('returns pct as integer', function(){
+  var r=predictAdultHeightFn('男',36,97.6);
+  expect(r.pct).toBe(Math.round(r.pct));
+});
+
+suite('calcMidParentalHeight — genetic height prediction');
+test('boy target = (fatherH + motherH + 13) / 2', function(){
+  var r=calcMidParentalHeightFn('男',175,162);
+  expect(r.target).toBe((175+162+13)/2);
+});
+test('girl target = (fatherH + motherH - 13) / 2', function(){
+  var r=calcMidParentalHeightFn('女',175,162);
+  expect(r.target).toBe((175+162-13)/2);
+});
+test('range is ±8.5 cm', function(){
+  var r=calcMidParentalHeightFn('男',175,162);
+  expect(r.high-r.low).toBeCloseTo(17,1);
+});
+test('returns null when either height missing', function(){
+  expect(calcMidParentalHeightFn('男',null,162)).toBe(null);
+  expect(calcMidParentalHeightFn('男',175,null)).toBe(null);
+});
+test('realistic boy parents (175+162): target = 175', function(){
+  var r=calcMidParentalHeightFn('男',175,162);
+  expect(r.target).toBe(175);
+});
+test('gap detection: trend vs genetic differ by ≥10cm is flaggable', function(){
+  var trend=predictAdultHeightFn('男',24,82.3);   // P3 boy → 161.5
+  var mph=calcMidParentalHeightFn('男',185,172);  // tall parents → 179
+  var gap=Math.abs(trend.cm-mph.target);
+  expect(gap).toBeGreaterThan(10);
+  return 'gap='+gap.toFixed(1)+' cm';
+});
+
+/* ── Render Results ── */
+var totalPass=0,totalFail=0;
+var html='';
+results.forEach(function(s){
+  html+='<div class="suite"><div class="suite-title">'+s.suite+'</div>';
+  s.tests.forEach(function(t){
+    if(t.pass)totalPass++;else totalFail++;
+    html+='<div class="test '+(t.pass?'pass':'fail')+'">'+
+      '<span class="badge">'+(t.pass?'PASS':'FAIL')+'</span>'+
+      '<span>'+t.desc+'</span>'+
+      (t.detail?'<span class="detail">'+t.detail+'</span>':'')+
+    '</div>';
+    if(!t.pass) html+='<div class="err">✗ '+t.detail+'</div>';
+  });
+  html+='</div>';
+});
+var total=totalPass+totalFail;
+html+='<div class="summary '+(totalFail===0?'all-pass':'has-fail')+'">'+
+  (totalFail===0?'✅ All '+total+' tests passed':'❌ '+totalFail+' / '+total+' tests failed')+
+'</div>';
+document.getElementById('results').innerHTML=html;
+</script>
+</body>
+</html>
