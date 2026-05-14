@@ -51,13 +51,13 @@
     .app-header {
       position:relative;overflow:hidden;
       padding: 52px 20px 38px; text-align:center;
-      background: url('images/header-bg.jpg') center/cover no-repeat;
+      background: linear-gradient(180deg,#060218 0%,#0e0645 55%,#060220 100%);
       border-bottom: 3px solid rgba(255,210,80,0.45);
       box-shadow: 0 6px 32px rgba(0,0,0,0.5);
     }
     .app-header::before {
       content:'';position:absolute;inset:0;
-      background:linear-gradient(180deg,rgba(6,4,20,0.42) 0%,rgba(10,6,30,0.18) 45%,rgba(6,4,20,0.52) 100%);
+      background:linear-gradient(180deg,rgba(6,4,20,0.15) 0%,rgba(10,6,30,0.05) 45%,rgba(6,4,20,0.20) 100%);
       pointer-events:none;z-index:0;
     }
     .app-header::after {
@@ -156,7 +156,7 @@
     }
 
     /* ── Hero ── */
-    .hero { position:relative;overflow:hidden;padding:24px 20px 36px;text-align:center;background:url('images/header-bg.jpg') center/cover no-repeat;border-bottom:3px solid rgba(255,210,80,0.45);box-shadow:0 6px 32px rgba(0,0,0,0.5); }
+    .hero { position:relative;overflow:hidden;padding:24px 20px 36px;text-align:center;background:linear-gradient(180deg,#060218 0%,#0e0645 55%,#060220 100%);border-bottom:3px solid rgba(255,210,80,0.45);box-shadow:0 6px 32px rgba(0,0,0,0.5); }
     .hero::before { content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,4,20,0.4) 0%,rgba(10,6,30,0.15) 50%,rgba(6,4,20,0.5) 100%);pointer-events:none;z-index:0; }
     .hero::after { content:'';position:absolute;bottom:8px;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,210,80,0.7),rgba(255,140,200,0.5),rgba(255,210,80,0.7),transparent);pointer-events:none;z-index:0; }
     .hero-content { position:relative;z-index:2;margin-top:16px; }
@@ -198,7 +198,7 @@
     .card:not(.no-float):hover { transform:translateY(-5px) rotate(0.15deg);box-shadow:0 8px 40px rgba(120,80,255,0.45),0 0 80px rgba(100,60,220,0.25),inset 0 0 18px rgba(255,255,255,0.06); }
     .tab-content .card:nth-child(3n+1) { border-radius:20px 16px 22px 14px / 16px 22px 14px 20px; }
     .tab-content .card:nth-child(3n+2) { border-radius:14px 22px 18px 22px / 22px 14px 22px 16px; }
-    .card-chart { padding:18px;margin-bottom:18px; }
+    .card-chart { padding:18px;margin-bottom:18px;background:rgba(115,85,195,0.42) !important;box-shadow:0 4px 30px rgba(140,100,240,0.38),0 0 60px rgba(110,80,220,0.18),inset 0 0 20px rgba(200,180,255,0.08) !important; }
     .card-title { font-size:0.72em;font-weight:700;color:rgba(255,248,200,0.98);margin-bottom:16px;display:flex;align-items:center;gap:8px;font-family:var(--pixel);letter-spacing:0.3px;line-height:1.8;text-shadow:0 0 8px rgba(255,210,80,0.3); }
     .badge { background:linear-gradient(160deg,var(--yellow) 0%,#F0C500 100%);color:var(--ink);font-size:0.8em;padding:3px 10px;border-radius:8px;font-weight:900;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);font-family:-apple-system,BlinkMacSystemFont,'微軟正黑體',sans-serif; }
 
@@ -2122,16 +2122,14 @@ function buildReportHTML(hImg,wImg){
       '<div class="prof-photo">'+photoHTML+'</div>'+
       '<div class="prof-info">'+
         '<div class="prof-name">'+safeName+'</div>'+
-        '<div class="prof-badge">'+(isEn?(gender==='女'?'♀ Girl':'♂ Boy'):(gender==='女'?'♀ 女生':'♂ 男生'))+'</div>'+
-        '<div class="prof-grid">'+
-          '<div class="pg"><div class="pg-l">'+(isEn?'Age':'年齡')+'</div><div class="pg-v" style="font-size:15px;">'+ageDisplay+'</div></div>'+
-          '<div class="pg"><div class="pg-l">'+(isEn?'Birthday':'生日')+'</div><div class="pg-v" style="font-size:15px;">'+bdayFmt+'</div></div>'+
-          (isEn?'':'<div class="pg"><div class="pg-l">星座</div><div class="pg-v" style="font-size:14px;color:rgba(200,180,255,0.92);">'+zodiac+'</div></div>')+
-          (isEn?'':'<div class="pg"><div class="pg-l">屬相</div><div class="pg-v" style="font-size:14px;color:rgba(200,180,255,0.92);">'+chineseZodiac+'</div></div>')+
+        '<div style="margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">'+
+          '<div class="prof-badge">'+(isEn?(gender==='女'?'♀ Girl':'♂ Boy'):(gender==='女'?'♀ 女生':'♂ 男生'))+'</div>'+
+          '<span style="font-size:12px;color:rgba(200,185,255,0.82);font-weight:500;">'+(isEn?'· Born '+fmtDate(bday):'· 生日 '+bdayFmt)+'</span>'+
         '</div>'+
-        '<div style="display:flex;gap:8px;margin-top:8px;">'+
-          '<div class="pg" style="flex:1;text-align:center;"><div class="pg-l">'+(isEn?'Height cm':'身高 cm')+'</div><div class="pg-v">'+latest.height+'</div></div>'+
-          '<div class="pg" style="flex:1;text-align:center;"><div class="pg-l">'+(isEn?'Weight kg':'體重 kg')+'</div><div class="pg-v">'+latest.weight+'</div></div>'+
+        '<div style="display:flex;gap:8px;margin-top:12px;">'+
+          '<div class="pg" style="flex:1;text-align:center;"><div class="pg-l">'+(isEn?'Height cm':'身高 cm')+'</div><div class="pg-v" style="font-size:20px;">'+latest.height+'</div></div>'+
+          '<div class="pg" style="flex:1;text-align:center;"><div class="pg-l">'+(isEn?'Weight kg':'體重 kg')+'</div><div class="pg-v" style="font-size:20px;">'+latest.weight+'</div></div>'+
+          '<div class="pg" style="flex:1;text-align:center;"><div class="pg-l">'+(isEn?'Age':'年齡')+'</div><div class="pg-v" style="font-size:14px;line-height:1.4;">'+ageDisplay+'</div></div>'+
         '</div>'+
       '</div>'+
       '<div class="alert-wrap">'+
@@ -2442,14 +2440,33 @@ async function removeShare(shareId){
   var bg=document.getElementById('skyBg');
   var fg=document.getElementById('skyFg');
   if(!bg)return;
-  /* Stars — 920 total, 45 larger feature stars */
-  for(var i=0;i<920;i++){
+  /* Stars — 1100 total, 50 larger feature stars */
+  for(var i=0;i<1100;i++){
     var s=document.createElement('div');s.className='sk-star';
-    var sz=i<45?(2.2+Math.random()*2.0):(0.5+Math.random()*1.8);
-    var glow=sz*(i<45?8:5.5);
+    var sz=i<50?(2.2+Math.random()*2.2):(0.5+Math.random()*1.8);
+    var glow=sz*(i<50?9:5.5);
     s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;top:'+Math.random()*92+'%;animation-duration:'+(0.9+Math.random()*3.5)+'s;animation-delay:'+(-Math.random()*8)+'s;box-shadow:0 0 '+glow+'px '+sz+'px rgba(255,255,245,'+(0.65+Math.random()*0.35)+');';
     bg.appendChild(s);
   }
+  /* Zodiac constellation star groups */
+  var constellations=[
+    /* 雙子座 Gemini — two parallel lines */
+    [[22,8],[24,12],[25,17],[23,22],[21,16],[20,11],[19,7],[26,9]],
+    /* 巨蟹座 Cancer — compact crab cluster */
+    [[68,14],[70,10],[72,15],[74,11],[71,17],[69,19],[73,8]],
+    /* 天蠍座 Scorpio — curved tail shape */
+    [[82,55],[83,60],[82,65],[84,70],[83,76],[81,81],[84,86],[87,88],[90,86],[92,83]],
+    /* 處女座 Virgo — Y shape */
+    [[44,28],[46,32],[48,36],[49,41],[47,46],[45,51],[50,38],[52,34],[54,30]]
+  ];
+  constellations.forEach(function(pts){
+    pts.forEach(function(pt){
+      var cs=document.createElement('div');cs.className='sk-star';
+      var csz=2.5+Math.random()*1.5;
+      cs.style.cssText='width:'+csz+'px;height:'+csz+'px;left:'+pt[0]+'%;top:'+pt[1]+'%;animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+(-Math.random()*4)+'s;box-shadow:0 0 '+(csz*9)+'px '+(csz*2)+'px rgba(220,200,255,0.92);';
+      bg.appendChild(cs);
+    });
+  });
   /* Clouds — pink-purple glow, fireworks reflection */
   [[280,95,'255,200,230',0.30,56],[190,68,'210,190,255',0.26,44],[320,105,'255,190,220',0.22,72],[220,78,'195,200,255',0.28,51],[250,88,'255,215,235',0.18,63]].forEach(function(c,idx){
     var cl=document.createElement('div');cl.className='sk-cloud';
@@ -2462,21 +2479,26 @@ async function removeShare(shareId){
     fly.style.cssText='left:'+(3+Math.random()*94)+'%;top:'+(50+Math.random()*44)+'%;animation-duration:'+(5+Math.random()*8)+'s,'+(1.2+Math.random()*2.8)+'s;animation-delay:'+(-Math.random()*9)+'s,'+(-Math.random()*3)+'s;';
     bg.appendChild(fly);
   }
-  /* Mist clouds — large slow blobs (foreground layer, visible over content) */
+  /* Mist + atmosphere particles on foreground layer (3× strength) */
   if(fg){
-    [[700,420,'80,55,180',0.055,48],[520,360,'110,60,210',0.062,58],[640,400,'180,90,255',0.048,65],[480,320,'55,75,160',0.058,42],[580,380,'140,100,220',0.042,55]].forEach(function(m,idx){
+    /* 15 large mist blobs */
+    [[820,500,'80,55,180',0.16,48],[600,420,'110,60,210',0.18,58],[750,480,'180,90,255',0.14,65],[560,380,'55,75,160',0.17,42],[680,450,'140,100,220',0.13,55],
+     [700,440,'90,60,200',0.15,52],[540,360,'160,80,240',0.16,62],[780,460,'70,50,180',0.14,44],[620,400,'120,70,215',0.17,49],[660,420,'100,65,195',0.15,60],
+     [590,380,'150,90,230',0.13,55],[720,460,'85,55,185',0.16,48],[640,410,'130,75,220',0.14,58],[580,370,'165,85,245',0.17,43],[700,450,'95,60,200',0.15,52]]
+    .forEach(function(m,idx){
       var el=document.createElement('div');el.className='sk-mist';
-      el.style.cssText='width:'+m[0]+'px;height:'+m[1]+'px;left:'+(Math.random()*110-5)+'%;top:'+(8+Math.random()*75)+'%;background:rgba('+m[2]+','+m[3]+');animation-duration:'+m[4]+'s;animation-delay:'+(-m[4]*(idx*0.25))+'s;';
+      el.style.cssText='width:'+m[0]+'px;height:'+m[1]+'px;left:'+(Math.random()*115-8)+'%;top:'+(5+Math.random()*80)+'%;background:rgba('+m[2]+','+m[3]+');animation-duration:'+m[4]+'s;animation-delay:'+(-m[4]*(idx*0.18))+'s;';
       fg.appendChild(el);
     });
-    /* Atmosphere particles — slow rising dots (foreground layer) */
-    for(var a=0;a<32;a++){
+    /* 90 slow rising atmosphere particles */
+    for(var a=0;a<90;a++){
       var ap=document.createElement('div');ap.className='sk-atm';
-      var asz=0.8+Math.random()*1.8;
-      var aCol=Math.random()<0.5?'255,220,180':'200,180,255';
-      var aop=(0.45+Math.random()*0.40).toFixed(2);
-      var adx=(Math.random()*50-25).toFixed(0);
-      ap.style.cssText='width:'+asz+'px;height:'+asz+'px;left:'+Math.random()*100+'%;bottom:'+(Math.random()*65)+'%;background:rgba('+aCol+','+aop+');box-shadow:0 0 '+(asz*3.5)+'px rgba('+aCol+',0.45);animation-duration:'+(18+Math.random()*28)+'s;animation-delay:'+(-Math.random()*35)+'s;';
+      var asz=1.2+Math.random()*2.5;
+      var aColIdx=Math.random();
+      var aCol=aColIdx<0.33?'255,220,180':aColIdx<0.66?'200,180,255':'180,220,255';
+      var aop=(0.58+Math.random()*0.35).toFixed(2);
+      var adx=(Math.random()*60-30).toFixed(0);
+      ap.style.cssText='width:'+asz+'px;height:'+asz+'px;left:'+Math.random()*100+'%;bottom:'+(Math.random()*70)+'%;background:rgba('+aCol+','+aop+');box-shadow:0 0 '+(asz*4)+'px rgba('+aCol+',0.55);animation-duration:'+(14+Math.random()*24)+'s;animation-delay:'+(-Math.random()*32)+'s;';
       ap.style.setProperty('--aop',aop);
       ap.style.setProperty('--adx',adx+'px');
       fg.appendChild(ap);
