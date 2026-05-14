@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://gfvccfpzwhwvuoxffafl.supabase.co">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js" defer></script>
@@ -18,17 +18,18 @@
       --blue:    #049CD8; --blue-pale:#C4ECFF;
       --green:   #3A9D23; --green-pale:#BFEFB2;
       --orange:  #FB8C00; --orange-pale:#FFE0B2;
-      --ink:     #231203; --card: #FFFDE0; --muted: #6B4C2A;
+      --ink:     #1a0f3a; --card: #FFF4D0; --muted: #4a3060;
       --nav-h:   72px;
-      --pixel: 'Press Start 2P', monospace;
+      --pixel: 'Noto Serif TC', serif;
       --r-card: 14px;
       --shadow-card: 6px 6px 0 var(--ink), inset 0 -3px 0 rgba(0,0,0,0.1);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { min-height: 100%; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', '微軟正黑體', sans-serif;
-      background: url('images/content-bg.jpg') center/cover fixed;
+      font-family: 'Noto Serif TC', -apple-system, BlinkMacSystemFont, '微軟正黑體', serif;
+      background: url('images/content-bg.jpg') top center / 100% auto no-repeat;
+      background-color: #0a0d2e;
       color: var(--ink); min-height: 100vh; position: relative;
     }
 
@@ -150,7 +151,7 @@
     .hero-stat-lbl { font-size:0.62em;color:var(--ink);margin-top:5px;font-weight:800;letter-spacing:0.3px; }
 
     /* ── Nav ── */
-    .bottom-nav { position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:linear-gradient(180deg,#48B228 0%,#2E8A18 100%);border-top:4px solid var(--ink);border-radius:20px 20px 0 0;display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 20px rgba(0,0,0,0.25);overflow:hidden; }
+    .bottom-nav { position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:linear-gradient(180deg,#1e1560 0%,#0d0a3a 100%);border-top:4px solid var(--ink);border-radius:20px 20px 0 0;display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 20px rgba(0,0,0,0.4);overflow:hidden; }
     .nav-btn { flex:1;border:none;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;color:rgba(255,255,255,0.72);font-size:0.5em;font-weight:900;letter-spacing:0.3px;transition:color 0.15s,background 0.15s;font-family:var(--pixel);border-right:2px solid rgba(0,0,0,0.15);line-height:1.5; }
     .nav-btn:last-child { border-right:none; }
     .nav-btn .nav-icon { font-size:1.6em;transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
@@ -322,7 +323,7 @@
 
 <!-- ══ LOADING ══ -->
 <div id="loadingOverlay" class="hidden">
-  <div class="loading-box" data-i18n="loading">成長魔法啟動中 ✨</div>
+  <div class="loading-box" data-i18n="loading">成長魔法啟動中 🎆</div>
 </div>
 
 <!-- ══ LOGIN SCREEN ══ -->
@@ -332,12 +333,12 @@
       <button class="lang-opt" id="loginLangZh" onclick="setLang('zh')">繁中</button>
       <button class="lang-opt" id="loginLangEn" onclick="setLang('en')">EN</button>
     </div>
-    <div class="app-title" data-i18n="appTitle">⭐ 寶貝成長紀錄 ⭐</div>
+    <div class="app-title" data-i18n="appTitle">🎆 寶貝成長紀錄 🎆</div>
     <div class="app-subtitle" data-i18n="appSubtitle">寶貝的成長冒險日記</div>
   </div>
   <div style="padding:48px 24px;max-width:380px;margin:0 auto;">
     <div style="background:var(--card);border:4px solid var(--ink);border-radius:20px;padding:32px 24px;box-shadow:6px 6px 0 var(--ink);text-align:center;">
-      <div style="font-size:3.2em;margin-bottom:16px;">👑</div>
+      <div style="font-size:3.2em;margin-bottom:16px;">🎆</div>
       <div style="font-family:var(--pixel);font-size:0.6em;color:var(--ink);line-height:2.2;margin-bottom:8px;" data-i18n="loginTitle">登入你的帳號</div>
       <div style="font-size:0.84em;color:var(--muted);font-weight:700;margin-bottom:28px;line-height:1.7;" data-i18n-html="loginDesc">資料儲存在雲端<br>換裝置也不怕資料不見！</div>
       <button onclick="signIn()" class="google-btn">
@@ -356,7 +357,7 @@
       <button class="lang-opt" id="homeLangEn" onclick="setLang('en')">EN</button>
     </div>
     <button class="logout-btn" onclick="signOut()" data-i18n="logoutBtn">登出</button>
-    <div class="app-title" data-i18n="appTitle">⭐ 寶貝成長紀錄 ⭐</div>
+    <div class="app-title" data-i18n="appTitle">🎆 寶貝成長紀錄 🎆</div>
     <div class="app-subtitle" data-i18n="homeSubtitle">選擇寶貝查看成長資料</div>
     <div class="user-email" id="userEmail"></div>
     <div style="text-align:center;margin-top:6px;">
@@ -379,11 +380,11 @@
     <div class="hero-content">
       <div class="photo-ring" id="photoRing">
         <div class="photo-placeholder" id="photoPlaceholder">
-          <span class="ph-emoji" id="heroEmoji">⭐</span>
+          <span class="ph-emoji" id="heroEmoji">🎆</span>
           <span class="ph-hint" data-i18n-html="uploadHint">點我<br>上傳照片</span>
         </div>
         <img id="heroPhoto" alt="">
-        <div class="edit-layer">🌟</div>
+        <div class="edit-layer">✨</div>
       </div>
       <div class="hero-name" id="heroName">—</div>
       <div class="hero-sub" id="heroAge">—</div>
@@ -399,7 +400,7 @@
   <div class="tab-content active" id="tab-records">
     <div class="card" id="addMeasureCard">
       <div class="collapse-header" onclick="toggleCollapse('addMeasureCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t1Title">⭐ 新增量測</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t1Title">🎆 新增量測</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -409,12 +410,12 @@
           <div class="form-group"><label data-i18n="t1Weight">體重 (kg)</label><input type="number" id="measureWeight" placeholder="13.2" step="0.1" min="2" max="100" inputmode="decimal" autocomplete="off"></div>
         </div>
         <div class="form-group" style="margin-bottom:12px;"><label data-i18n="t1Note">備註（選填）</label><input type="text" id="measureNote" data-i18n-placeholder="t1NotePlaceholder" placeholder="例：診所量測、在家量測" autocomplete="off"></div>
-        <button class="btn btn-primary btn-full" onclick="addMeasurement()" data-i18n="t1Save">⭐ 儲存量測</button>
+        <button class="btn btn-primary btn-full" onclick="addMeasurement()" data-i18n="t1Save">🎆 儲存量測</button>
       </div>
     </div>
     <div class="card collapsed" id="batchCard">
       <div class="collapse-header" onclick="toggleCollapse('batchCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="batchTitle">🍄 多筆匯入</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="batchTitle">🎇 多筆匯入</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -436,7 +437,7 @@
     </div>
     <div class="card collapsed" id="historyCard">
       <div class="collapse-header" onclick="toggleCollapse('historyCard')">
-        <div class="card-title" style="margin-bottom:0;" data-i18n="historyTitle">🍄 歷史量測紀錄</div>
+        <div class="card-title" style="margin-bottom:0;" data-i18n="historyTitle">🎇 歷史量測紀錄</div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -445,7 +446,7 @@
     </div>
     <div class="card collapsed" id="backupCard">
       <div class="collapse-header" onclick="toggleCollapse('backupCard')">
-        <div class="card-title" style="margin-bottom:0;" data-i18n="backupTitle">💾 資料備份 / 還原</div>
+        <div class="card-title" style="margin-bottom:0;" data-i18n="backupTitle">🗂️ 資料備份 / 還原</div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -465,7 +466,7 @@
     </div>
     <div class="card" id="growthCard">
       <div class="collapse-header" onclick="toggleCollapse('growthCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2GrowthTitle">🌟 年增長分析</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2GrowthTitle">🎇 年增長分析</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -474,7 +475,7 @@
     </div>
     <div class="card card-chart collapsed" id="heightChartCard">
       <div class="collapse-header" onclick="toggleCollapse('heightChartCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2HeightChart">⭐ 身高生長曲線</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2HeightChart">🎆 身高生長曲線</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -489,7 +490,7 @@
     </div>
     <div class="card card-chart collapsed" id="weightChartCard">
       <div class="collapse-header" onclick="toggleCollapse('weightChartCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2WeightChart">🍄 體重生長曲線</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2WeightChart">✨ 體重生長曲線</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -503,7 +504,7 @@
     </div>
     <div class="card card-chart collapsed" id="corrCard">
       <div class="collapse-header" onclick="toggleCollapse('corrCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2CorrTitle">🌟 保健品 × 生長速度對比</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2CorrTitle">🎇 保健品 × 生長速度對比</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -516,7 +517,7 @@
   <div class="tab-content" id="tab-supplements">
     <div class="card" id="addSuppCard">
       <div class="collapse-header" onclick="toggleCollapse('addSuppCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t3AddTitle">⭐ 新增保健品 / 配方奶</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t3AddTitle">🎆 新增保健品 / 配方奶</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -534,12 +535,12 @@
         </div>
         <div class="form-group" style="margin-bottom:10px;"><label data-i18n="t3Name">品名</label><input type="text" id="suppName" placeholder="例：Appeton 成長奶粉、兒童維生素D3" data-i18n-placeholder="t3NamePlaceholder"></div>
         <div class="form-group" style="margin-bottom:12px;"><label data-i18n="t3Note">備註（選填）</label><textarea id="suppNote" data-i18n-placeholder="t3NotePlaceholder" placeholder="例：每天睡前一匙" rows="2" style="resize:vertical;"></textarea></div>
-        <button class="btn btn-primary btn-full" onclick="addSupplement()" data-i18n="t3Save">⭐ 儲存記錄</button>
+        <button class="btn btn-primary btn-full" onclick="addSupplement()" data-i18n="t3Save">🎆 儲存記錄</button>
       </div>
     </div>
     <div class="card collapsed" id="suppListCard">
       <div class="collapse-header" onclick="toggleCollapse('suppListCard')">
-        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t3ListTitle">🍄 保健品紀錄</span></div>
+        <div class="card-title" style="margin-bottom:0;"><span data-i18n="t3ListTitle">✨ 保健品紀錄</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
@@ -549,9 +550,9 @@
   </div>
 
   <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('records',this)"><span class="nav-icon">⭐</span><span data-i18n="tabRecords">成長紀錄</span></button>
-    <button class="nav-btn" onclick="switchTab('chart',this)"><span class="nav-icon">🌟</span><span data-i18n="tabChart">生長曲線</span></button>
-    <button class="nav-btn" onclick="switchTab('supplements',this)"><span class="nav-icon">🍄</span><span data-i18n="tabSupp">保健紀錄</span></button>
+    <button class="nav-btn active" onclick="switchTab('records',this)"><span class="nav-icon">🎆</span><span data-i18n="tabRecords">成長紀錄</span></button>
+    <button class="nav-btn" onclick="switchTab('chart',this)"><span class="nav-icon">🎇</span><span data-i18n="tabChart">生長曲線</span></button>
+    <button class="nav-btn" onclick="switchTab('supplements',this)"><span class="nav-icon">✨</span><span data-i18n="tabSupp">保健紀錄</span></button>
   </nav>
 </div>
 
@@ -593,7 +594,7 @@
     </div>
     <div class="modal-btns">
       <button class="btn btn-secondary" onclick="closeModal()" data-i18n="childCancel">取消</button>
-      <button class="btn btn-primary" onclick="saveChild()" data-i18n="childSave">⭐ 儲存</button>
+      <button class="btn btn-primary" onclick="saveChild()" data-i18n="childSave">🎆 儲存</button>
     </div>
     <button class="btn btn-danger btn-full" id="deleteChildBtn" onclick="deleteChildConfirm()" style="display:none;margin-top:10px;" data-i18n="childDelete">刪除此寶貝的所有資料</button>
   </div>
@@ -676,8 +677,8 @@ var CHILD_BG=[['#E52521','#AA1A18'],['#049CD8','#0270A0'],['#3A9D23','#1E6B10'],
 var currentLang=localStorage.getItem('growLang')||'zh';
 var LANG={
   zh:{
-    loading:'成長魔法啟動中 ✨',
-    appTitle:'⭐ 寶貝成長紀錄 ⭐',appSubtitle:'寶貝的成長冒險日記',
+    loading:'成長魔法啟動中 🎆',
+    appTitle:'🎆 寶貝成長紀錄 🎆',appSubtitle:'寶貝的成長冒險日記',
     loginTitle:'登入你的帳號',loginDesc:'資料儲存在雲端<br>換裝置也不怕資料不見！',
     googleBtn:'使用 Google 帳號登入',
     homeSubtitle:'選擇寶貝查看成長資料',logoutBtn:'登出',
@@ -686,19 +687,19 @@ var LANG={
     uploadHint:'點我<br>上傳照片',
     maleBadge:'♂︎ 男生',femaleBadge:'♀︎ 女生',male:'男生',female:'女生',
     tabRecords:'成長紀錄',tabChart:'生長曲線',tabSupp:'保健紀錄',
-    t1Title:'⭐ 新增量測',t1Date:'量測日期',t1Height:'身高 (cm)',t1Weight:'體重 (kg)',
-    t1Note:'備註（選填）',t1NotePlaceholder:'例：診所量測、在家量測',t1Save:'⭐ 儲存量測',
-    batchTitle:'🍄 多筆匯入',
+    t1Title:'🎆 新增量測',t1Date:'量測日期',t1Height:'身高 (cm)',t1Weight:'體重 (kg)',
+    t1Note:'備註（選填）',t1NotePlaceholder:'例：診所量測、在家量測',t1Save:'🎆 儲存量測',
+    batchTitle:'🎇 多筆匯入',
     batchDesc:'逐筆填入量測紀錄，資料來源欄位可選填（如：愛託付、診所、在家量）。',
     batchAddRow:'＋ 新增一行',batchImportBtn:'匯入所有資料',batchSrcPlaceholder:'資料來源（選填）',
-    historyTitle:'🍄 歷史量測紀錄',
-    t2GrowthTitle:'🌟 生長速度分析',t2HeightChart:'⭐ 身高生長曲線',
-    t2WeightChart:'🍄 體重生長曲線',t2CorrTitle:'🌟 保健品 × 生長速度對比',
+    historyTitle:'🎇 歷史量測紀錄',
+    t2GrowthTitle:'🎇 生長速度分析',t2HeightChart:'🎆 身高生長曲線',
+    t2WeightChart:'✨ 體重生長曲線',t2CorrTitle:'🎇 保健品 × 生長速度對比',
     whoSource:'資料來源：衛福部國健署（WHO 生長標準 0–7 歲）',
-    t3AddTitle:'⭐ 新增保健品 / 配方奶',t3Date:'開始日期',t3Type:'類型',
+    t3AddTitle:'🎆 新增保健品 / 配方奶',t3Date:'開始日期',t3Type:'類型',
     t3Name:'品名',t3NamePlaceholder:'例：Appeton 成長奶粉、兒童維生素D3',
     t3Note:'備註（選填）',t3NotePlaceholder:'例：每天睡前一匙',
-    t3Save:'⭐ 儲存記錄',t3ListTitle:'🍄 保健品紀錄',
+    t3Save:'🎆 儲存記錄',t3ListTitle:'✨ 保健品紀錄',
     suppTypes:['保健品','營養品','成長飲品','配方奶','其他'],
     shareModalTitleBase:'👥 共享設定',shareEmailPlaceholder:'家人的 Gmail',
     shareInvite:'邀請',shareNote:'對方用自己的 Google 帳號登入後，即可查看並新增此寶貝的成長紀錄。',
@@ -706,12 +707,12 @@ var LANG={
     shareRemove:'移除',shareRemoveConfirm:'確定移除共享？',shareRemoveFail:'移除失敗：',
     shareAddFail:'新增失敗：',shareEmailInvalid:'請輸入正確的 Email',
     shareSelf:'無法共享給自己',shareDuplicate:'已共享給此帳號',
-    addChildTitle:'⭐ 新增寶貝',editChildTitle:'🌟 編輯寶貝',
+    addChildTitle:'🎆 新增寶貝',editChildTitle:'🎇 編輯寶貝',
     childNameLabel:'寶貝名字',childNamePlaceholder:'例：Boss Baby',
     childBirthdayLabel:'生日',childGenderLabel:'性別',
     parentHeightHint:'👨‍👩‍👧 輸入父母身高以計算遺傳預測身高（選填）',
     fatherHeightLabel:'爸爸身高 cm',motherHeightLabel:'媽媽身高 cm',
-    childCancel:'取消',childSave:'⭐ 儲存',childDelete:'刪除此寶貝的所有資料',
+    childCancel:'取消',childSave:'🎆 儲存',childDelete:'刪除此寶貝的所有資料',
     childSaveRequire:'請填入名字和生日',childSaveFail:'儲存失敗：',
     childDeleteFail:'刪除失敗：',
     mRequire:'請填入日期、身高、體重',mHeightRange:'身高請輸入合理數值（40–200 cm）',
@@ -756,7 +757,7 @@ var LANG={
     mSoftWarnDecrease:'⚠ 身高比上次紀錄低了 {d} cm\n上次：{h} cm（{date}）\n身高通常不會減少，請確認是否輸入正確。\n\n確定要繼續儲存嗎？',
     mSoftWarnJump:'⚠ 身高在 {days} 天內增長了 {d} cm，幅度異常偏大。\n請確認是否輸入正確。\n\n確定要繼續儲存嗎？',
     mSoftWarnWeight:'⚠ 體重在 {days} 天內變動了 {d} kg，幅度偏大。\n請確認是否輸入正確。\n\n確定要繼續儲存嗎？',
-    backupTitle:'💾 資料備份 / 還原',
+    backupTitle:'🗂️ 資料備份 / 還原',
     backupDesc:'將目前寶貝的量測及保健品資料匯出為 JSON 備份檔，或從備份檔案還原資料。',
     exportBtn:'📤 備份 JSON',importBtn:'📥 還原 JSON',
     importConfirm:'準備匯入：{m} 筆量測紀錄，{s} 筆保健品記錄。\n（重複日期自動略過）\n\n確定要繼續嗎？',
@@ -766,8 +767,8 @@ var LANG={
     importFail:'匯入失敗：',importReadFail:'讀取檔案失敗：'
   },
   en:{
-    loading:'Loading Growth Magic… ✨',
-    appTitle:'⭐ Baby Growth Tracker ⭐',appSubtitle:"Your Baby's Growth Adventure",
+    loading:'Loading Growth Magic… 🎆',
+    appTitle:'🎆 Baby Growth Tracker 🎆',appSubtitle:"Your Baby's Growth Adventure",
     loginTitle:'Sign in to your account',loginDesc:'Data stored in the cloud<br>Access from any device!',
     googleBtn:'Sign in with Google',
     homeSubtitle:'Select a child to view growth data',logoutBtn:'Log Out',
@@ -776,19 +777,19 @@ var LANG={
     uploadHint:'Tap to<br>Upload Photo',
     maleBadge:'♂︎ Boy',femaleBadge:'♀︎ Girl',male:'Boy',female:'Girl',
     tabRecords:'Records',tabChart:'Charts',tabSupp:'Supplements',
-    t1Title:'⭐ Add Measurement',t1Date:'Date',t1Height:'Height (cm)',t1Weight:'Weight (kg)',
-    t1Note:'Note (optional)',t1NotePlaceholder:'e.g. Clinic, Home',t1Save:'⭐ Save',
-    batchTitle:'🍄 Batch Import',
+    t1Title:'🎆 Add Measurement',t1Date:'Date',t1Height:'Height (cm)',t1Weight:'Weight (kg)',
+    t1Note:'Note (optional)',t1NotePlaceholder:'e.g. Clinic, Home',t1Save:'🎆 Save',
+    batchTitle:'🎇 Batch Import',
     batchDesc:'Enter multiple records. Source field is optional (e.g. Clinic, Home).',
     batchAddRow:'＋ Add Row',batchImportBtn:'Import All',batchSrcPlaceholder:'Source (optional)',
-    historyTitle:'🍄 Measurement History',
-    t2GrowthTitle:'🌟 Growth Rate',t2HeightChart:'⭐ Height Growth Chart',
-    t2WeightChart:'🍄 Weight Growth Chart',t2CorrTitle:'🌟 Growth Impact',
+    historyTitle:'🎇 Measurement History',
+    t2GrowthTitle:'🎇 Growth Rate',t2HeightChart:'🎆 Height Growth Chart',
+    t2WeightChart:'✨ Weight Growth Chart',t2CorrTitle:'🎇 Growth Impact',
     whoSource:'Source: WHO Child Growth Standards (0–7 years)',
-    t3AddTitle:'⭐ Add Supplement / Formula',t3Date:'Start Date',t3Type:'Type',
+    t3AddTitle:'🎆 Add Supplement / Formula',t3Date:'Start Date',t3Type:'Type',
     t3Name:'Product Name',t3NamePlaceholder:'e.g. Vitamin D3, Growth Formula',
     t3Note:'Note (optional)',t3NotePlaceholder:'e.g. One scoop before bed',
-    t3Save:'⭐ Save Record',t3ListTitle:'🍄 Supplement Records',
+    t3Save:'🎆 Save Record',t3ListTitle:'✨ Supplement Records',
     suppTypes:['Supplement','Nutrition','Growth Drink','Formula','Other'],
     shareModalTitleBase:'👥 Sharing Settings',shareEmailPlaceholder:"Family member's Gmail",
     shareInvite:'Invite',shareNote:'Once invited, they can sign in with their own Google account to view and add records.',
@@ -796,12 +797,12 @@ var LANG={
     shareRemove:'Remove',shareRemoveConfirm:'Remove this share?',shareRemoveFail:'Remove failed: ',
     shareAddFail:'Failed to add: ',shareEmailInvalid:'Please enter a valid email',
     shareSelf:'Cannot share with yourself',shareDuplicate:'Already shared with this account',
-    addChildTitle:'⭐ Add Child',editChildTitle:'🌟 Edit Child',
+    addChildTitle:'🎆 Add Child',editChildTitle:'🎇 Edit Child',
     childNameLabel:"Child's Name",childNamePlaceholder:'e.g. Boss Baby',
     childBirthdayLabel:'Birthday',childGenderLabel:'Gender',
     parentHeightHint:'👨‍👩‍👧 Enter parent heights for genetic height prediction (optional)',
     fatherHeightLabel:"Father's Height cm",motherHeightLabel:"Mother's Height cm",
-    childCancel:'Cancel',childSave:'⭐ Save',childDelete:'Delete all data for this child',
+    childCancel:'Cancel',childSave:'🎆 Save',childDelete:'Delete all data for this child',
     childSaveRequire:'Please enter name and birthday',childSaveFail:'Save failed: ',
     childDeleteFail:'Delete failed: ',
     mRequire:'Please enter date, height and weight',mHeightRange:'Height must be 40–200 cm',
@@ -850,7 +851,7 @@ var LANG={
     mSoftWarnDecrease:'⚠ Height is {d} cm LOWER than the last record\nLast: {h} cm ({date})\nHeight rarely decreases — please check your entry.\n\nSave anyway?',
     mSoftWarnJump:'⚠ Height increased by {d} cm in only {days} days.\nThis seems unusually large — please confirm.\n\nSave anyway?',
     mSoftWarnWeight:'⚠ Weight changed by {d} kg in {days} days.\nThis seems large — please confirm.\n\nSave anyway?',
-    backupTitle:'💾 Backup / Restore',
+    backupTitle:'🗂️ Backup / Restore',
     backupDesc:'Export current child\'s records as a JSON backup, or restore from a backup file.',
     exportBtn:'📤 Export JSON',importBtn:'📥 Import JSON',
     importConfirm:'Ready to import: {m} measurements, {s} supplements.\n(Duplicates are skipped)\n\nProceed?',
