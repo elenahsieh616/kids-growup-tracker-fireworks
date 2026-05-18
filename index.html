@@ -198,7 +198,8 @@
     .card:not(.no-float):hover { transform:translateY(-5px) rotate(0.15deg);box-shadow:0 8px 40px rgba(120,80,255,0.45),0 0 80px rgba(100,60,220,0.25),inset 0 0 18px rgba(255,255,255,0.06); }
     .tab-content .card:nth-child(3n+1) { border-radius:20px 16px 22px 14px / 16px 22px 14px 20px; }
     .tab-content .card:nth-child(3n+2) { border-radius:14px 22px 18px 22px / 22px 14px 22px 16px; }
-    .card-chart { padding:18px;margin-bottom:18px;background:rgba(18,8,58,0.97) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;box-shadow:0 4px 30px rgba(100,70,220,0.38),0 0 60px rgba(80,50,200,0.18),inset 0 0 16px rgba(255,255,255,0.04) !important; }
+    .card-chart { padding:18px;margin-bottom:18px;background:rgb(16,8,52) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;box-shadow:0 4px 30px rgba(100,70,220,0.38),0 0 60px rgba(80,50,200,0.18),inset 0 0 16px rgba(255,255,255,0.04) !important; }
+    #heightChart,#weightChart { background:rgb(12,7,40); }
     .card-title { font-size:0.72em;font-weight:700;color:rgba(255,248,200,0.98);margin-bottom:16px;display:flex;align-items:center;gap:8px;font-family:var(--pixel);letter-spacing:0.3px;line-height:1.8;text-shadow:0 0 8px rgba(255,210,80,0.3); }
     .badge { background:linear-gradient(160deg,var(--yellow) 0%,#F0C500 100%);color:var(--ink);font-size:0.8em;padding:3px 10px;border-radius:8px;font-weight:900;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);font-family:-apple-system,BlinkMacSystemFont,'微軟正黑體',sans-serif; }
 
@@ -1774,7 +1775,7 @@ function renderCharts(){
     Chart.register({id:'darkBg',beforeDraw:function(chart){
       var c=chart.canvas.getContext('2d');
       c.save();
-      c.fillStyle=chart.config.options._reportBg||'rgba(12,7,40,0.98)';
+      c.fillStyle=chart.config.options._reportBg||'rgb(12,7,40)';
       c.fillRect(0,0,chart.canvas.width,chart.canvas.height);
       c.restore();
     }});
