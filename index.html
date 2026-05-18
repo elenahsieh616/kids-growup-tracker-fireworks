@@ -2148,8 +2148,52 @@ function buildReportHTML(hImg,wImg){
   '.rmsec-body{padding:11px 16px;}.rmsec-body ul{padding-left:18px;font-size:13px;font-weight:600;line-height:2.0;color:#2a3060;}.rmsec-body li{margin-bottom:3px;}'+
   '.rpt-src{padding:9px 14px;background:rgba(30,60,150,0.04);border:1px solid rgba(30,60,150,0.10);border-radius:10px;font-size:12px;color:#6678aa;font-weight:600;margin-bottom:14px;line-height:1.8;}'+
   '.rpt-footer{background:linear-gradient(180deg,rgba(6,4,18,0.40),rgba(8,5,22,0.55)),url("'+contentBgUrl+'") bottom/cover;border-top:1px solid rgba(255,210,80,0.28);padding:20px 24px;font-size:12px;color:rgba(210,205,250,0.88);line-height:1.8;}'+
-  '@page{margin:7mm;size:A4 portrait;}'+
-  '@media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}.actions{display:none!important;}body{background:white!important;}.rpt{max-width:100%;margin:0;}.two-col{grid-template-columns:200px 1fr!important;}.chart-card img{max-height:155px!important;}.rpt-hdr{padding:28px 22px 24px;}.rpt-title{font-size:22px;}.rpt-profile{padding:13px 18px;}.rpt-body{padding:12px 18px;}}'+
+  '@page{margin:6mm;size:A4 portrait;}'+
+  '@media print{'+
+    '*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}'+
+    '.actions{display:none!important;}'+
+    'body{background:white!important;}'+
+    '.rpt{max-width:100%!important;margin:0!important;box-shadow:none!important;}'+
+    '.rpt-hdr{padding:18px 18px 14px!important;}'+
+    '.rpt-hdr::after{display:none!important;}'+
+    '.rpt-title{font-size:19px!important;line-height:1.4!important;}'+
+    '.rpt-date{margin-top:3px!important;font-size:11px!important;}'+
+    '.rpt-profile{padding:10px 16px!important;gap:12px!important;}'+
+    '.prof-photo{width:70px!important;height:70px!important;}'+
+    '.prof-name{font-size:17px!important;}'+
+    '.prof-sub{font-size:11px!important;margin-top:2px!important;}'+
+    '.stat-boxes{margin-top:6px!important;gap:5px!important;}'+
+    '.stat-box{padding:6px 4px!important;border-radius:9px!important;}'+
+    '.stat-v{font-size:15px!important;}'+
+    '.stat-l{font-size:9px!important;}'+
+    '.alert-wrap{width:195px!important;padding:9px 12px!important;}'+
+    '.alert-ttl{margin-bottom:5px!important;font-size:11px!important;}'+
+    '.alert-bd{padding:7px 9px!important;font-size:11px!important;line-height:1.5!important;}'+
+    '.alert-note{margin-top:5px!important;font-size:11px!important;}'+
+    '.rpt-body{padding:9px 16px!important;}'+
+    '.two-col{grid-template-columns:185px 1fr!important;gap:9px!important;margin-bottom:9px!important;}'+
+    '.dk-head{padding:6px 12px!important;font-size:11px!important;}'+
+    '.dk-body{padding:5px 10px 7px!important;}'+
+    '.sr{padding:3px 0!important;}'+
+    '.si{font-size:10px!important;}'+
+    '.sl{font-size:10px!important;}'+
+    '.sv{font-size:11.5px!important;}'+
+    '.sv-sub{font-size:10px!important;}'+
+    '.stat-note{font-size:9.5px!important;padding-top:4px!important;}'+
+    '.chart-col{gap:7px!important;}'+
+    '.chart-hdr{padding:5px 12px!important;font-size:11px!important;}'+
+    '.chart-card img{max-height:125px!important;}'+
+    '.sec-title{font-size:12px!important;margin-bottom:6px!important;padding-bottom:4px!important;}'+
+    '.sc-row{padding:5px 10px!important;margin-bottom:4px!important;font-size:11px!important;}'+
+    '.sc-name{font-size:11px!important;}.sc-since{font-size:10px!important;}.sc-rate{font-size:10.5px!important;padding:3px 7px!important;}.sc-diff{font-size:11px!important;}'+
+    '.rmsec{margin-bottom:8px!important;}'+
+    '.rmsec-hdr{padding:5px 14px!important;font-size:11px!important;}'+
+    '.rmsec-body{padding:5px 14px 7px!important;}'+
+    '.rmsec-body ul{line-height:1.65!important;font-size:11px!important;padding-left:15px!important;}'+
+    '.rmsec-body li{margin-bottom:0!important;}'+
+    '.rpt-src{padding:5px 10px!important;margin-bottom:8px!important;font-size:10.5px!important;line-height:1.6!important;}'+
+    '.rpt-footer{padding:12px 16px!important;font-size:10.5px!important;line-height:1.6!important;}'+
+  '}'+
   '@media (max-width:600px){.two-col{grid-template-columns:1fr!important;}.rpt-profile{flex-direction:column;}.alert-wrap{width:100%!important;}.stat-boxes{gap:5px;}}'+
   '</style></head><body>'+
   '<div class="rpt">'+
