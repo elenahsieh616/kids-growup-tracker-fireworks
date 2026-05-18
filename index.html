@@ -352,7 +352,10 @@
 
     /* Stars */
     .sk-star { position:absolute;border-radius:50%;background:#fff;animation:sk-twinkle ease-in-out infinite; }
-    @keyframes sk-twinkle { 0%,100%{opacity:0.5;transform:scale(0.75)} 50%{opacity:1;transform:scale(1.7)} }
+    @keyframes sk-twinkle {
+      0%,100%{opacity:var(--s-lo,0.35);transform:scale(0.75)}
+      50%    {opacity:var(--s-hi,0.85);transform:scale(1.5)}
+    }
 
     /* Clouds — pink-purple glow & fireworks reflection */
     .sk-cloud { position:absolute;border-radius:50%;filter:blur(38px);animation:sk-cloud-drift linear infinite; }
@@ -2440,76 +2443,97 @@ async function removeShare(shareId){
   var bg=document.getElementById('skyBg');
   var fg=document.getElementById('skyFg');
   if(!bg)return;
-  /* Stars — 2000 total, 50 larger feature stars */
-  for(var i=0;i<2000;i++){
-    var s=document.createElement('div');s.className='sk-star';
-    var sz=i<50?(2.2+Math.random()*2.2):(0.5+Math.random()*1.8);
-    var glow=sz*(i<50?9:5.5);
-    s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;top:'+Math.random()*92+'%;animation-duration:'+(0.9+Math.random()*3.5)+'s;animation-delay:'+(-Math.random()*8)+'s;box-shadow:0 0 '+glow+'px '+sz+'px rgba(255,255,245,'+(0.65+Math.random()*0.35)+');';
-    bg.appendChild(s);
+
+  function buildStars(){
+    var old=bg.querySelectorAll('.sk-star');
+    for(var x=0;x<old.length;x++)old[x].remove();
+    var isMobile=window.innerWidth<768;
+    var density=isMobile?14000:9500;
+    var count=Math.floor((window.innerWidth*window.innerHeight)/density);
+    var featureN=isMobile?5:18;
+    var sizeMax=isMobile?0.8:1.4;
+    for(var i=0;i<count;i++){
+      var s=document.createElement('div');s.className='sk-star';
+      var feat=i<featureN;
+      var sz=feat?(isMobile?1.8+Math.random()*0.9:2.2+Math.random()*2.0):(0.4+Math.random()*sizeMax);
+      var opHi=feat?(isMobile?0.62:0.96):+(isMobile?(0.26+Math.random()*0.20):(0.50+Math.random()*0.40)).toFixed(2);
+      var opLo=+(opHi*(feat?0.38:0.35)).toFixed(2);
+      s.style.cssText='width:'+sz.toFixed(2)+'px;height:'+sz.toFixed(2)+'px;left:'+Math.random()*100+'%;top:'+Math.random()*92+'%;animation-duration:'+(0.9+Math.random()*3.5)+'s;animation-delay:'+(-Math.random()*8)+'s;box-shadow:0 0 '+(sz*(feat?9:5))+'px '+sz+'px rgba(255,255,245,'+opHi+');';
+      s.style.setProperty('--s-hi',opHi);
+      s.style.setProperty('--s-lo',opLo);
+      bg.appendChild(s);
+    }
+    /* Zodiac constellations — desktop only */
+    if(!isMobile){
+      [[[22,8],[24,12],[25,17],[23,22],[21,16],[20,11],[19,7],[26,9]],
+       [[68,14],[70,10],[72,15],[74,11],[71,17],[69,19],[73,8]],
+       [[82,55],[83,60],[82,65],[84,70],[83,76],[81,81],[84,86],[87,88],[90,86],[92,83]],
+       [[44,28],[46,32],[48,36],[49,41],[47,46],[45,51],[50,38],[52,34],[54,30]]
+      ].forEach(function(pts){
+        pts.forEach(function(pt){
+          var cs=document.createElement('div');cs.className='sk-star';
+          var csz=2.5+Math.random()*1.5;
+          cs.style.cssText='width:'+csz+'px;height:'+csz+'px;left:'+pt[0]+'%;top:'+pt[1]+'%;animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+(-Math.random()*4)+'s;box-shadow:0 0 '+(csz*9)+'px '+(csz*2)+'px rgba(220,200,255,0.92);';
+          cs.style.setProperty('--s-hi','0.92');cs.style.setProperty('--s-lo','0.40');
+          bg.appendChild(cs);
+        });
+      });
+    }
   }
-  /* Zodiac constellation star groups */
-  var constellations=[
-    /* 雙子座 Gemini — two parallel lines */
-    [[22,8],[24,12],[25,17],[23,22],[21,16],[20,11],[19,7],[26,9]],
-    /* 巨蟹座 Cancer — compact crab cluster */
-    [[68,14],[70,10],[72,15],[74,11],[71,17],[69,19],[73,8]],
-    /* 天蠍座 Scorpio — curved tail shape */
-    [[82,55],[83,60],[82,65],[84,70],[83,76],[81,81],[84,86],[87,88],[90,86],[92,83]],
-    /* 處女座 Virgo — Y shape */
-    [[44,28],[46,32],[48,36],[49,41],[47,46],[45,51],[50,38],[52,34],[54,30]]
-  ];
-  constellations.forEach(function(pts){
-    pts.forEach(function(pt){
-      var cs=document.createElement('div');cs.className='sk-star';
-      var csz=2.5+Math.random()*1.5;
-      cs.style.cssText='width:'+csz+'px;height:'+csz+'px;left:'+pt[0]+'%;top:'+pt[1]+'%;animation-duration:'+(1.5+Math.random()*2)+'s;animation-delay:'+(-Math.random()*4)+'s;box-shadow:0 0 '+(csz*9)+'px '+(csz*2)+'px rgba(220,200,255,0.92);';
-      bg.appendChild(cs);
+
+  function buildMist(){
+    if(!fg)return;
+    var old=fg.querySelectorAll('.sk-mist');
+    for(var x=0;x<old.length;x++)old[x].remove();
+    var vw=window.innerWidth,vh=window.innerHeight;
+    var mobile=vw<640;
+    var cols=['255,205,215','255,225,200','215,200,255','200,220,255','255,235,195','210,230,255'];
+    var configs=mobile?[
+      [680,480,0,0.040,65,-vw*0.30,-vh*0.22,0.00],
+      [640,460,2,0.035,72, vw*0.65,-vh*0.20,0.28],
+      [600,440,1,0.038,68,-vw*0.28, vh*0.62,0.50],
+      [640,460,3,0.032,78, vw*0.62, vh*0.60,0.72]
+    ]:[
+      [1500,1000,0,0.058,65,-vw*0.40,-vh*0.32,0.00],
+      [1400, 950,2,0.050,72, vw*0.68,-vh*0.30,0.12],
+      [1300, 900,1,0.055,68,-vw*0.35, vh*0.62,0.25],
+      [1500,1000,3,0.048,78, vw*0.62, vh*0.58,0.38],
+      [1800, 750,4,0.038,80, vw*0.08,-vh*0.42,0.50],
+      [ 900,1400,5,0.045,62,-vw*0.48, vh*0.18,0.62],
+      [ 950,1350,0,0.040,74, vw*0.72, vh*0.22,0.75],
+      [1600, 750,2,0.042,58, vw*0.12, vh*0.76,0.88]
+    ];
+    configs.forEach(function(c){
+      var el=document.createElement('div');el.className='sk-mist';
+      var dur=c[4],delay=-(dur*c[7]);
+      el.style.cssText='width:'+c[0]+'px;height:'+c[1]+'px;left:'+Math.round(c[5])+'px;top:'+Math.round(c[6])+'px;background:rgba('+cols[c[2]]+','+c[3]+');animation-duration:'+dur+'s;animation-delay:'+delay.toFixed(1)+'s;';
+      fg.appendChild(el);
     });
-  });
-  /* Clouds — pink-purple glow, fireworks reflection */
+  }
+
+  buildStars();
+  buildMist();
+
+  /* Clouds — one-time horizontal drift */
   [[280,95,'255,200,230',0.30,56],[190,68,'210,190,255',0.26,44],[320,105,'255,190,220',0.22,72],[220,78,'195,200,255',0.28,51],[250,88,'255,215,235',0.18,63]].forEach(function(c,idx){
     var cl=document.createElement('div');cl.className='sk-cloud';
     cl.style.cssText='width:'+c[0]+'px;height:'+c[1]+'px;top:'+(2+idx*4.5)+'%;background:rgba('+c[2]+','+c[3]+');box-shadow:0 0 55px 18px rgba('+c[2]+',0.22);animation-duration:'+c[4]+'s;animation-delay:'+(-c[4]*(idx*0.22))+'s;';
     bg.appendChild(cl);
   });
-  /* Fireflies — lower half (in bg) */
+
+  /* Fireflies — one-time, lower half */
   for(var f=0;f<14;f++){
     var fly=document.createElement('div');fly.className='sk-fly';
     fly.style.cssText='left:'+(3+Math.random()*94)+'%;top:'+(50+Math.random()*44)+'%;animation-duration:'+(5+Math.random()*8)+'s,'+(1.2+Math.random()*2.8)+'s;animation-delay:'+(-Math.random()*9)+'s,'+(-Math.random()*3)+'s;';
     bg.appendChild(fly);
   }
-  /* Watercolour air wash — feather-light edge blobs only */
-  if(fg){
-    var vw=window.innerWidth, vh=window.innerHeight;
-    var mobile=vw<640;
-    /* Watercolour palette: soft rose, warm peach, pale lavender, sky blue, warm gold */
-    var cols=['255,205,215','255,225,200','215,200,255','200,220,255','255,235,195','210,230,255'];
-    /* Desktop: 8 edge/corner positions  Mobile: 4 corner positions */
-    /* Each entry: [w, h, colIdx, opacity, duration, leftPx, topPx, delayFrac] */
-    var configs=mobile?[
-      /* 4 corners, smaller, softer */
-      [680,480,0,0.040,65, -vw*0.30,-vh*0.22, 0.00],
-      [640,460,2,0.035,72,  vw*0.65,-vh*0.20, 0.28],
-      [600,440,1,0.038,68, -vw*0.28, vh*0.62, 0.50],
-      [640,460,3,0.032,78,  vw*0.62, vh*0.60, 0.72]
-    ]:[
-      /* top-left corner  */ [1500,1000,0,0.058,65,-vw*0.40,-vh*0.32,0.00],
-      /* top-right corner */ [1400, 950,2,0.050,72, vw*0.68,-vh*0.30,0.12],
-      /* bottom-left      */ [1300, 900,1,0.055,68,-vw*0.35, vh*0.62,0.25],
-      /* bottom-right     */ [1500,1000,3,0.048,78, vw*0.62, vh*0.58,0.38],
-      /* top centre       */ [1800, 750,4,0.038,80, vw*0.08,-vh*0.42,0.50],
-      /* left middle      */ [ 900,1400,5,0.045,62,-vw*0.48, vh*0.18,0.62],
-      /* right middle     */ [ 950,1350,0,0.040,74, vw*0.72, vh*0.22,0.75],
-      /* bottom centre    */ [1600, 750,2,0.042,58, vw*0.12, vh*0.76,0.88]
-    ];
-    configs.forEach(function(c){
-      var el=document.createElement('div');el.className='sk-mist';
-      var dur=c[4], delay=-(dur*c[7]);
-      el.style.cssText='width:'+c[0]+'px;height:'+c[1]+'px;left:'+Math.round(c[5])+'px;top:'+Math.round(c[6])+'px;background:rgba('+cols[c[2]]+','+c[3]+');animation-duration:'+dur+'s;animation-delay:'+delay.toFixed(1)+'s;';
-      fg.appendChild(el);
-    });
-  }
+
+  /* Resize — debounced 300ms, rebuild stars + mist only */
+  var _rt;
+  window.addEventListener('resize',function(){
+    clearTimeout(_rt);
+    _rt=setTimeout(function(){buildStars();buildMist();},300);
+  });
 })();
 
 /* ══ Ehon Save Animation (Japanese picture-book style) ══ */
