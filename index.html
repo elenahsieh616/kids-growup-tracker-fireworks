@@ -358,20 +358,20 @@
     .sk-cloud { position:absolute;border-radius:50%;filter:blur(38px);animation:sk-cloud-drift linear infinite; }
     @keyframes sk-cloud-drift { from{transform:translateX(-160%)} to{transform:translateX(calc(100vw + 160%))} }
 
-    /* Mist clouds — very large soft blobs */
-    .sk-mist { position:absolute;border-radius:50%;filter:blur(80px);animation:sk-mist-drift ease-in-out infinite;pointer-events:none; }
+    /* Watercolour air wash — huge edge blobs, barely visible */
+    .sk-mist {
+      position:absolute;border-radius:50%;
+      filter:blur(140px);
+      animation:sk-mist-drift ease-in-out infinite;
+      pointer-events:none;will-change:transform;
+    }
     @keyframes sk-mist-drift {
       0%,100%{transform:translate(0,0) scale(1)}
-      38%{transform:translate(28px,-18px) scale(1.07)}
-      72%{transform:translate(-18px,14px) scale(0.95)}
+      33%   {transform:translate(10px,-6px) scale(1.012)}
+      67%   {transform:translate(-6px,4px) scale(0.991)}
     }
-    /* Atmosphere particles — tiny slow-rising dots */
-    .sk-atm { position:absolute;border-radius:50%;animation:sk-atm-float linear infinite; }
-    @keyframes sk-atm-float {
-      0%{opacity:0;transform:translateY(0) translateX(0)}
-      8%{opacity:var(--aop)}
-      88%{opacity:var(--aop)}
-      100%{opacity:0;transform:translateY(-140px) translateX(var(--adx))}
+    @media (max-width:640px){
+      .sk-mist{filter:blur(100px);}
     }
     /* Fireflies */
     .sk-fly { position:absolute;width:5px;height:5px;border-radius:50%;
@@ -2479,30 +2479,36 @@ async function removeShare(shareId){
     fly.style.cssText='left:'+(3+Math.random()*94)+'%;top:'+(50+Math.random()*44)+'%;animation-duration:'+(5+Math.random()*8)+'s,'+(1.2+Math.random()*2.8)+'s;animation-delay:'+(-Math.random()*9)+'s,'+(-Math.random()*3)+'s;';
     bg.appendChild(fly);
   }
-  /* Mist + atmosphere particles on foreground layer */
+  /* Watercolour air wash — feather-light edge blobs only */
   if(fg){
-    /* 15 large mist blobs */
-    [[820,500,'80,55,180',0.16,48],[600,420,'110,60,210',0.18,58],[750,480,'180,90,255',0.14,65],[560,380,'55,75,160',0.17,42],[680,450,'140,100,220',0.13,55],
-     [700,440,'90,60,200',0.15,52],[540,360,'160,80,240',0.16,62],[780,460,'70,50,180',0.14,44],[620,400,'120,70,215',0.17,49],[660,420,'100,65,195',0.15,60],
-     [590,380,'150,90,230',0.13,55],[720,460,'85,55,185',0.16,48],[640,410,'130,75,220',0.14,58],[580,370,'165,85,245',0.17,43],[700,450,'95,60,200',0.15,52]]
-    .forEach(function(m,idx){
+    var vw=window.innerWidth, vh=window.innerHeight;
+    var mobile=vw<640;
+    /* Watercolour palette: soft rose, warm peach, pale lavender, sky blue, warm gold */
+    var cols=['255,205,215','255,225,200','215,200,255','200,220,255','255,235,195','210,230,255'];
+    /* Desktop: 8 edge/corner positions  Mobile: 4 corner positions */
+    /* Each entry: [w, h, colIdx, opacity, duration, leftPx, topPx, delayFrac] */
+    var configs=mobile?[
+      /* 4 corners, smaller, softer */
+      [680,480,0,0.040,65, -vw*0.30,-vh*0.22, 0.00],
+      [640,460,2,0.035,72,  vw*0.65,-vh*0.20, 0.28],
+      [600,440,1,0.038,68, -vw*0.28, vh*0.62, 0.50],
+      [640,460,3,0.032,78,  vw*0.62, vh*0.60, 0.72]
+    ]:[
+      /* top-left corner  */ [1500,1000,0,0.058,65,-vw*0.40,-vh*0.32,0.00],
+      /* top-right corner */ [1400, 950,2,0.050,72, vw*0.68,-vh*0.30,0.12],
+      /* bottom-left      */ [1300, 900,1,0.055,68,-vw*0.35, vh*0.62,0.25],
+      /* bottom-right     */ [1500,1000,3,0.048,78, vw*0.62, vh*0.58,0.38],
+      /* top centre       */ [1800, 750,4,0.038,80, vw*0.08,-vh*0.42,0.50],
+      /* left middle      */ [ 900,1400,5,0.045,62,-vw*0.48, vh*0.18,0.62],
+      /* right middle     */ [ 950,1350,0,0.040,74, vw*0.72, vh*0.22,0.75],
+      /* bottom centre    */ [1600, 750,2,0.042,58, vw*0.12, vh*0.76,0.88]
+    ];
+    configs.forEach(function(c){
       var el=document.createElement('div');el.className='sk-mist';
-      el.style.cssText='width:'+m[0]+'px;height:'+m[1]+'px;left:'+(Math.random()*115-8)+'%;top:'+(5+Math.random()*80)+'%;background:rgba('+m[2]+','+m[3]+');animation-duration:'+m[4]+'s;animation-delay:'+(-m[4]*(idx*0.18))+'s;';
+      var dur=c[4], delay=-(dur*c[7]);
+      el.style.cssText='width:'+c[0]+'px;height:'+c[1]+'px;left:'+Math.round(c[5])+'px;top:'+Math.round(c[6])+'px;background:rgba('+cols[c[2]]+','+c[3]+');animation-duration:'+dur+'s;animation-delay:'+delay.toFixed(1)+'s;';
       fg.appendChild(el);
     });
-    /* 90 slow rising atmosphere particles */
-    for(var a=0;a<90;a++){
-      var ap=document.createElement('div');ap.className='sk-atm';
-      var asz=1.2+Math.random()*2.5;
-      var aColIdx=Math.random();
-      var aCol=aColIdx<0.33?'255,220,180':aColIdx<0.66?'200,180,255':'180,220,255';
-      var aop=(0.58+Math.random()*0.35).toFixed(2);
-      var adx=(Math.random()*60-30).toFixed(0);
-      ap.style.cssText='width:'+asz+'px;height:'+asz+'px;left:'+Math.random()*100+'%;bottom:'+(Math.random()*70)+'%;background:rgba('+aCol+','+aop+');box-shadow:0 0 '+(asz*4)+'px rgba('+aCol+',0.55);animation-duration:'+(14+Math.random()*24)+'s;animation-delay:'+(-Math.random()*32)+'s;';
-      ap.style.setProperty('--aop',aop);
-      ap.style.setProperty('--adx',adx+'px');
-      fg.appendChild(ap);
-    }
   }
 })();
 
