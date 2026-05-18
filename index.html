@@ -1833,7 +1833,10 @@ function generateReport(){
   if(wWas)wCard.classList.remove('collapsed');
   // Wait for CSS layout to update (especially on mobile) before rendering charts
   setTimeout(function(){
+    var prevAnim=Chart.defaults.animation;
+    Chart.defaults.animation=false;
     renderCharts();
+    Chart.defaults.animation=prevAnim;
     setTimeout(function(){
       function captureForReport(ch){
         if(!ch)return'';
@@ -1876,7 +1879,7 @@ function generateReport(){
       if(!win){alert(currentLang==='en'?'Please allow pop-ups for this site.':'請允許彈出視窗以產生報告。');return;}
       win.document.write(html);
       win.document.close();
-    },500);
+    },150);
   },50);
 }
 function buildReportHTML_OLD_UNUSED(){}
@@ -2192,8 +2195,8 @@ function buildReportHTML(hImg,wImg){
           '</div>'+
         '</div>'+
         '<div class="chart-col">'+
-          (hImg?'<div class="chart-card"><div class="chart-hdr" style="background:linear-gradient(135deg,rgba(4,100,200,0.45),rgba(4,60,150,0.3));">⭐ '+(isEn?'Height Curve':'身高曲線')+'</div><img src="'+hImg+'" alt="height chart"></div>':'<div class="chart-card chart-empty">'+(isEn?'No chart data':'尚無圖表')+'</div>')+
-          (wImg?'<div class="chart-card"><div class="chart-hdr" style="background:linear-gradient(135deg,rgba(20,110,80,0.45),rgba(15,80,55,0.3));">💗 '+(isEn?'Weight Curve':'體重曲線')+'</div><img src="'+wImg+'" alt="weight chart"></div>':'')+
+          (hImg?'<div class="chart-card"><div class="chart-hdr">⭐ '+(isEn?'Height Curve':'身高曲線')+'</div><img src="'+hImg+'" alt="height chart"></div>':'<div class="chart-card chart-empty">'+(isEn?'No chart data':'尚無圖表')+'</div>')+
+          (wImg?'<div class="chart-card"><div class="chart-hdr">💗 '+(isEn?'Weight Curve':'體重曲線')+'</div><img src="'+wImg+'" alt="weight chart"></div>':'')+
         '</div>'+
       '</div>'+
       (scRowsHTML?'<div style="margin-bottom:16px;"><div class="sec-title">⭐ '+(isEn?'Supplement × Growth':'保健品 × 生長對比')+'</div>'+scRowsHTML+'</div>':'')+
