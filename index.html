@@ -156,8 +156,8 @@
     }
 
     /* ── Hero ── */
-    .hero { position:relative;overflow:hidden;padding:24px 20px 36px;text-align:center;background:linear-gradient(180deg,#060218 0%,#0e0645 55%,#060220 100%);border-bottom:3px solid rgba(255,210,80,0.45);box-shadow:0 6px 32px rgba(0,0,0,0.5); }
-    .hero::before { content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,4,20,0.4) 0%,rgba(10,6,30,0.15) 50%,rgba(6,4,20,0.5) 100%);pointer-events:none;z-index:0; }
+    .hero { position:relative;overflow:hidden;padding:24px 20px 36px;text-align:center;background:url('images/header-bg.jpg') center/cover no-repeat;border-bottom:3px solid rgba(255,210,80,0.45);box-shadow:0 6px 32px rgba(0,0,0,0.5); }
+    .hero::before { content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,4,20,0.42) 0%,rgba(10,6,30,0.22) 45%,rgba(6,4,20,0.48) 100%);pointer-events:none;z-index:0; }
     .hero::after { content:'';position:absolute;bottom:8px;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,210,80,0.7),rgba(255,140,200,0.5),rgba(255,210,80,0.7),transparent);pointer-events:none;z-index:0; }
     .hero-content { position:relative;z-index:2;margin-top:16px; }
     .photo-ring { width:140px;height:140px;border-radius:50%;border:5px solid var(--ink);box-shadow:6px 6px 0 var(--ink);margin:0 auto 16px;cursor:pointer;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--yellow) 0%,#FFC200 100%);transition:transform 0.18s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.15s; }
@@ -198,7 +198,7 @@
     .card:not(.no-float):hover { transform:translateY(-5px) rotate(0.15deg);box-shadow:0 8px 40px rgba(120,80,255,0.45),0 0 80px rgba(100,60,220,0.25),inset 0 0 18px rgba(255,255,255,0.06); }
     .tab-content .card:nth-child(3n+1) { border-radius:20px 16px 22px 14px / 16px 22px 14px 20px; }
     .tab-content .card:nth-child(3n+2) { border-radius:14px 22px 18px 22px / 22px 14px 22px 16px; }
-    .card-chart { padding:18px;margin-bottom:18px;background:rgba(115,85,195,0.42) !important;box-shadow:0 4px 30px rgba(140,100,240,0.38),0 0 60px rgba(110,80,220,0.18),inset 0 0 20px rgba(200,180,255,0.08) !important; }
+    .card-chart { padding:18px;margin-bottom:18px;background:rgba(22,12,65,0.82) !important;box-shadow:0 4px 30px rgba(100,70,220,0.38),0 0 60px rgba(80,50,200,0.18),inset 0 0 16px rgba(255,255,255,0.04) !important; }
     .card-title { font-size:0.72em;font-weight:700;color:rgba(255,248,200,0.98);margin-bottom:16px;display:flex;align-items:center;gap:8px;font-family:var(--pixel);letter-spacing:0.3px;line-height:1.8;text-shadow:0 0 8px rgba(255,210,80,0.3); }
     .badge { background:linear-gradient(160deg,var(--yellow) 0%,#F0C500 100%);color:var(--ink);font-size:0.8em;padding:3px 10px;border-radius:8px;font-weight:900;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);font-family:-apple-system,BlinkMacSystemFont,'微軟正黑體',sans-serif; }
 
@@ -2458,15 +2458,24 @@ async function removeShare(shareId){
     var isMobile=window.innerWidth<768;
     var density=isMobile?750:650;
     var count=Math.floor((window.innerWidth*window.innerHeight)/density);
-    var featureN=isMobile?12:50;
-    var sizeMax=isMobile?1.0:1.4;
     for(var i=0;i<count;i++){
       var s=document.createElement('div');s.className='sk-star';
-      var feat=i<featureN;
-      var sz=feat?(isMobile?1.8+Math.random()*1.0:2.2+Math.random()*2.0):(0.4+Math.random()*sizeMax);
-      var opHi=feat?(isMobile?0.72:0.96):+(isMobile?(0.38+Math.random()*0.28):(0.52+Math.random()*0.38)).toFixed(2);
-      var opLo=+(opHi*(feat?0.38:0.35)).toFixed(2);
-      s.style.cssText='width:'+sz.toFixed(2)+'px;height:'+sz.toFixed(2)+'px;left:'+Math.random()*100+'%;top:'+Math.random()*92+'%;animation-duration:'+(0.9+Math.random()*3.5)+'s;animation-delay:'+(-Math.random()*8)+'s;box-shadow:0 0 '+(sz*(feat?9:5))+'px '+sz+'px rgba(255,255,245,'+opHi+');';
+      var r=i/count; /* tier by position ratio for even distribution */
+      var sz,opHi,glowMul;
+      if(isMobile){
+        if(r<0.03){sz=2.8+Math.random()*1.4;opHi=0.78+Math.random()*0.18;glowMul=11;}
+        else if(r<0.12){sz=1.6+Math.random()*1.2;opHi=0.55+Math.random()*0.28;glowMul=8;}
+        else if(r<0.35){sz=0.8+Math.random()*0.9;opHi=0.36+Math.random()*0.26;glowMul=5;}
+        else{sz=0.3+Math.random()*0.6;opHi=0.14+Math.random()*0.20;glowMul=3;}
+      }else{
+        if(r<0.03){sz=4.2+Math.random()*2.0;opHi=0.88+Math.random()*0.12;glowMul=12;}
+        else if(r<0.12){sz=2.4+Math.random()*1.8;opHi=0.65+Math.random()*0.25;glowMul=9;}
+        else if(r<0.35){sz=1.1+Math.random()*1.4;opHi=0.44+Math.random()*0.26;glowMul=6;}
+        else{sz=0.4+Math.random()*0.8;opHi=0.18+Math.random()*0.26;glowMul=4;}
+      }
+      opHi=+opHi.toFixed(2);
+      var opLo=+(opHi*0.35).toFixed(2);
+      s.style.cssText='width:'+sz.toFixed(2)+'px;height:'+sz.toFixed(2)+'px;left:'+Math.random()*100+'%;top:'+Math.random()*92+'%;animation-duration:'+(0.8+Math.random()*3.8)+'s;animation-delay:'+(-Math.random()*9)+'s;box-shadow:0 0 '+(sz*glowMul).toFixed(1)+'px '+sz.toFixed(1)+'px rgba(255,255,245,'+opHi+');';
       s.style.setProperty('--s-hi',opHi);
       s.style.setProperty('--s-lo',opLo);
       bg.appendChild(s);
@@ -2543,10 +2552,13 @@ async function removeShare(shareId){
     bg.appendChild(cl);
   });
 
-  /* Fireflies — one-time, lower half */
-  for(var f=0;f<14;f++){
+  /* Fireflies — mobile: 50-94%, desktop: bottom 25% only to avoid card overlap */
+  var isMobileF=window.innerWidth<768;
+  var flyCount=isMobileF?14:8;
+  for(var f=0;f<flyCount;f++){
     var fly=document.createElement('div');fly.className='sk-fly';
-    fly.style.cssText='left:'+(3+Math.random()*94)+'%;top:'+(50+Math.random()*44)+'%;animation-duration:'+(5+Math.random()*8)+'s,'+(1.2+Math.random()*2.8)+'s;animation-delay:'+(-Math.random()*9)+'s,'+(-Math.random()*3)+'s;';
+    var flyTop=isMobileF?(50+Math.random()*44):(72+Math.random()*26);
+    fly.style.cssText='left:'+(3+Math.random()*94)+'%;top:'+flyTop.toFixed(1)+'%;animation-duration:'+(5+Math.random()*8)+'s,'+(1.2+Math.random()*2.8)+'s;animation-delay:'+(-Math.random()*9)+'s,'+(-Math.random()*3)+'s;';
     bg.appendChild(fly);
   }
 
