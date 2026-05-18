@@ -351,8 +351,8 @@
     @media (prefers-reduced-motion:reduce) { .num-bounce { animation:none!important; } }
 
     /* ══ Background Image ══ */
-    #bgImgWrap { position:fixed;bottom:0;left:0;width:100%;z-index:1;pointer-events:none; }
-    #bgImgWrap img { width:100%;display:block;animation:sk-bg-breathe 14s ease-in-out infinite; }
+    #bgImgWrap { position:fixed;inset:0;z-index:1;pointer-events:none; }
+    #bgImgWrap img { width:100%;height:100%;display:block;object-fit:contain;object-position:center bottom;animation:sk-bg-breathe 14s ease-in-out infinite; }
 
     /* ══ Sky Ambient Layer ══ */
     #skyBg { position:fixed;top:0;left:0;right:0;bottom:0;z-index:2;pointer-events:none;overflow:hidden; }
