@@ -316,6 +316,8 @@
       table tbody td:nth-child(2), table tbody td:nth-child(5), table tbody td:nth-child(6) { display:none; }
       thead th { padding:8px; }
       tbody td { padding:7px 8px; }
+      /* 手機：背景圖頂端漸層融入天空色，避免硬切 */
+      #bgImgWrap::after { content:'';position:absolute;top:0;left:0;right:0;height:55%;background:linear-gradient(to bottom,#0a0d2e 0%,rgba(10,13,46,0.55) 55%,transparent 100%);pointer-events:none;z-index:1; }
     }
     @media (min-width:768px) {
       html { font-size:17px; }
@@ -349,8 +351,8 @@
     @media (prefers-reduced-motion:reduce) { .num-bounce { animation:none!important; } }
 
     /* ══ Background Image ══ */
-    #bgImgWrap { position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none; }
-    #bgImgWrap img { width:100%;height:100%;display:block;object-fit:cover;object-position:center bottom;animation:sk-bg-breathe 14s ease-in-out infinite; }
+    #bgImgWrap { position:fixed;bottom:0;left:0;width:100%;z-index:1;pointer-events:none; }
+    #bgImgWrap img { width:100%;display:block;animation:sk-bg-breathe 14s ease-in-out infinite; }
 
     /* ══ Sky Ambient Layer ══ */
     #skyBg { position:fixed;top:0;left:0;right:0;bottom:0;z-index:2;pointer-events:none;overflow:hidden; }
