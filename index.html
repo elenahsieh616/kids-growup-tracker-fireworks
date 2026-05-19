@@ -2175,17 +2175,17 @@ function buildReportHTML(hImg,wImg){
   '.rpt-src{padding:9px 14px;background:rgba(30,60,150,0.04);border:1px solid rgba(30,60,150,0.10);border-radius:10px;font-size:12px;color:#6678aa;font-weight:600;margin-bottom:14px;line-height:1.8;}'+
   '.rpt-footer{background:linear-gradient(180deg,rgba(6,4,18,0.35),rgba(8,5,22,0.50)),url("'+desktopBgUrl+'") center top/cover no-repeat;border-top:1px solid rgba(255,210,80,0.28);padding:20px 24px;font-size:12px;color:rgba(210,205,250,0.88);line-height:1.8;}'+
   '@media screen and (max-width:600px){.two-col{grid-template-columns:1fr!important;}.rpt-profile{flex-direction:column;}.alert-wrap{width:100%!important;}.stat-boxes{gap:5px;}}'+
-  '@page{margin:8mm 10mm;size:210mm auto;}'+
+  '@page{size:A4;margin:20mm;}'+
   '@media print{'+
     '*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}'+
     '.actions{display:none!important;}'+
-    'body{background:white!important;}'+
-    '.rpt{max-width:710px!important;margin:0 auto!important;box-shadow:none!important;}'+
-    '.rpt-hdr{padding:14px 16px 10px!important;}'+
+    'html,body{margin:0!important;padding:0!important;height:100%!important;background:white!important;}'+
+    '.rpt{max-width:100%!important;margin:0!important;box-shadow:none!important;min-height:calc(297mm - 40mm)!important;display:flex!important;flex-direction:column!important;}'+
+    '.rpt-hdr{padding:12px 16px 8px!important;flex-shrink:0!important;}'+
     '.rpt-hdr::after{display:none!important;}'+
     '.rpt-title{font-size:17px!important;line-height:1.3!important;}'+
     '.rpt-date{margin-top:2px!important;font-size:10px!important;}'+
-    '.rpt-profile{padding:8px 14px!important;gap:10px!important;flex-direction:row!important;}'+
+    '.rpt-profile{padding:8px 14px!important;gap:10px!important;flex-direction:row!important;flex-shrink:0!important;}'+
     '.prof-photo{width:60px!important;height:60px!important;flex-shrink:0!important;}'+
     '.prof-name{font-size:15px!important;}'+
     '.prof-sub{font-size:10px!important;margin-top:2px!important;}'+
@@ -2197,8 +2197,8 @@ function buildReportHTML(hImg,wImg){
     '.alert-ttl{margin-bottom:4px!important;font-size:10px!important;}'+
     '.alert-bd{padding:6px 8px!important;font-size:10px!important;line-height:1.45!important;}'+
     '.alert-note{margin-top:4px!important;font-size:10px!important;}'+
-    '.rpt-body{padding:7px 14px!important;}'+
-    '.two-col{grid-template-columns:175px 1fr!important;gap:8px!important;margin-bottom:8px!important;}'+
+    '.rpt-body{padding:8px 16px!important;flex:1!important;}'+
+    '.two-col{grid-template-columns:175px 1fr!important;gap:10px!important;margin-bottom:10px!important;}'+
     '.dk-head{padding:5px 10px!important;font-size:10.5px!important;}'+
     '.dk-body{padding:4px 8px 6px!important;}'+
     '.sr{padding:2px 0!important;}'+
@@ -2207,19 +2207,19 @@ function buildReportHTML(hImg,wImg){
     '.sv{font-size:11px!important;}'+
     '.sv-sub{font-size:9.5px!important;}'+
     '.stat-note{font-size:9px!important;padding-top:3px!important;}'+
-    '.chart-col{gap:5px!important;}'+
+    '.chart-col{gap:8px!important;}'+
     '.chart-hdr{padding:4px 10px!important;font-size:10.5px!important;}'+
-    '.chart-card img{max-height:150px!important;}'+
+    '.chart-card img{max-height:200px!important;}'+
     '.sec-title{font-size:11px!important;margin-bottom:5px!important;padding-bottom:3px!important;}'+
-    '.sc-row{padding:4px 8px!important;margin-bottom:3px!important;font-size:10px!important;}'+
+    '.sc-row{padding:5px 9px!important;margin-bottom:4px!important;font-size:10px!important;}'+
     '.sc-name{font-size:10px!important;}.sc-since{font-size:9px!important;}.sc-rate{font-size:9.5px!important;padding:2px 6px!important;}.sc-diff{font-size:10px!important;}'+
-    '.rmsec{margin-bottom:6px!important;}'+
-    '.rmsec-hdr{padding:4px 12px!important;font-size:10.5px!important;}'+
-    '.rmsec-body{padding:4px 12px 6px!important;}'+
-    '.rmsec-body ul{line-height:1.55!important;font-size:10.5px!important;padding-left:13px!important;}'+
-    '.rmsec-body li{margin-bottom:0!important;}'+
-    '.rpt-src{padding:4px 8px!important;margin-bottom:6px!important;font-size:10px!important;line-height:1.5!important;}'+
-    '.rpt-footer{padding:9px 14px!important;font-size:10px!important;line-height:1.6!important;}'+
+    '.rmsec{margin-bottom:8px!important;}'+
+    '.rmsec-hdr{padding:5px 12px!important;font-size:10.5px!important;}'+
+    '.rmsec-body{padding:5px 12px 7px!important;}'+
+    '.rmsec-body ul{line-height:1.7!important;font-size:10.5px!important;padding-left:13px!important;}'+
+    '.rmsec-body li{margin-bottom:1px!important;}'+
+    '.rpt-src{padding:5px 10px!important;margin-bottom:8px!important;font-size:10px!important;line-height:1.5!important;}'+
+    '.rpt-footer{padding:10px 16px!important;font-size:10px!important;line-height:1.6!important;margin-top:auto!important;flex-shrink:0!important;}'+
   '}'+
   '</style></head><body>'+
   '<div class="rpt">'+
@@ -2444,14 +2444,14 @@ function renderSuppCorrelation(){
     html+='<div class="supp-item"><div class="supp-row1"><div><span class="supp-name">⭐ '+esc(s.name)+'</span><span style="font-size:0.78em;color:var(--muted);font-weight:700;margin-left:8px;">'+fmtDate(s.date)+(currentLang==='en'?' (since '+fmtAgeFull(currentChild.birthday,s.date)+')':'（'+fmtAgeFull(currentChild.birthday,s.date)+'起）')+'</span></div></div>';
     html+='<div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
     var cmYr2=currentLang==='en'?' cm/yr':' cm/年';
-    html+='<div style="background:rgba(255,255,255,0.09);border-radius:8px;padding:10px;text-align:center;border:1.5px solid rgba(180,160,255,0.35);"><div style="font-size:0.7em;color:#805c7d;font-weight:900;margin-bottom:5px;">'+t('corrBefore')+'</div>';
-    if(bRate!==null){html+='<div style="font-size:1.15em;font-weight:900;color:#F6B8B8;">'+bRate+'</div><div style="font-size:0.68em;color:#805c7d;font-weight:700;">'+cmYr2.trim()+'</div>';}
-    else{html+='<div style="font-size:0.82em;color:#805c7d;font-weight:700;padding:6px 0;opacity:0.7;">'+t('corrInsufficient')+'</div>';}
+    html+='<div style="background:rgba(255,248,240,0.88);border-radius:8px;padding:10px;text-align:center;border:1.5px solid rgba(180,120,160,0.35);"><div style="font-size:0.7em;color:#805c7d;font-weight:900;margin-bottom:5px;">'+t('corrBefore')+'</div>';
+    if(bRate!==null){html+='<div style="font-size:1.15em;font-weight:900;color:#F6B8B8;text-shadow:0 0 6px rgba(246,184,184,0.4);">'+bRate+'</div><div style="font-size:0.68em;color:#805c7d;font-weight:700;">'+cmYr2.trim()+'</div>';}
+    else{html+='<div style="font-size:0.82em;color:#a08098;font-weight:700;padding:6px 0;">'+t('corrInsufficient')+'</div>';}
     html+='</div>';
     var hasA=aRate!==null;
-    html+='<div style="background:'+(hasA?'rgba(30,180,60,0.15)':'rgba(255,255,255,0.09)')+';border-radius:8px;padding:10px;text-align:center;border:1.5px solid '+(hasA?'rgba(50,200,80,0.5)':'rgba(180,160,255,0.35)')+';"><div style="font-size:0.7em;color:#805c7d;font-weight:900;margin-bottom:5px;">'+t('corrAfter')+'</div>';
-    if(hasA){html+='<div style="font-size:1.15em;font-weight:900;color:#F6B8B8;">'+aRate+'</div><div style="font-size:0.68em;color:#805c7d;font-weight:700;">'+cmYr2.trim()+'</div>';}
-    else{html+='<div style="font-size:0.82em;color:#805c7d;font-weight:700;padding:6px 0;opacity:0.7;">'+t('corrObserving')+'</div>';}
+    html+='<div style="background:'+(hasA?'rgba(230,250,235,0.88)':'rgba(255,248,240,0.88)')+';border-radius:8px;padding:10px;text-align:center;border:1.5px solid '+(hasA?'rgba(60,180,80,0.45)':'rgba(180,120,160,0.35)')+';"><div style="font-size:0.7em;color:'+(hasA?'#2a7a3a':'#805c7d')+';font-weight:900;margin-bottom:5px;">'+t('corrAfter')+'</div>';
+    if(hasA){html+='<div style="font-size:1.15em;font-weight:900;color:#F6B8B8;text-shadow:0 0 6px rgba(246,184,184,0.4);">'+aRate+'</div><div style="font-size:0.68em;color:#805c7d;font-weight:700;">'+cmYr2.trim()+'</div>';}
+    else{html+='<div style="font-size:0.82em;color:#a08098;font-weight:700;padding:6px 0;">'+t('corrObserving')+'</div>';}
     html+='</div></div>';
     if(bRate!==null&&aRate!==null){
       var diff=(parseFloat(aRate)-parseFloat(bRate)).toFixed(1);var pos=parseFloat(diff)>0;
