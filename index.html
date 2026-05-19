@@ -2080,8 +2080,7 @@ function buildReportHTML(hImg,wImg){
   var safeName=esc(name);
   var dlName=JSON.stringify(name+'_report_'+new Date().toISOString().slice(0,10)+'.png');
   var saveBtnLabel=JSON.stringify('📱 '+(isEn?'Save as Image':'儲存圖片'));
-  var lineSvg='<svg viewBox="0 0 100 100" width="18" height="18" style="flex-shrink:0;vertical-align:middle" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="22" fill="#fff"/><path fill="#06C755" d="M50 12C27.8 12 9.6 27.1 9.6 45.6c0 16.6 14.7 30.5 34.6 33.2 1.3.3 3.2.8 3.6 2 .4 1 .3 2.7.1 3.7l-.6 3.6c-.2 1-.8 4.1 3.6 2.2 4.4-1.9 23.7-14 32-24.2 5.9-6.5 8.8-13.1 8.8-20.5C90.4 27.1 72.2 12 50 12z"/></svg>';
-  var shareBtnLabel=JSON.stringify(lineSvg+' '+(isEn?'Share to LINE':'分享到 LINE'));
+  var shareBtnLabel=JSON.stringify(isEn?'Share to LINE':'分享到 LINE');
   var loadingLabel=JSON.stringify('⏳ '+(isEn?'Loading...':'載入中...'));
   var baseHref=window.location.href.replace(/[^/]*$/,'');
   var bgUrl=baseHref+'images/header-bg.jpg';
@@ -2176,7 +2175,7 @@ function buildReportHTML(hImg,wImg){
   '.rpt-src{padding:9px 14px;background:rgba(30,60,150,0.04);border:1px solid rgba(30,60,150,0.10);border-radius:10px;font-size:12px;color:#6678aa;font-weight:600;margin-bottom:14px;line-height:1.8;}'+
   '.rpt-footer{background:linear-gradient(180deg,rgba(6,4,18,0.35),rgba(8,5,22,0.50)),url("'+desktopBgUrl+'") center top/cover no-repeat;border-top:1px solid rgba(255,210,80,0.28);padding:20px 24px;font-size:12px;color:rgba(210,205,250,0.88);line-height:1.8;}'+
   '@media screen and (max-width:600px){.two-col{grid-template-columns:1fr!important;}.rpt-profile{flex-direction:column;}.alert-wrap{width:100%!important;}.stat-boxes{gap:5px;}}'+
-  '@page{margin:8mm 10mm;size:auto;}'+
+  '@page{margin:8mm 10mm;size:210mm auto;}'+
   '@media print{'+
     '*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}'+
     '.actions{display:none!important;}'+
@@ -2231,7 +2230,7 @@ function buildReportHTML(hImg,wImg){
     '<div class="actions">'+
       '<button class="btn-print" onclick="window.print()">🖨️ '+(isEn?'Print':'列印')+'</button>'+
       '<button class="btn-save" id="saveBtn" onclick="saveAsImg()">📱 '+(isEn?'Save as Image':'儲存圖片')+'</button>'+
-      '<button class="btn-share" id="shareBtn" onclick="shareReport()">'+lineSvg+' '+(isEn?'Share to LINE':'分享到 LINE')+'</button>'+
+      '<button class="btn-share" id="shareBtn" onclick="shareReport()">'+( isEn?'Share to LINE':'分享到 LINE')+'</button>'+
     '</div>'+
     '<div class="rpt-profile">'+
       '<div class="prof-left">'+
@@ -2310,22 +2309,22 @@ function buildReportHTML(hImg,wImg){
           'var file=new File([blob],fname,{type:"image/png"});'+
           'if(navigator.canShare&&navigator.canShare({files:[file]})){'+
             'navigator.share({title:"寶貝成長報告",files:[file]}).catch(function(){});'+
-            'btn.innerHTML='+shareBtnLabel+';btn.disabled=false;'+
+            'btn.textContent='+shareBtnLabel+';btn.disabled=false;'+
           '}else{'+
             'var url=URL.createObjectURL(blob);'+
             'var a=document.createElement("a");a.href=url;a.download=fname;a.click();'+
             'URL.revokeObjectURL(url);'+
             'setTimeout(function(){window.open("https://line.me/R/share?text="+encodeURIComponent("寶貝成長報告已儲存，請開啟圖片分享 📊"),"_blank");},600);'+
-            'btn.innerHTML='+shareBtnLabel+';btn.disabled=false;'+
+            'btn.textContent='+shareBtnLabel+';btn.disabled=false;'+
           '}'+
         '},"image/png");'+
-      '}).catch(function(){acts.style.display="";btn.innerHTML='+shareBtnLabel+';btn.disabled=false;});'+
+      '}).catch(function(){acts.style.display="";btn.textContent='+shareBtnLabel+';btn.disabled=false;});'+
     '}'+
     'if(typeof html2canvas!=="undefined"){doShare();}else{'+
       'var s=document.createElement("script");'+
       's.src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";'+
       's.onload=doShare;'+
-      's.onerror=function(){btn.innerHTML='+shareBtnLabel+';btn.disabled=false;};'+
+      's.onerror=function(){btn.textContent='+shareBtnLabel+';btn.disabled=false;};'+
       'document.head.appendChild(s);'+
     '}'+
   '}'+
@@ -2445,14 +2444,14 @@ function renderSuppCorrelation(){
     html+='<div class="supp-item"><div class="supp-row1"><div><span class="supp-name">⭐ '+esc(s.name)+'</span><span style="font-size:0.78em;color:var(--muted);font-weight:700;margin-left:8px;">'+fmtDate(s.date)+(currentLang==='en'?' (since '+fmtAgeFull(currentChild.birthday,s.date)+')':'（'+fmtAgeFull(currentChild.birthday,s.date)+'起）')+'</span></div></div>';
     html+='<div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
     var cmYr2=currentLang==='en'?' cm/yr':' cm/年';
-    html+='<div style="background:rgba(90,70,160,0.08);border-radius:8px;padding:10px;text-align:center;border:2px solid rgba(90,70,160,0.22);"><div style="font-size:0.7em;color:#5a3878;font-weight:900;margin-bottom:5px;">'+t('corrBefore')+'</div>';
-    if(bRate!==null){html+='<div style="font-size:1.15em;font-weight:900;color:#1a0f3a;">'+bRate+'</div><div style="font-size:0.68em;color:#5a3878;font-weight:700;">'+cmYr2.trim()+'</div>';}
-    else{html+='<div style="font-size:0.82em;color:#777;font-weight:700;padding:6px 0;">'+t('corrInsufficient')+'</div>';}
+    html+='<div style="background:rgba(255,255,255,0.09);border-radius:8px;padding:10px;text-align:center;border:1.5px solid rgba(180,160,255,0.35);"><div style="font-size:0.7em;color:rgba(210,195,255,0.85);font-weight:900;margin-bottom:5px;">'+t('corrBefore')+'</div>';
+    if(bRate!==null){html+='<div style="font-size:1.15em;font-weight:900;color:rgba(255,250,228,0.95);">'+bRate+'</div><div style="font-size:0.68em;color:rgba(210,195,255,0.72);font-weight:700;">'+cmYr2.trim()+'</div>';}
+    else{html+='<div style="font-size:0.82em;color:rgba(210,195,255,0.55);font-weight:700;padding:6px 0;">'+t('corrInsufficient')+'</div>';}
     html+='</div>';
     var hasA=aRate!==null;
-    html+='<div style="background:'+(hasA?'var(--green-pale)':'rgba(90,70,160,0.08)')+';border-radius:8px;padding:10px;text-align:center;border:2px solid '+(hasA?'rgba(58,157,35,0.5)':'rgba(90,70,160,0.22)')+';"><div style="font-size:0.7em;color:'+(hasA?'#1a6b0a':'#5a3878')+';font-weight:900;margin-bottom:5px;">'+t('corrAfter')+'</div>';
-    if(hasA){html+='<div style="font-size:1.15em;font-weight:900;color:#1a6b0a;">'+aRate+'</div><div style="font-size:0.68em;color:#2a7a10;font-weight:700;">'+cmYr2.trim()+'</div>';}
-    else{html+='<div style="font-size:0.82em;color:#777;font-weight:700;padding:6px 0;">'+t('corrObserving')+'</div>';}
+    html+='<div style="background:'+(hasA?'rgba(30,180,60,0.15)':'rgba(255,255,255,0.09)')+';border-radius:8px;padding:10px;text-align:center;border:1.5px solid '+(hasA?'rgba(50,200,80,0.5)':'rgba(180,160,255,0.35)')+';"><div style="font-size:0.7em;color:'+(hasA?'rgba(100,240,130,0.9)':'rgba(210,195,255,0.85)')+';font-weight:900;margin-bottom:5px;">'+t('corrAfter')+'</div>';
+    if(hasA){html+='<div style="font-size:1.15em;font-weight:900;color:rgba(150,255,165,0.95);">'+aRate+'</div><div style="font-size:0.68em;color:rgba(100,230,120,0.8);font-weight:700;">'+cmYr2.trim()+'</div>';}
+    else{html+='<div style="font-size:0.82em;color:rgba(210,195,255,0.55);font-weight:700;padding:6px 0;">'+t('corrObserving')+'</div>';}
     html+='</div></div>';
     if(bRate!==null&&aRate!==null){
       var diff=(parseFloat(aRate)-parseFloat(bRate)).toFixed(1);var pos=parseFloat(diff)>0;
