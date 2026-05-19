@@ -2444,14 +2444,14 @@ function renderSuppCorrelation(){
     html+='<div class="supp-item"><div class="supp-row1"><div><span class="supp-name">⭐ '+esc(s.name)+'</span><span style="font-size:0.78em;color:var(--muted);font-weight:700;margin-left:8px;">'+fmtDate(s.date)+(currentLang==='en'?' (since '+fmtAgeFull(currentChild.birthday,s.date)+')':'（'+fmtAgeFull(currentChild.birthday,s.date)+'起）')+'</span></div></div>';
     html+='<div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
     var cmYr2=currentLang==='en'?' cm/yr':' cm/年';
-    html+='<div style="background:rgba(255,255,255,0.09);border-radius:8px;padding:10px;text-align:center;border:1.5px solid rgba(180,160,255,0.35);"><div style="font-size:0.7em;color:rgba(210,195,255,0.85);font-weight:900;margin-bottom:5px;">'+t('corrBefore')+'</div>';
-    if(bRate!==null){html+='<div style="font-size:1.15em;font-weight:900;color:rgba(255,250,228,0.95);">'+bRate+'</div><div style="font-size:0.68em;color:rgba(210,195,255,0.72);font-weight:700;">'+cmYr2.trim()+'</div>';}
-    else{html+='<div style="font-size:0.82em;color:rgba(210,195,255,0.55);font-weight:700;padding:6px 0;">'+t('corrInsufficient')+'</div>';}
+    html+='<div style="background:rgba(255,255,255,0.09);border-radius:8px;padding:10px;text-align:center;border:1.5px solid rgba(180,160,255,0.35);"><div style="font-size:0.7em;color:#805c7d;font-weight:900;margin-bottom:5px;">'+t('corrBefore')+'</div>';
+    if(bRate!==null){html+='<div style="font-size:1.15em;font-weight:900;color:#F6B8B8;">'+bRate+'</div><div style="font-size:0.68em;color:#805c7d;font-weight:700;">'+cmYr2.trim()+'</div>';}
+    else{html+='<div style="font-size:0.82em;color:#805c7d;font-weight:700;padding:6px 0;opacity:0.7;">'+t('corrInsufficient')+'</div>';}
     html+='</div>';
     var hasA=aRate!==null;
-    html+='<div style="background:'+(hasA?'rgba(30,180,60,0.15)':'rgba(255,255,255,0.09)')+';border-radius:8px;padding:10px;text-align:center;border:1.5px solid '+(hasA?'rgba(50,200,80,0.5)':'rgba(180,160,255,0.35)')+';"><div style="font-size:0.7em;color:'+(hasA?'rgba(100,240,130,0.9)':'rgba(210,195,255,0.85)')+';font-weight:900;margin-bottom:5px;">'+t('corrAfter')+'</div>';
-    if(hasA){html+='<div style="font-size:1.15em;font-weight:900;color:rgba(150,255,165,0.95);">'+aRate+'</div><div style="font-size:0.68em;color:rgba(100,230,120,0.8);font-weight:700;">'+cmYr2.trim()+'</div>';}
-    else{html+='<div style="font-size:0.82em;color:rgba(210,195,255,0.55);font-weight:700;padding:6px 0;">'+t('corrObserving')+'</div>';}
+    html+='<div style="background:'+(hasA?'rgba(30,180,60,0.15)':'rgba(255,255,255,0.09)')+';border-radius:8px;padding:10px;text-align:center;border:1.5px solid '+(hasA?'rgba(50,200,80,0.5)':'rgba(180,160,255,0.35)')+';"><div style="font-size:0.7em;color:#805c7d;font-weight:900;margin-bottom:5px;">'+t('corrAfter')+'</div>';
+    if(hasA){html+='<div style="font-size:1.15em;font-weight:900;color:#F6B8B8;">'+aRate+'</div><div style="font-size:0.68em;color:#805c7d;font-weight:700;">'+cmYr2.trim()+'</div>';}
+    else{html+='<div style="font-size:0.82em;color:#805c7d;font-weight:700;padding:6px 0;opacity:0.7;">'+t('corrObserving')+'</div>';}
     html+='</div></div>';
     if(bRate!==null&&aRate!==null){
       var diff=(parseFloat(aRate)-parseFloat(bRate)).toFixed(1);var pos=parseFloat(diff)>0;
