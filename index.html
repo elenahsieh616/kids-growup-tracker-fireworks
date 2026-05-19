@@ -201,7 +201,7 @@
     .tab-content .card:nth-child(3n+2) { border-radius:14px 22px 18px 22px / 22px 14px 22px 16px; }
     .card-chart { padding:18px;margin-bottom:18px;background:rgb(16,8,52) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;box-shadow:0 4px 30px rgba(100,70,220,0.38),0 0 60px rgba(80,50,200,0.18),inset 0 0 16px rgba(255,255,255,0.04) !important; }
     #heightChart,#weightChart { background:rgb(12,7,40); }
-    .card-title { font-size:0.75em;font-weight:700;color:rgba(255,248,200,0.98);margin-bottom:16px;display:flex;align-items:center;gap:8px;font-family:var(--pixel);letter-spacing:0.3px;line-height:1.8;text-shadow:0 0 8px rgba(255,210,80,0.3); }
+    .card-title { font-size:0.88em;font-weight:700;color:rgba(255,248,200,0.98);margin-bottom:16px;display:flex;align-items:center;gap:8px;font-family:var(--pixel);letter-spacing:0.3px;line-height:1.8;text-shadow:0 0 8px rgba(255,210,80,0.3); }
     .badge { background:linear-gradient(160deg,var(--yellow) 0%,#F0C500 100%);color:var(--ink);font-size:0.82em;padding:3px 10px;border-radius:8px;font-weight:900;border:2px solid var(--ink);box-shadow:2px 2px 0 var(--ink);font-family:var(--pixel); }
 
     /* ── Form ── */
@@ -209,8 +209,8 @@
     .form-grid.col2 { grid-template-columns:1fr 1fr; }
     .form-grid.col3 { grid-template-columns:1fr 1fr 1fr; }
     .form-group { display:flex;flex-direction:column;gap:6px; }
-    label { font-size:0.75em;font-weight:600;color:rgba(210,195,255,0.92);letter-spacing:0.3px;font-family:inherit;line-height:1.7; }
-    input, select, textarea { padding:10px 12px;border:3px solid var(--ink);border-radius:10px;font-size:0.91em;font-family:inherit;width:100%;min-width:0;background:white;transition:box-shadow 0.15s,background 0.15s;color:var(--ink);font-weight:600; }
+    label { font-size:0.78em;font-weight:600;color:rgba(210,195,255,0.92);letter-spacing:0.3px;font-family:inherit;line-height:1.7; }
+    input, select, textarea { padding:10px 12px;border:3px solid var(--ink);border-radius:10px;font-size:0.88em;font-family:inherit;width:100%;min-width:0;background:white;transition:box-shadow 0.15s,background 0.15s;color:var(--ink);font-weight:600; }
     input:focus, select:focus, textarea:focus { outline:none;background:#FEFAE8;box-shadow:0 0 0 3px rgba(180,140,255,0.5); }
 
     /* ── Buttons ── */
@@ -307,7 +307,6 @@
       .hero-stat-val { text-shadow:0 0 5px rgba(255,200,60,0.36); }
       .child-card .child-name { text-shadow:0 0 5px rgba(255,210,60,0.36); }
       .add-card-text { text-shadow:0 0 5px rgba(255,200,80,0.48); }
-      .card-title { font-size:0.65em; }
       .btn { font-size:0.65em; }
       .child-grid { grid-template-columns:1fr 1fr;gap:11px;padding:12px; }
       .child-card { padding:14px 10px 12px; }
@@ -317,6 +316,14 @@
       table tbody td:nth-child(2), table tbody td:nth-child(5), table tbody td:nth-child(6) { display:none; }
       thead th { padding:8px; }
       tbody td { padding:7px 8px; }
+      /* Performance: remove expensive backdrop-filter on mobile */
+      .card,.card-chart { backdrop-filter:none!important;-webkit-backdrop-filter:none!important; }
+      .child-card { backdrop-filter:none!important;-webkit-backdrop-filter:none!important; }
+      .add-card { backdrop-filter:none!important;-webkit-backdrop-filter:none!important; }
+      .hero-stat { backdrop-filter:none!important;-webkit-backdrop-filter:none!important; }
+      /* Performance: disable heavy sky particle animations on mobile */
+      .sk-star { animation:none!important; }
+      .sk-cloud,.sk-mist,.sk-fly,.sk-atm { display:none!important; }
     }
     @media (min-width:768px) {
       html { font-size:17px; }
@@ -1846,6 +1853,7 @@ function generateReport(){
   var wWas=wCard.classList.contains('collapsed');
   if(hWas)hCard.classList.remove('collapsed');
   if(wWas)wCard.classList.remove('collapsed');
+  showLoading();
   // Wait for CSS layout to update (especially on mobile) before rendering charts
   setTimeout(function(){
     var prevAnim=Chart.defaults.animation;
@@ -1890,6 +1898,7 @@ function generateReport(){
       if(hWas)hCard.classList.add('collapsed');
       if(wWas)wCard.classList.add('collapsed');
       var html=buildReportHTML(hImg,wImg);
+      hideLoading();
       var win=window.open('','_blank');
       if(!win){alert(currentLang==='en'?'Please allow pop-ups for this site.':'請允許彈出視窗以產生報告。');return;}
       win.document.write(html);
@@ -2103,7 +2112,7 @@ function buildReportHTML(hImg,wImg){
   '<meta charset="UTF-8"><meta name="viewport" content="width=860">'+
   '<base href="'+baseHref+'">'+
   '<title>'+(isEn?safeName+"'s Growth Report":safeName+' 成長報告')+'</title>'+
-  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Zen+Maru+Gothic:wght@700&family=Nunito:wght@500;700&display=swap" rel="stylesheet">'+
+  '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Zen+Maru+Gothic:wght@700&display=swap" rel="stylesheet">'+
   '<style>'+
   '*{box-sizing:border-box;margin:0;padding:0;}'+
   'body{font-family:"Zen Maru Gothic","Noto Sans TC","PingFang TC",sans-serif;background:#f0f2f8;color:#1a2e6b;font-size:14px;}'+
