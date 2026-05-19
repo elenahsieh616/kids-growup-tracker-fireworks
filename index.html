@@ -2445,12 +2445,12 @@ function renderSuppCorrelation(){
     html+='<div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
     var cmYr2=currentLang==='en'?' cm/yr':' cm/年';
     html+='<div style="background:rgba(255,248,240,0.88);border-radius:8px;padding:10px;text-align:center;border:1.5px solid rgba(180,120,160,0.35);"><div style="font-size:0.7em;color:#805c7d;font-weight:900;margin-bottom:5px;">'+t('corrBefore')+'</div>';
-    if(bRate!==null){html+='<div style="font-size:1.15em;font-weight:900;color:#F6B8B8;text-shadow:0 0 6px rgba(246,184,184,0.4);">'+bRate+'</div><div style="font-size:0.68em;color:#805c7d;font-weight:700;">'+cmYr2.trim()+'</div>';}
+    if(bRate!==null){html+='<div style="font-size:1.15em;font-weight:900;color:#E05878;text-shadow:0 0 6px rgba(224,88,120,0.3);">'+bRate+'</div><div style="font-size:0.68em;color:#805c7d;font-weight:700;">'+cmYr2.trim()+'</div>';}
     else{html+='<div style="font-size:0.82em;color:#a08098;font-weight:700;padding:6px 0;">'+t('corrInsufficient')+'</div>';}
     html+='</div>';
     var hasA=aRate!==null;
     html+='<div style="background:'+(hasA?'rgba(230,250,235,0.88)':'rgba(255,248,240,0.88)')+';border-radius:8px;padding:10px;text-align:center;border:1.5px solid '+(hasA?'rgba(60,180,80,0.45)':'rgba(180,120,160,0.35)')+';"><div style="font-size:0.7em;color:'+(hasA?'#2a7a3a':'#805c7d')+';font-weight:900;margin-bottom:5px;">'+t('corrAfter')+'</div>';
-    if(hasA){html+='<div style="font-size:1.15em;font-weight:900;color:#F6B8B8;text-shadow:0 0 6px rgba(246,184,184,0.4);">'+aRate+'</div><div style="font-size:0.68em;color:#805c7d;font-weight:700;">'+cmYr2.trim()+'</div>';}
+    if(hasA){html+='<div style="font-size:1.15em;font-weight:900;color:#E05878;text-shadow:0 0 6px rgba(224,88,120,0.3);">'+aRate+'</div><div style="font-size:0.68em;color:#805c7d;font-weight:700;">'+cmYr2.trim()+'</div>';}
     else{html+='<div style="font-size:0.82em;color:#a08098;font-weight:700;padding:6px 0;">'+t('corrObserving')+'</div>';}
     html+='</div></div>';
     if(bRate!==null&&aRate!==null){
