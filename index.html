@@ -133,11 +133,11 @@
       #loginScreen, #homeScreen { display:none !important; }
       .hero::before { display:none; }
       #childScreen { display:block !important; }
-      .back-btn, .print-btn, .tab-nav, .no-print,
+      .back-btn, .print-btn, .no-print,
       .collapse-arrow, .crb, .chart-range-btns,
       #addMeasureCard, #batchCard, #addSuppCard, #suppListCard,
       .btn-danger, .btn-primary, .btn-secondary { display:none !important; }
-      #tab-records, #tab-charts { display:block !important; }
+      #tab-records, #tab-chart { display:block !important; }
       #tab-supplements { display:none !important; }
       .collapse-body { display:block !important; margin-top:6px; }
       .card { break-inside:avoid; box-shadow:none !important; border:2px solid #ccc; margin-bottom:10px; }
@@ -206,7 +206,6 @@
     /* ── Form ── */
     .form-grid { display:grid;gap:11px;margin-bottom:11px; }
     .form-grid.col2 { grid-template-columns:1fr 1fr; }
-    .form-grid.col3 { grid-template-columns:1fr 1fr 1fr; }
     .form-group { display:flex;flex-direction:column;gap:6px; }
     label { font-size:0.78em;font-weight:600;color:rgba(210,195,255,0.92);letter-spacing:0.3px;font-family:inherit;line-height:1.7; }
     input, select, textarea { padding:10px 12px;border:3px solid var(--ink);border-radius:10px;font-size:0.88em;font-family:inherit;width:100%;min-width:0;background:white;transition:box-shadow 0.15s,background 0.15s;color:var(--ink);font-weight:600; }
@@ -296,7 +295,7 @@
       input, select, textarea { font-size:16px !important; }
       html[lang="zh-TW"] .app-title { font-size:1.2em;letter-spacing:2px; }
       html[lang="en"] .app-title { font-size:1.2em;letter-spacing:1px; }
-      .form-grid.col2, .form-grid.col3 { grid-template-columns:1fr; }
+      .form-grid.col2 { grid-template-columns:1fr; }
       .batch-row { display:flex;flex-wrap:wrap;gap:5px; }
       .batch-row .b-date { flex-basis:100%; }
       .batch-row .b-height,.batch-row .b-weight { flex:1;min-width:0; }
@@ -417,7 +416,7 @@
     .fw-p { position:fixed;border-radius:50%;pointer-events:none;z-index:3500;transform:translate(-50%,-50%); }
 
     @media (prefers-reduced-motion:reduce) {
-      .sk-star,.sk-cloud,.sk-fly,.sk-mist,.sk-atm,.fw-p,.ehon-p,.ehon-ring { animation:none!important; }
+      .sk-star,.sk-cloud,.sk-fly,.sk-mist,.sk-atm,.fw-p { animation:none!important; }
       body { animation:none!important; }
       .card:not(.no-float):hover { transform:none!important; }
     }
@@ -1901,7 +1900,6 @@ function generateReport(){
     },150);
   },50);
 }
-function buildReportHTML_OLD_UNUSED(){}
 function _getZodiac(bday){
   var d=new Date(bday),m=d.getMonth()+1,day=d.getDate();
   if((m==12&&day>=22)||(m==1&&day<=19))return'摩羯座';
