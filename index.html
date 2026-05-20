@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&family=Noto+Sans+TC:wght@400;500;600;700;900&family=Nunito:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js" defer></script>
@@ -23,7 +23,6 @@
       --nav-h:   72px;
       --pixel: 'Zen Maru Gothic', 'PingFang TC', 'Noto Sans TC', sans-serif;
       --font-ui: 'Microsoft JhengHei', '微軟正黑體', 'PingFang TC', 'Noto Sans TC', sans-serif;
-      --font-data: 'Nunito', 'Noto Sans TC', sans-serif;
       --r-card: 14px;
       --shadow-card: 6px 6px 0 var(--ink), inset 0 -3px 0 rgba(0,0,0,0.1);
     }
@@ -152,7 +151,6 @@
       #printHeader { display:block !important; text-align:center; padding:6px 0 10px; border-bottom:3px solid #231203; margin-bottom:14px; }
       .print-report-title { font-size:1em; font-weight:900; font-family:'Noto Serif TC',serif; color:#231203; }
       .print-report-date { font-size:0.75em; color:#666; margin-top:4px; }
-      .whoSource { display:none; }
     }
 
     /* ── Hero ── */
@@ -340,10 +338,6 @@
       .chart-wrap { height:440px; }
     }
 
-    @media (prefers-reduced-motion:reduce) {
-      .num-bounce { animation:none!important; }
-    }
-
     /* ── Celebration Effects (ehon/picture-book style) ── */
     @keyframes num-bounce { 0%,100%{transform:scale(1)} 35%{transform:scale(1.32)} 65%{transform:scale(0.94)} }
     .num-bounce { animation:num-bounce 0.45s cubic-bezier(0.34,1.56,0.64,1); }
@@ -413,10 +407,8 @@
     @keyframes sk-bg-breathe { 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.06)} }
 
     /* Fireworks save particles */
-    .fw-p { position:fixed;border-radius:50%;pointer-events:none;z-index:3500;transform:translate(-50%,-50%); }
-
     @media (prefers-reduced-motion:reduce) {
-      .sk-star,.sk-cloud,.sk-fly,.sk-mist,.sk-atm,.fw-p { animation:none!important; }
+      .sk-star,.sk-cloud,.sk-fly,.sk-mist,.sk-atm { animation:none!important; }
       body { animation:none!important; }
       .card:not(.no-float):hover { transform:none!important; }
     }
@@ -1345,15 +1337,6 @@ function clearPhoto(){document.getElementById('heroPhoto').style.display='none';
 function withTimeout(promise,ms){
   return Promise.race([promise,new Promise(function(_,rej){setTimeout(function(){rej(new Error('timeout'));},ms);})]);
 }
-async function loadAndShowHome(){
-  showLoading();
-  try{children=await withTimeout(db_getChildren(),8000);}
-  catch(e){console.error('loadHome err:',e);children=[];}
-  finally{hideLoading();}
-  document.getElementById('homeScreen').style.display='';
-  document.getElementById('childScreen').style.display='none';
-  renderChildCards();
-}
 async function showHome(){
   currentChild=null;measurements=[];supplements=[];chartRangeMode='AUTO';
   if(hChart){hChart.destroy();hChart=null;}
@@ -2004,29 +1987,7 @@ function buildReportHTML(hImg,wImg){
     acBody=(isEn?'Add 2+ measurements<br>to see growth rate':'新增至少 2 筆量測<br>查看生長速度分析');
     acNote='';
   }
-  var alertCardHTML='<div style="background:white;border-radius:14px;padding:16px;width:210px;flex-shrink:0;box-shadow:4px 4px 0 rgba(0,0,0,0.3);">'+
-    '<div style="font-family:\'Press Start 2P\',monospace;font-size:0.52em;font-weight:900;letter-spacing:0.3px;line-height:1.8;margin-bottom:8px;">'+acTitle+'</div>'+
-    '<div style="background:'+acBg+';border-radius:8px;padding:10px;border:2px solid '+acBorder+';font-size:0.8em;font-weight:700;line-height:1.65;color:'+acColor+';">'+acBody+'</div>'+
-    (acNote?'<div style="margin-top:10px;font-size:0.74em;font-weight:700;line-height:1.5;">'+acNote+'</div>':'')+
-  '</div>';
-  // Stats rows (flex-based, no table)
-  var sRow=function(lbl,val,vStyle){
-    return '<div class="sr"><div class="sl">'+lbl+'</div><div class="sv"'+(vStyle?' style="'+vStyle+'"':'')+'>'+val+'</div></div>';
-  };
-  var wDiffVal=ref?(parseFloat(latest.weight)-parseFloat(ref.weight)).toFixed(1):null;
-  var statsHTML=
-    sRow(isEn?'Date':'量測日期',fmtDate(latest.date))+
-    sRow(isEn?'Age':'年齡',ageStr)+
-    sRow(isEn?'Height':'身高',latest.height+' cm <span style="color:#5CC8FF;font-size:0.75em;white-space:nowrap;">('+hPct+')</span>')+
-    sRow(isEn?'Weight':'體重',latest.weight+' kg <span style="color:#5CC8FF;font-size:0.75em;white-space:nowrap;">('+wPct+')</span>')+
-    (ref?sRow(isEn?'Growth Δ':'增長差',(parseFloat(hDiff)>=0?'+':'')+hDiff+' cm / '+(parseFloat(wDiffVal)>=0?'+':'')+wDiffVal+' kg <span style="font-size:0.78em;color:rgba(195,180,255,0.75);font-weight:700;">('+fmtDate(ref.date)+')</span>',parseFloat(hDiff)>=0?'color:#4CAF50;':'color:#EF5350;'):'')+
-    (annualH!==null?sRow(isEn?'Annual Growth':'年化增長',annualH+(isEn?' cm/yr':' cm/年'),annualLow?'color:#E52521;font-weight:900;':'color:#3A9D23;font-weight:900;'):'')+
-    (thresh?sRow(isEn?'Min. Standard':'最低標準',thresh.min+(isEn?' cm/yr':' cm/年')):'')+
-    (annualH!==null&&annualLow?sRow(isEn?'Gap to Std.':'距標準差',(thresh.min-parseFloat(annualH)).toFixed(1)+(isEn?' cm/yr':' cm/年'),'color:#E52521;font-weight:900;'):'')+
-    '';
   var rptMph=calcMidParentalHeight();
-  var statsHTML2=(rptMph?sRow(isEn?'Genetic Pred.':'遺傳預測',rptMph.target+' cm ('+rptMph.low+'–'+rptMph.high+')','color:#FB8C00;'):'');
-  var statsHTML=statsHTML+statsHTML2;
   // Reminder bullets
   var rmBullets=[];
   if(annualH!==null&&annualLow)rmBullets.push(isEn?'<li>⚠️ Height growth (<strong>'+annualH+' cm/yr</strong>) is below the minimum standard of <strong>'+thresh.min+' cm/yr</strong>. Please consult a pediatrician for professional assessment.</li>':'<li>⚠️ 身高年化增長速度（<strong>'+annualH+' cm/年</strong>）低於最低標準（<strong>'+thresh.min+' cm/年</strong>），建議盡快諮詢兒科醫師進行評估。</li>');
@@ -2037,36 +1998,6 @@ function buildReportHTML(hImg,wImg){
   rmBullets.push(isEn?'<li>📅 Growth assessment is recommended every 3–6 months to track long-term trends.</li>':'<li>📅 建議每 3–6 個月定期量測，追蹤長期生長趨勢。</li>');
   if(pred&&pred.isExtreme)rmBullets.push(isEn?'<li>⚠️ Height is at an extreme percentile (below P3 or above P97). Genetic prediction may be more reliable — please consult a pediatrician for accurate assessment.</li>':'<li>⚠️ 身高處於極端百分位（P3以下或P97以上），遺傳預測可能更具參考價值，建議諮詢小兒科醫師進行評估。</li>');
   if(rptMph)rmBullets.push(isEn?'<li>🧬 Genetic predicted height (Mid-Parental Height): <strong>'+rptMph.target+' cm</strong> (range '+rptMph.low+'–'+rptMph.high+' cm).</li>':'<li>🧬 遺傳預測身高（父母中間值法）：<strong>'+rptMph.target+' cm</strong>（範圍 '+rptMph.low+'–'+rptMph.high+' cm）。</li>');
-  var safeName=esc(name);
-  var dlName=JSON.stringify(name+'_report_'+new Date().toISOString().slice(0,10)+'.png');
-  var saveBtnLabel=JSON.stringify('📱 '+(isEn?'Save as Image':'儲存圖片'));
-  var loadingLabel=JSON.stringify('⏳ '+(isEn?'Loading...':'載入中...'));
-  var baseHref=window.location.href.replace(/[^/]*$/,'');
-  var bgUrl=baseHref+'images/header-bg.jpg';
-  var contentBgUrl=baseHref+'images/content-bg.jpg';
-  /* Inline supplementary section rows for dark theme */
-  var scRowsHTML='';
-  if(supplements.length&&sorted.length>=2){
-    var cmYr2=isEn?' cm/yr':' cm/年';
-    supplements.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(s){
-      var bef2=sorted.filter(function(m){return m.date<s.date;});
-      var aft2=sorted.filter(function(m){return m.date>s.date;});
-      var bR=null,aR=null;
-      if(bef2.length>=2){var bd2=(new Date(bef2[bef2.length-1].date)-new Date(bef2[0].date))/86400000;if(bd2>=14)bR=((bef2[bef2.length-1].height-bef2[0].height)/bd2*365).toFixed(1);}
-      if(aft2.length>=2){var ad2=(new Date(aft2[aft2.length-1].date)-new Date(aft2[0].date))/86400000;if(ad2>=14)aR=((aft2[aft2.length-1].height-aft2[0].height)/ad2*365).toFixed(1);}
-      var df2=bR!==null&&aR!==null?(parseFloat(aR)-parseFloat(bR)).toFixed(1):null;
-      var pos3=df2!==null&&parseFloat(df2)>0;
-      scRowsHTML+='<div class="sc-row">'+
-        '<span class="sc-name">⭐ '+esc(s.name)+'</span>'+
-        '<span class="sc-since">'+(isEn?'since ':'自 ')+fmtDate(s.date)+'</span>'+
-        '<span style="flex:1"></span>'+
-        '<span class="sc-rate sc-bef">'+(isEn?'Before: ':'前：')+(bR!==null?bR+cmYr2.trim():(isEn?'—':'資料不足'))+'</span>'+
-        '<span class="sc-arr">→</span>'+
-        '<span class="sc-rate '+(aR!==null?'sc-aft-ok':'sc-aft-obs')+'">'+(isEn?'After: ':'後：')+(aR!==null?aR+cmYr2.trim():(isEn?'Observing…':'觀察中'))+'</span>'+
-        (df2!==null?'<span class="sc-diff '+(pos3?'sc-pos':'sc-neg')+'">'+(pos3?'▲ +':'▼ ')+df2+cmYr2.trim()+'</span>':'')+
-      '</div>';
-    });
-  }
   /* Avatar HTML */
   var photoHTML=currentChild._reportPhotoUrl
     ?'<img src="'+currentChild._reportPhotoUrl+'" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;">'
@@ -2496,12 +2427,6 @@ function getMinGrowth(m){
 function getAgeMonths(dateStr){
   if(!currentChild)return 0;
   var b=new Date(currentChild.birthday),d=new Date(dateStr);
-  var m=(d.getFullYear()-b.getFullYear())*12+(d.getMonth()-b.getMonth());
-  if(d.getDate()<b.getDate())m--;
-  return Math.max(0,m);
-}
-function getAgeMonths2(birthdayStr){
-  var b=new Date(birthdayStr),d=new Date();
   var m=(d.getFullYear()-b.getFullYear())*12+(d.getMonth()-b.getMonth());
   if(d.getDate()<b.getDate())m--;
   return Math.max(0,m);
