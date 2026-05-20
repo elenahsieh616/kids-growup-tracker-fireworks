@@ -772,6 +772,20 @@ var S_URL='https://gfvccfpzwhwvuoxffafl.supabase.co';
 var S_KEY='sb_publishable_7k8OUBz4clQhV57mSjkNlA_3xb_vTaA';
 var db=supabase.createClient(S_URL,S_KEY);
 
+/* ── Photo helpers ── */
+function getPhotoPath(urlOrPath){
+  if(!urlOrPath)return null;
+  var marker='/object/public/child-photos/';
+  var idx=urlOrPath.indexOf(marker);
+  if(idx!==-1)return urlOrPath.slice(idx+marker.length).split('?')[0];
+  return urlOrPath.split('?')[0];
+}
+async function getSignedPhotoUrl(path){
+  if(!path)return null;
+  var r=await db.storage.from('child-photos').createSignedUrl(path,3600);
+  return(r.error||!r.data)?null:r.data.signedUrl;
+}
+
 /* ── State ── */
 var currentUser=null;
 var children=[],currentChild=null,measurements=[],supplements=[],hChart=null,wChart=null;
@@ -1300,11 +1314,10 @@ async function uploadPhoto(file){
   var blob=await compressToBlob(file);
   var up=await db.storage.from('child-photos').upload(path,blob,{upsert:true,contentType:'image/jpeg'});
   if(up.error){throw up.error;}
-  var pub=db.storage.from('child-photos').getPublicUrl(path);
-  var url=pub.data.publicUrl;
-  await db.from('children').update({photo_url:url}).eq('id',currentChild.id);
-  currentChild.photo_url=url;
-  showPhoto(url+'?t='+Date.now());
+  await db.from('children').update({photo_url:path}).eq('id',currentChild.id);
+  currentChild.photo_url=path;
+  var signedUrl=await getSignedPhotoUrl(path);
+  if(signedUrl)showPhoto(signedUrl);
 }
 function compressToBlob(file){
   return new Promise(function(resolve){
@@ -1359,16 +1372,13 @@ function renderChildCards(){
   var html=children.length===0?'<div class="empty" style="grid-column:1/-1;padding-bottom:12px;">'+t('noChildTitle')+'<span class="empty-sub">'+t('noChildSub')+'</span></div>':'';
   html+=children.map(function(child,idx){
     var bg=CHILD_BG[idx%CHILD_BG.length];
-    var avatarContent=child.photo_url
-      ?'<img src="'+child.photo_url+'?t=1" style="width:100%;height:100%;object-fit:cover;" alt="">'
-      :child.emoji;
     var topBtns=child._isOwner
       ?'<button class="child-edit-btn" onclick="event.stopPropagation();openEditModal(\''+child.id+'\')">✏️</button>'+
         '<button class="share-btn" onclick="event.stopPropagation();openShareModal(\''+child.id+'\')">'+t('shareBtn')+'</button>'
       :'<span class="shared-badge">'+t('sharedBadge')+'</span>';
     return '<div class="child-card" onclick="enterChild(\''+child.id+'\')">' +
       topBtns+
-      '<div class="child-avatar" style="background:linear-gradient(135deg,'+bg[0]+' 0%,'+bg[1]+' 100%);">'+avatarContent+'</div>'+
+      '<div class="child-avatar" id="avatar-'+child.id+'" style="background:linear-gradient(135deg,'+bg[0]+' 0%,'+bg[1]+' 100%);">'+child.emoji+'</div>'+
       '<div class="child-name">'+esc(child.name)+'</div>'+
       '<div class="child-age">'+fmtAgeFull(child.birthday)+'</div>'+
       '<div class="child-gender-badge" style="background:'+(child.gender==='男'?'#C4ECFF':'#FFD6D5')+';color:var(--ink);">'+(child.gender==='男'?t('maleBadge'):t('femaleBadge'))+'</div>'+
@@ -1376,6 +1386,17 @@ function renderChildCards(){
   }).join('');
   html+='<div class="add-card" onclick="openAddModal()"><div class="add-card-icon">⭐</div><div class="add-card-text">'+t('addChild')+'</div></div>';
   grid.innerHTML=html;
+  loadChildPhotos();
+}
+function loadChildPhotos(){
+  children.forEach(function(child){
+    if(!child.photo_url)return;
+    getSignedPhotoUrl(getPhotoPath(child.photo_url)).then(function(url){
+      if(!url)return;
+      var el=document.getElementById('avatar-'+child.id);
+      if(el)el.innerHTML='<img src="'+url+'" style="width:100%;height:100%;object-fit:cover;" alt="">';
+    });
+  });
 }
 
 /* ── Child Entry ── */
@@ -1402,8 +1423,9 @@ async function enterChild(childId){
   }finally{hideLoading();}
   renderRecords();renderGrowthAnalysis();updateHeroStats();
   renderSupplements();renderSuppCorrelation();
-  if(currentChild.photo_url){showPhoto(currentChild.photo_url+'?t='+Date.now());}
-  else{clearPhoto();}
+  if(currentChild.photo_url){
+    getSignedPhotoUrl(getPhotoPath(currentChild.photo_url)).then(function(url){if(url)showPhoto(url);});
+  }else{clearPhoto();}
 }
 
 function updateHeroFromChild(){
@@ -1835,11 +1857,14 @@ function calcMidParentalHeight(){
   var target=currentChild.gender==='女'?(ph.father+ph.mother-13)/2:(ph.father+ph.mother+13)/2;
   return{target:Math.round(target*10)/10,low:Math.round((target-8.5)*10)/10,high:Math.round((target+8.5)*10)/10};
 }
-function generateReport(){
+async function generateReport(){
   if(!currentChild||measurements.length===0){
     alert(currentLang==='en'?'Please add measurement records first.':'請先新增量測紀錄。');
     return;
   }
+  currentChild._reportPhotoUrl=currentChild.photo_url
+    ?await getSignedPhotoUrl(getPhotoPath(currentChild.photo_url))
+    :null;
   // Temporarily expand collapsed chart cards so charts render at full size
   var hCard=document.getElementById('heightChartCard');
   var wCard=document.getElementById('weightChartCard');
@@ -1956,8 +1981,8 @@ function buildReportHTML(hImg,wImg){
     }
   }
   // Avatar
-  var avatarHTML=currentChild.photo_url
-    ?'<img src="'+currentChild.photo_url+'" style="width:80px;height:80px;border-radius:50%;border:4px solid rgba(255,255,255,0.7);object-fit:cover;box-shadow:3px 3px 0 rgba(0,0,0,0.3);flex-shrink:0;" crossorigin="anonymous">'
+  var avatarHTML=currentChild._reportPhotoUrl
+    ?'<img src="'+currentChild._reportPhotoUrl+'" style="width:80px;height:80px;border-radius:50%;border:4px solid rgba(255,255,255,0.7);object-fit:cover;box-shadow:3px 3px 0 rgba(0,0,0,0.3);flex-shrink:0;" crossorigin="anonymous">'
     :'<div style="width:80px;height:80px;flex-shrink:0;border-radius:50%;border:4px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:2.4em;box-shadow:3px 3px 0 rgba(0,0,0,0.3);">'+(gender==='女'?'👧':'👦')+'</div>';
   // Alert card (right side of hero)
   var acColor,acBg,acBorder,acTitle,acBody,acNote;
@@ -2043,8 +2068,8 @@ function buildReportHTML(hImg,wImg){
     });
   }
   /* Avatar HTML */
-  var photoHTML=currentChild.photo_url
-    ?'<img src="'+currentChild.photo_url+'" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;">'
+  var photoHTML=currentChild._reportPhotoUrl
+    ?'<img src="'+currentChild._reportPhotoUrl+'" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;">'
     :'<span style="font-size:1.9em;opacity:0.70;">📷</span><span class="prof-photo-txt">'+(isEn?'Photo':'寶貝照片')+'</span>';
   /* Age formatted for display */
   var ageDisplay=(function(){
