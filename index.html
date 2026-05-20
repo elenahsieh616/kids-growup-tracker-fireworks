@@ -2177,10 +2177,7 @@ function buildReportHTML(hImg,wImg){
       '<div class="rpt-date">📅 '+dateStr+'</div>'+
     '</div>'+
     '<div class="actions">'+
-      '<div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;">'+
-        '<button class="btn-print" onclick="window.print()">🖨️ '+(isEn?'Print':'列印')+'</button>'+
-        '<span style="font-size:10.5px;color:#8a9ab8;font-weight:600;">'+( isEn?'💡 Uncheck "Headers and footers" for best results':'💡 列印時請取消勾選「頁首及頁尾」')+'</span>'+
-      '</div>'+
+      '<button class="btn-print" onclick="window.print()">🖨️ '+(isEn?'Print':'列印')+'</button>'+
       '<button class="btn-save" id="saveBtn" onclick="saveAsImg()">📱 '+(isEn?'Save as Image':'儲存圖片')+'</button>'+
       '<button class="btn-share" id="shareBtn" onclick="shareReport()">'+( isEn?'Share to LINE':'分享到 LINE')+'</button>'+
     '</div>'+
