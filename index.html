@@ -2241,9 +2241,9 @@ function buildReportHTML(hImg,wImg){
         'acts.style.display="";'+
         'canvas.toBlob(function(blob){'+
           'var fname='+dlName+';'+
-          'var file=new File([blob],fname,{type:"image/png"});'+
-          'if(navigator.canShare&&navigator.canShare({files:[file]})){'+
-            'navigator.share({files:[file],title:"寶貝成長報告"}).catch(function(){});'+
+          'var isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);'+
+          'if(isMobile&&navigator.canShare&&navigator.canShare({files:[new File([blob],fname,{type:"image/png"})]})){'+
+            'navigator.share({files:[new File([blob],fname,{type:"image/png"})],title:"寶貝成長報告"}).catch(function(){});'+
           '}else{'+
             'var url=URL.createObjectURL(blob);'+
             'var a=document.createElement("a");a.href=url;a.download=fname;a.click();'+
