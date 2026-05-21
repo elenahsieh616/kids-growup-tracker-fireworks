@@ -2031,7 +2031,8 @@ function buildReportHTML(hImg,wImg){
     (rptMph?sRow('🧬',isEn?'Genetic':'遺傳預測',rptMph.target+' cm','('+rptMph.low+'–'+rptMph.high+')','color:#FB8C00;'):'');
   var safeName=esc(name);
   var dlName=JSON.stringify(name+'_report_'+new Date().toISOString().slice(0,10)+'.png');
-  var saveBtnLabel=JSON.stringify('📱 '+(isEn?'Save as Image':'儲存圖片'));
+  var isMobileDev=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  var saveBtnLabel=JSON.stringify('📱 '+(isMobileDev?(isEn?'Save / Share':'儲存／分享'):(isEn?'Save as Image':'儲存圖片')));
   var shareBtnLabel=JSON.stringify(isEn?'Share to LINE':'分享到 LINE');
   var loadingLabel=JSON.stringify('⏳ '+(isEn?'Loading...':'載入中...'));
   var baseHref=window.location.href.replace(/[^/]*$/,'');
@@ -2181,8 +2182,8 @@ function buildReportHTML(hImg,wImg){
     '</div>'+
     '<div class="actions">'+
       '<button class="btn-print" onclick="window.print()">🖨️ '+(isEn?'Print':'列印')+'</button>'+
-      '<button class="btn-save" id="saveBtn" onclick="saveAsImg()">📱 '+(isEn?'Save as Image':'儲存圖片')+'</button>'+
-      '<button class="btn-share" id="shareBtn" onclick="shareReport()">'+( isEn?'Share to LINE':'分享到 LINE')+'</button>'+
+      '<button class="btn-save" id="saveBtn" onclick="saveAsImg()">📱 '+(isMobileDev?(isEn?'Save / Share':'儲存／分享'):(isEn?'Save as Image':'儲存圖片'))+'</button>'+
+      (!isMobileDev?'<button class="btn-share" id="shareBtn" onclick="shareReport()">'+(isEn?'Share to LINE':'分享到 LINE')+'</button>':'')+
     '</div>'+
     '<div class="rpt-profile">'+
       '<div class="prof-left">'+
