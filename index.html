@@ -2234,19 +2234,32 @@ function buildReportHTML(hImg,wImg){
   'function saveAsImg(){'+
     'var btn=document.getElementById("saveBtn");'+
     'btn.disabled=true;btn.textContent='+loadingLabel+';'+
-    'var s=document.createElement("script");'+
-    's.src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";'+
-    's.onload=function(){'+
+    'function doSave(){'+
       'var acts=document.querySelector(".actions");acts.style.display="none";'+
       'var rptEl=document.querySelector(".rpt");'+
       'html2canvas(rptEl,{scale:2,useCORS:true,allowTaint:true,backgroundColor:"#ffffff",windowWidth:860,windowHeight:rptEl.scrollHeight,logging:false}).then(function(canvas){'+
         'acts.style.display="";'+
-        'var a=document.createElement("a");a.download='+dlName+';a.href=canvas.toDataURL("image/png");a.click();'+
-        'btn.textContent='+saveBtnLabel+';btn.disabled=false;'+
+        'canvas.toBlob(function(blob){'+
+          'var fname='+dlName+';'+
+          'var file=new File([blob],fname,{type:"image/png"});'+
+          'if(navigator.canShare&&navigator.canShare({files:[file]})){'+
+            'navigator.share({files:[file],title:"寶貝成長報告"}).catch(function(){});'+
+          '}else{'+
+            'var url=URL.createObjectURL(blob);'+
+            'var a=document.createElement("a");a.href=url;a.download=fname;a.click();'+
+            'URL.revokeObjectURL(url);'+
+          '}'+
+          'btn.textContent='+saveBtnLabel+';btn.disabled=false;'+
+        '},"image/png");'+
       '}).catch(function(){acts.style.display="";btn.textContent='+saveBtnLabel+';btn.disabled=false;});'+
-    '};'+
-    's.onerror=function(){btn.textContent='+saveBtnLabel+';btn.disabled=false;};'+
-    'document.head.appendChild(s);'+
+    '}'+
+    'if(typeof html2canvas!=="undefined"){doSave();}else{'+
+      'var s=document.createElement("script");'+
+      's.src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";'+
+      's.onload=doSave;'+
+      's.onerror=function(){btn.textContent='+saveBtnLabel+';btn.disabled=false;};'+
+      'document.head.appendChild(s);'+
+    '}'+
   '}'+
   'function shareReport(){'+
     'var btn=document.getElementById("shareBtn");'+
