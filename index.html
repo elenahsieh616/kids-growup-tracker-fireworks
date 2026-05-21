@@ -1845,6 +1845,10 @@ async function generateReport(){
     alert(currentLang==='en'?'Please add measurement records first.':'請先新增量測紀錄。');
     return;
   }
+  var isEn=currentLang==='en';
+  var win=window.open('','_blank');
+  if(!win){alert(isEn?'Please allow pop-ups for this site.':'請允許彈出視窗以產生報告。');return;}
+  win.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+(isEn?'Loading…':'報告生成中…')+'</title><style>body{margin:0;background:#060418;display:flex;align-items:center;justify-content:center;height:100vh;font-family:"Noto Sans TC",sans-serif;color:rgba(255,220,180,0.85);font-size:18px;letter-spacing:2px;}</style></head><body>'+(isEn?'Generating report…':'報告生成中，請稍候…')+'</body></html>');
   currentChild._reportPhotoUrl=currentChild.photo_url
     ?await getSignedPhotoUrl(getPhotoPath(currentChild.photo_url))
     :null;
@@ -1901,8 +1905,7 @@ async function generateReport(){
       if(wWas)wCard.classList.add('collapsed');
       var html=buildReportHTML(hImg,wImg);
       hideLoading();
-      var win=window.open('','_blank');
-      if(!win){alert(currentLang==='en'?'Please allow pop-ups for this site.':'請允許彈出視窗以產生報告。');return;}
+      win.document.open();
       win.document.write(html);
       win.document.close();
     },150);
