@@ -343,6 +343,15 @@
     .num-bounce { animation:num-bounce 0.45s cubic-bezier(0.34,1.56,0.64,1); }
     @media (prefers-reduced-motion:reduce) { .num-bounce { animation:none!important; } }
 
+    /* ── celebrationEffect 粒子 ── */
+    .cel-ring { position:fixed;pointer-events:none;z-index:3000;width:60px;height:60px;border-radius:50%;border:3px solid rgba(255,210,80,0.9);animation:cel-ring-pop 0.55s ease-out forwards; }
+    @keyframes cel-ring-pop { 0%{transform:translate(-50%,-50%) scale(0.1);opacity:0.9;} 100%{transform:translate(-50%,-50%) scale(2.4);opacity:0;} }
+    .cel-star { position:fixed;pointer-events:none;z-index:3001;font-size:1.2em;line-height:1;animation:cel-star-fly 0.85s ease-out forwards; }
+    @keyframes cel-star-fly { 0%{transform:translate(-50%,-50%) scale(0.4) rotate(0deg);opacity:1;} 100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(0.2) rotate(var(--dr));opacity:0;} }
+    .cel-coin { position:fixed;pointer-events:none;z-index:3001;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#FFD700,#FFA500);border:2px solid rgba(180,120,0,0.6);box-shadow:0 0 6px rgba(255,200,0,0.7);animation:cel-coin-up 0.95s cubic-bezier(0.2,0.8,0.3,1) forwards; }
+    @keyframes cel-coin-up { 0%{transform:translate(-50%,-50%) scale(0.3);opacity:0.9;} 40%{transform:translate(-50%,calc(-50% - 52px)) scale(1.1);opacity:1;} 100%{transform:translate(-50%,calc(-50% + 28px)) scale(0.5);opacity:0;} }
+    @media (prefers-reduced-motion:reduce) { .cel-ring,.cel-star,.cel-coin { animation:none!important;opacity:0!important; } }
+
     /* ══ Background Image ══ */
     #bgImgWrap { position:fixed;inset:0;z-index:1;pointer-events:none; }
     #bgImgWrap picture { display:block;width:100%;height:100%; }
@@ -700,6 +709,50 @@
   </div>
 </div>
 
+<!-- ══ EDIT MEASUREMENT MODAL ══ -->
+<div class="modal-overlay hidden" id="editMeasureModal">
+  <div class="modal-box">
+    <div class="modal-title" data-i18n="editMeasureTitle">✏️ 編輯量測紀錄</div>
+    <input type="hidden" id="editMeasureId">
+    <div class="form-group" style="margin-bottom:11px;"><label data-i18n="t1Date">量測日期</label><input type="date" id="editMeasureDate"></div>
+    <div class="form-grid col2" style="margin-bottom:11px;">
+      <div class="form-group"><label data-i18n="t1Height">身高 (cm)</label><input type="number" id="editMeasureHeight" step="0.1" min="40" max="200" inputmode="decimal" autocomplete="off"></div>
+      <div class="form-group"><label data-i18n="t1Weight">體重 (kg)</label><input type="number" id="editMeasureWeight" step="0.1" min="2" max="100" inputmode="decimal" autocomplete="off"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;"><label data-i18n="t1Note">備註（選填）</label><input type="text" id="editMeasureNote" autocomplete="off"></div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="closeEditMeasureModal()" data-i18n="childCancel">取消</button>
+      <button class="btn btn-primary" onclick="saveMeasurementEdit();burstFireworks(this)" data-i18n="editSave">⭐ 儲存修改</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EDIT SUPPLEMENT MODAL ══ -->
+<div class="modal-overlay hidden" id="editSuppModal">
+  <div class="modal-box">
+    <div class="modal-title" data-i18n="editSuppTitle">✏️ 編輯保健品紀錄</div>
+    <input type="hidden" id="editSuppId">
+    <div class="form-grid col2" style="margin-bottom:11px;">
+      <div class="form-group"><label data-i18n="t3Date">開始日期</label><input type="date" id="editSuppDate"></div>
+      <div class="form-group"><label data-i18n="t3Type">類型</label>
+        <select id="editSuppType">
+          <option value="保健品" data-i18n-opt="0">保健品</option>
+          <option value="營養品" data-i18n-opt="1">營養品</option>
+          <option value="成長飲品" data-i18n-opt="2">成長飲品</option>
+          <option value="配方奶" data-i18n-opt="3">配方奶</option>
+          <option value="其他" data-i18n-opt="4">其他</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:10px;"><label data-i18n="t3Name">品名</label><input type="text" id="editSuppName" autocomplete="off"></div>
+    <div class="form-group" style="margin-bottom:12px;"><label data-i18n="t3Note">備註（選填）</label><textarea id="editSuppNote" rows="2" style="resize:vertical;"></textarea></div>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" onclick="closeEditSuppModal()" data-i18n="childCancel">取消</button>
+      <button class="btn btn-primary" onclick="saveSupplementEdit();burstFireworks(this)" data-i18n="editSave">⭐ 儲存修改</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ── WHO Data (Boys) ── */
 var WHO_H_BOY=[
@@ -878,7 +931,9 @@ var LANG={
     importOk:'✅ 匯入成功！已新增：{m} 筆量測，{s} 筆保健品。',
     importNone:'沒有新紀錄可匯入（所有日期已存在）。',
     importInvalid:'無效的備份檔案。',importNewVer:'此備份由較新版本建立，可能有相容性問題，確定要匯入嗎？',
-    importFail:'匯入失敗：',importReadFail:'讀取檔案失敗：'
+    importFail:'匯入失敗：',importReadFail:'讀取檔案失敗：',
+    editMeasureTitle:'✏️ 編輯量測紀錄',editSuppTitle:'✏️ 編輯保健品紀錄',editSave:'⭐ 儲存修改',
+    mEditFail:'編輯失敗：',sEditFail:'編輯失敗：'
   },
   en:{
     loading:'⭐ Loading Growth Magic…',
@@ -972,7 +1027,9 @@ var LANG={
     importOk:'✅ Import successful! Added: {m} measurements, {s} supplements.',
     importNone:'No new records to import (all dates already exist).',
     importInvalid:'Invalid backup file.',importNewVer:'This backup was created by a newer version. Import anyway?',
-    importFail:'Import failed: ',importReadFail:'Failed to read file: '
+    importFail:'Import failed: ',importReadFail:'Failed to read file: ',
+    editMeasureTitle:'✏️ Edit Measurement',editSuppTitle:'✏️ Edit Supplement',editSave:'⭐ Save Changes',
+    mEditFail:'Edit failed: ',sEditFail:'Edit failed: '
   }
 };
 function t(k){return (LANG[currentLang]&&LANG[currentLang][k]!==undefined)?LANG[currentLang][k]:(LANG.zh[k]||k);}
@@ -1284,6 +1341,78 @@ async function db_insertS(obj){
 async function db_deleteS(id){
   var r=await db.from('supplements').delete().eq('id',id);
   if(r.error) throw r.error;
+}
+async function db_updateM(id,obj){
+  var r=await db.from('measurements').update(obj).eq('id',id);
+  if(r.error) throw r.error;
+}
+async function db_updateS(id,obj){
+  var r=await db.from('supplements').update(obj).eq('id',id);
+  if(r.error) throw r.error;
+}
+
+/* ── Edit Measurement ── */
+function editMeasurement(id){
+  var m=measurements.find(function(m){return m.id===id;});
+  if(!m)return;
+  document.getElementById('editMeasureId').value=id;
+  document.getElementById('editMeasureDate').value=m.date;
+  document.getElementById('editMeasureHeight').value=m.height;
+  document.getElementById('editMeasureWeight').value=m.weight;
+  document.getElementById('editMeasureNote').value=m.note||'';
+  document.getElementById('editMeasureModal').classList.remove('hidden');
+}
+function closeEditMeasureModal(){document.getElementById('editMeasureModal').classList.add('hidden');}
+async function saveMeasurementEdit(){
+  var id=document.getElementById('editMeasureId').value;
+  var date=document.getElementById('editMeasureDate').value;
+  var height=parseFloat(document.getElementById('editMeasureHeight').value);
+  var weight=parseFloat(document.getElementById('editMeasureWeight').value);
+  var note=document.getElementById('editMeasureNote').value.trim();
+  if(!date||isNaN(height)||isNaN(weight)){alert(t('mRequire'));return;}
+  if(height<40||height>200){alert(t('mHeightRange'));return;}
+  if(weight<2||weight>100){alert(t('mWeightRange'));return;}
+  showLoading();
+  try{
+    await db_updateM(id,{date:date,height:height,weight:weight,note:note||null});
+    var idx=measurements.findIndex(function(m){return m.id===id;});
+    if(idx>=0)Object.assign(measurements[idx],{date:date,height:height,weight:weight,note:note});
+    measurements.sort(function(a,b){return b.date.localeCompare(a.date);});
+  }catch(e){alert(t('mEditFail')+(e.message||e));hideLoading();return;}
+  hideLoading();
+  closeEditMeasureModal();
+  renderRecords();renderGrowthAnalysis();renderCharts();updateHeroStats();
+}
+
+/* ── Edit Supplement ── */
+function editSupplement(id){
+  var s=supplements.find(function(s){return s.id===id;});
+  if(!s)return;
+  document.getElementById('editSuppId').value=id;
+  document.getElementById('editSuppDate').value=s.date;
+  document.getElementById('editSuppType').value=s.type;
+  document.getElementById('editSuppName').value=s.name;
+  document.getElementById('editSuppNote').value=s.note||'';
+  document.getElementById('editSuppModal').classList.remove('hidden');
+}
+function closeEditSuppModal(){document.getElementById('editSuppModal').classList.add('hidden');}
+async function saveSupplementEdit(){
+  var id=document.getElementById('editSuppId').value;
+  var date=document.getElementById('editSuppDate').value;
+  var type=document.getElementById('editSuppType').value;
+  var name=document.getElementById('editSuppName').value.trim();
+  var note=document.getElementById('editSuppNote').value.trim();
+  if(!date||!name){alert(t('sRequire'));return;}
+  showLoading();
+  try{
+    await db_updateS(id,{date:date,type:type,name:name,note:note||null});
+    var idx=supplements.findIndex(function(s){return s.id===id;});
+    if(idx>=0)Object.assign(supplements[idx],{date:date,type:type,name:name,note:note});
+    supplements.sort(function(a,b){return b.date.localeCompare(a.date);});
+  }catch(e){alert(t('sEditFail')+(e.message||e));hideLoading();return;}
+  hideLoading();
+  closeEditSuppModal();
+  renderSupplements();renderSuppCorrelation();renderCharts();
 }
 
 /* ── Photo ── */
@@ -1718,7 +1847,7 @@ function renderRecords(){
   el.innerHTML='<div class="table-wrap"><table><thead><tr><th>'+t('tDate')+'</th><th>'+t('tMonthAge')+'</th><th>'+t('tHeight')+'</th><th>'+t('tWeight')+'</th><th>BMI</th><th>'+t('tNote')+'</th><th></th></tr></thead><tbody>'+
     measurements.map(function(m){
       var bmi=(m.weight/Math.pow(m.height/100,2)).toFixed(1);
-      return '<tr><td>'+fmtDate(m.date)+'</td><td>'+fmtAgeFull(currentChild.birthday,m.date)+'</td><td><strong>'+m.height+'</strong> cm</td><td><strong>'+m.weight+'</strong> kg</td><td>'+bmi+'</td><td style="color:#AAA;font-size:0.8em;">'+(m.note||'—')+'</td><td><button class="btn btn-danger" onclick="deleteMeasurement(\''+m.id+'\')">'+t('tDelete')+'</button></td></tr>';
+      return '<tr><td>'+fmtDate(m.date)+'</td><td>'+fmtAgeFull(currentChild.birthday,m.date)+'</td><td><strong>'+m.height+'</strong> cm</td><td><strong>'+m.weight+'</strong> kg</td><td>'+bmi+'</td><td style="color:#AAA;font-size:0.8em;">'+(m.note||'—')+'</td><td style="white-space:nowrap;"><button class="btn btn-secondary" style="font-size:0.65em;padding:5px 9px;margin-right:4px;min-height:36px;" onclick="editMeasurement(\''+m.id+'\')">✏️</button><button class="btn btn-danger" onclick="deleteMeasurement(\''+m.id+'\')">'+t('tDelete')+'</button></td></tr>';
     }).join('')+'</tbody></table></div>';
 }
 function renderSupplements(){
@@ -1727,7 +1856,7 @@ function renderSupplements(){
   var ts={'保健品':'background:#BFEFB2;color:#1A6B0A','營養品':'background:#C4ECFF;color:#0270A0','成長飲品':'background:#FFE0B2;color:#C45000','配方奶':'background:#FFD6D5;color:#B01010','其他':'background:#F0EACF;color:#6B4C2A'};
   var typeLabels={};['保健品','營養品','成長飲品','配方奶','其他'].forEach(function(k,i){typeLabels[k]=t('suppTypes')[i]||k;});
   el.innerHTML=supplements.map(function(s){
-    return '<div class="supp-item"><div class="supp-row1"><div><span class="supp-tag" style="'+(ts[s.type]||ts['其他'])+'">'+(typeLabels[s.type]||s.type)+'</span><span class="supp-name">'+esc(s.name)+'</span></div><button class="btn btn-danger" onclick="deleteSupplement(\''+s.id+'\')">'+t('tDelete')+'</button></div><div class="supp-date">⭐ '+fmtDate(s.date)+'</div>'+(s.note?'<div class="supp-note">'+esc(s.note)+'</div>':'')+'</div>';
+    return '<div class="supp-item"><div class="supp-row1"><div><span class="supp-tag" style="'+(ts[s.type]||ts['其他'])+'">'+(typeLabels[s.type]||s.type)+'</span><span class="supp-name">'+esc(s.name)+'</span></div><div style="display:flex;gap:6px;flex-shrink:0;"><button class="btn btn-secondary" style="font-size:0.65em;padding:5px 9px;min-height:36px;" onclick="editSupplement(\''+s.id+'\')">✏️</button><button class="btn btn-danger" onclick="deleteSupplement(\''+s.id+'\')">'+t('tDelete')+'</button></div></div><div class="supp-date">⭐ '+fmtDate(s.date)+'</div>'+(s.note?'<div class="supp-note">'+esc(s.note)+'</div>':'')+'</div>';
   }).join('');
 }
 function renderGrowthAnalysis(){
