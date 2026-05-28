@@ -1062,7 +1062,7 @@ function renderRecords(){
   el.innerHTML='<div class="table-wrap"><table><thead><tr><th>'+t('tDate')+'</th><th>'+t('tMonthAge')+'</th><th>'+t('tHeight')+'</th><th>'+t('tWeight')+'</th><th>BMI</th><th>'+t('tNote')+'</th><th></th></tr></thead><tbody>'+
     measurements.map(function(m){
       var bmi=(m.weight/Math.pow(m.height/100,2)).toFixed(1);
-      return '<tr><td>'+fmtDate(m.date)+'</td><td>'+fmtAgeFull(currentChild.birthday,m.date)+'</td><td><strong>'+m.height+'</strong> cm</td><td><strong>'+m.weight+'</strong> kg</td><td>'+bmi+'</td><td style="color:#AAA;font-size:0.8em;">'+(m.note||'—')+'</td><td style="white-space:nowrap;"><button class="btn btn-secondary" style="font-size:0.65em;padding:5px 9px;margin-right:4px;min-height:36px;" onclick="editMeasurement(\''+m.id+'\')">✏️</button><button class="btn btn-danger" onclick="deleteMeasurement(\''+m.id+'\')">'+t('tDelete')+'</button></td></tr>';
+      return '<tr><td>'+fmtDate(m.date)+'</td><td>'+fmtAgeFull(currentChild.birthday,m.date)+'</td><td><strong>'+m.height+'</strong> cm</td><td><strong>'+m.weight+'</strong> kg</td><td>'+bmi+'</td><td style="color:#AAA;font-size:0.8em;">'+esc(m.note||'—')+'</td><td style="white-space:nowrap;"><button class="btn btn-secondary" style="font-size:0.65em;padding:5px 9px;margin-right:4px;min-height:36px;" onclick="editMeasurement(\''+m.id+'\')">✏️</button><button class="btn btn-danger" onclick="deleteMeasurement(\''+m.id+'\')">'+t('tDelete')+'</button></td></tr>';
     }).join('')+'</tbody></table></div>';
 }
 function renderSupplements(){
@@ -1517,7 +1517,7 @@ function buildReportHTML(hImg,wImg){
   var wRank=getPctRank(latestAge,latest.weight,whoW);
   var pred=predictAdultHeight();
   var gr=_rptGrowthRate(sorted,latest,latestDate,latestAge);
-  var annualH=gr.annualH,thresh=gr.thresh,annualLow=gr.annualLow,ref=gr.ref,months=gr.months,hDiff=gr.hDiff,refDays=gr.refDays;
+  var annualH=gr.annualH,thresh=gr.thresh,annualLow=gr.annualLow,ref=gr.ref,hDiff=gr.hDiff,refDays=gr.refDays;
   var ac=_rptAlertCard(annualH,annualLow,thresh,isEn);
   var acColor=ac.acColor,acBg=ac.acBg,acBorder=ac.acBorder,acTitle=ac.acTitle,acBody=ac.acBody,acNote=ac.acNote;
   var rptMph=calcMidParentalHeight();
