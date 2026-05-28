@@ -1568,14 +1568,14 @@ function updateHeroStats(){
   var l=measurements[0];
   var hEl=document.getElementById('statHeight');
   var wEl=document.getElementById('statWeight');
-  if(ENABLE_CELEBRATION_EFFECTS&&hEl.textContent!==String(l.height)){bounceEl(hEl);}
-  if(ENABLE_CELEBRATION_EFFECTS&&wEl.textContent!==String(l.weight)){bounceEl(wEl);}
+  if(hEl.textContent!==String(l.height)){bounceEl(hEl);}
+  if(wEl.textContent!==String(l.weight)){bounceEl(wEl);}
   hEl.textContent=l.height;
   wEl.textContent=l.weight;
 }
 
 function bounceEl(el){
-  if(!ENABLE_CELEBRATION_EFFECTS||!el)return;
+  if(!el)return;
   el.classList.remove('num-bounce');
   void el.offsetWidth;
   el.classList.add('num-bounce');
