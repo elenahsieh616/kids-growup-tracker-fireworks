@@ -1258,25 +1258,6 @@ async function generateReport(){
     },150);
   },50);
 }
-function _getZodiac(bday){
-  var d=new Date(bday),m=d.getMonth()+1,day=d.getDate();
-  if((m==12&&day>=22)||(m==1&&day<=19))return'摩羯座';
-  if((m==1&&day>=20)||(m==2&&day<=18))return'水瓶座';
-  if((m==2&&day>=19)||(m==3&&day<=20))return'雙魚座';
-  if((m==3&&day>=21)||(m==4&&day<=19))return'牡羊座';
-  if((m==4&&day>=20)||(m==5&&day<=20))return'金牛座';
-  if((m==5&&day>=21)||(m==6&&day<=20))return'雙子座';
-  if((m==6&&day>=21)||(m==7&&day<=22))return'巨蟹座';
-  if((m==7&&day>=23)||(m==8&&day<=22))return'獅子座';
-  if((m==8&&day>=23)||(m==9&&day<=22))return'處女座';
-  if((m==9&&day>=23)||(m==10&&day<=22))return'天秤座';
-  if((m==10&&day>=23)||(m==11&&day<=21))return'天蠍座';
-  return'射手座';
-}
-function _getChineseZodiac(bday){
-  var z=['鼠','牛','虎','兔','龍','蛇','馬','羊','猴','雞','狗','豬'];
-  return z[(new Date(bday).getFullYear()-1900)%12];
-}
 /* ── Report CSS helper ── */
 function _rptCSS(cbg,dbg){
   return `*{box-sizing:border-box;margin:0;padding:0;}
@@ -1525,8 +1506,6 @@ function buildReportHTML(hImg,wImg){
   var gender=currentChild.gender;
   var bday=currentChild.birthday;
   var bdayFmt=bday.replace(/-/g,'.');
-  var zodiac=_getZodiac(bday);
-  var chineseZodiac=_getChineseZodiac(bday);
   var sorted=measurements.slice().sort(function(a,b){return a.date.localeCompare(b.date);});
   var latest=sorted[sorted.length-1];
   var latestAge=getAgeMonths(latest.date);
@@ -1534,17 +1513,11 @@ function buildReportHTML(hImg,wImg){
   var ageStr=fmtAgeFull(bday,latest.date);
   var whoH=gender==='女'?WHO_H_GIRL:WHO_H_BOY;
   var whoW=gender==='女'?WHO_W_GIRL:WHO_W_BOY;
-  var hPct=getPctLabel(latestAge,latest.height,whoH);
-  var wPct=getPctLabel(latestAge,latest.weight,whoW);
   var hRank=getPctRank(latestAge,latest.height,whoH);
   var wRank=getPctRank(latestAge,latest.weight,whoW);
   var pred=predictAdultHeight();
   var gr=_rptGrowthRate(sorted,latest,latestDate,latestAge);
   var annualH=gr.annualH,thresh=gr.thresh,annualLow=gr.annualLow,ref=gr.ref,months=gr.months,hDiff=gr.hDiff,refDays=gr.refDays;
-  // Avatar
-  var avatarHTML=currentChild._reportPhotoUrl
-    ?'<img src="'+currentChild._reportPhotoUrl+'" style="width:80px;height:80px;border-radius:50%;border:4px solid rgba(255,255,255,0.7);object-fit:cover;box-shadow:3px 3px 0 rgba(0,0,0,0.3);flex-shrink:0;" crossorigin="anonymous">'
-    :'<div style="width:80px;height:80px;flex-shrink:0;border-radius:50%;border:4px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:2.4em;box-shadow:3px 3px 0 rgba(0,0,0,0.3);">'+(gender==='女'?'👧':'👦')+'</div>';
   var ac=_rptAlertCard(annualH,annualLow,thresh,isEn);
   var acColor=ac.acColor,acBg=ac.acBg,acBorder=ac.acBorder,acTitle=ac.acTitle,acBody=ac.acBody,acNote=ac.acNote;
   var rptMph=calcMidParentalHeight();
@@ -1585,7 +1558,6 @@ function buildReportHTML(hImg,wImg){
   var shareBtnLabel=JSON.stringify(isEn?'Share to LINE':'分享到 LINE');
   var loadingLabel=JSON.stringify('⏳ '+(isEn?'Loading...':'載入中...'));
   var baseHref=window.location.href.replace(/[^/]*$/,'');
-  var bgUrl=baseHref+'images/header-bg.jpg';
   var contentBgUrl=baseHref+'images/content-bg.jpg';
   var desktopBgUrl=baseHref+'images/desktop-bg.png';
   var scRowsHTML=_rptScRows(supplements,sorted,isEn);
