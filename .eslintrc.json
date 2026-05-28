@@ -1,0 +1,26 @@
+{
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "globals": {
+    "supabase": "readonly",
+    "Chart": "readonly",
+    "html2canvas": "readonly",
+    "currentChild": "writable",
+    "currentLang": "writable",
+    "measurements": "writable",
+    "supplements": "writable"
+  },
+  "rules": {
+    "no-unused-vars": "warn",
+    "no-undef": "error",
+    "no-console": "warn",
+    "eqeqeq": ["warn", "always"],
+    "semi": ["error", "always"],
+    "no-var": "off"
+  }
+}

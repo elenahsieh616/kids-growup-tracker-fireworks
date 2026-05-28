@@ -1380,72 +1380,143 @@ body{font-family:"Zen Maru Gothic","Noto Sans TC","PingFang TC",sans-serif;backg
 
 /* ── Report inline script helper ── */
 function _rptScript(dlName,saveBtnLabel,shareBtnLabel,loadingLabel,isMobileDev){
-  return(
-    'function saveAsImg(){'+
-      'var btn=document.getElementById("saveBtn");'+
-      'btn.disabled=true;btn.textContent='+loadingLabel+';'+
-      'function doSave(){'+
-        'var acts=document.querySelector(".actions");acts.style.display="none";'+
-        'var rptEl=document.querySelector(".rpt");'+
-        'html2canvas(rptEl,{scale:2,useCORS:true,allowTaint:true,backgroundColor:"#ffffff",windowWidth:860,windowHeight:rptEl.scrollHeight,logging:false}).then(function(canvas){'+
-          'acts.style.display="";'+
-          'canvas.toBlob(function(blob){'+
-            'var fname='+dlName+';'+
-            'var isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);'+
-            'if(isMobile&&navigator.canShare&&navigator.canShare({files:[new File([blob],fname,{type:"image/png"})]})){'+
-              'navigator.share({files:[new File([blob],fname,{type:"image/png"})],title:"寶貝成長報告"}).catch(function(){});'+
-            '}else{'+
-              'var url=URL.createObjectURL(blob);'+
-              'var a=document.createElement("a");a.href=url;a.download=fname;a.click();'+
-              'URL.revokeObjectURL(url);'+
-            '}'+
-            'btn.textContent='+saveBtnLabel+';btn.disabled=false;'+
-          '},"image/png");'+
-        '}).catch(function(){acts.style.display="";btn.textContent='+saveBtnLabel+';btn.disabled=false;});'+
-      '}'+
-      'if(typeof html2canvas!=="undefined"){doSave();}else{'+
-        'var s=document.createElement("script");'+
-        's.src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";'+
-        's.onload=doSave;'+
-        's.onerror=function(){btn.textContent='+saveBtnLabel+';btn.disabled=false;};'+
-        'document.head.appendChild(s);'+
-      '}'+
-    '}'+
-    'function shareReport(){'+
-      'var btn=document.getElementById("shareBtn");'+
-      'btn.disabled=true;btn.textContent='+loadingLabel+';'+
-      'function doShare(){'+
-        'var acts=document.querySelector(".actions");acts.style.display="none";'+
-        'var rptEl=document.querySelector(".rpt");'+
-        'html2canvas(rptEl,{scale:2,useCORS:true,allowTaint:true,backgroundColor:"#ffffff",windowWidth:860,windowHeight:rptEl.scrollHeight,logging:false}).then(function(canvas){'+
-          'acts.style.display="";'+
-          'canvas.toBlob(function(blob){'+
-            'var fname='+dlName+';'+
-            'var file=new File([blob],fname,{type:"image/png"});'+
-            'if(navigator.canShare&&navigator.canShare({files:[file]})){'+
-              'navigator.share({title:"寶貝成長報告",files:[file]}).catch(function(){});'+
-              'btn.textContent='+shareBtnLabel+';btn.disabled=false;'+
-            '}else{'+
-              'var url=URL.createObjectURL(blob);'+
-              'var a=document.createElement("a");a.href=url;a.download=fname;a.click();'+
-              'URL.revokeObjectURL(url);'+
-              'setTimeout(function(){window.open("https://line.me/R/share?text="+encodeURIComponent("寶貝成長報告已儲存，請開啟圖片分享 📊"),"_blank");},600);'+
-              'btn.textContent='+shareBtnLabel+';btn.disabled=false;'+
-            '}'+
-          '},"image/png");'+
-        '}).catch(function(){acts.style.display="";btn.textContent='+shareBtnLabel+';btn.disabled=false;});'+
-      '}'+
-      'if(typeof html2canvas!=="undefined"){doShare();}else{'+
-        'var s=document.createElement("script");'+
-        's.src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";'+
-        's.onload=doShare;'+
-        's.onerror=function(){btn.textContent='+shareBtnLabel+';btn.disabled=false;};'+
-        'document.head.appendChild(s);'+
-      '}'+
-    '}'
-  );
+  return `function saveAsImg(){
+var btn=document.getElementById("saveBtn");
+btn.disabled=true;btn.textContent=${loadingLabel};
+function doSave(){
+var acts=document.querySelector(".actions");acts.style.display="none";
+var rptEl=document.querySelector(".rpt");
+html2canvas(rptEl,{scale:2,useCORS:true,allowTaint:true,backgroundColor:"#ffffff",windowWidth:860,windowHeight:rptEl.scrollHeight,logging:false}).then(function(canvas){
+acts.style.display="";
+canvas.toBlob(function(blob){
+var fname=${dlName};
+var isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+if(isMobile&&navigator.canShare&&navigator.canShare({files:[new File([blob],fname,{type:"image/png"})]})){
+navigator.share({files:[new File([blob],fname,{type:"image/png"})],title:"寶貝成長報告"}).catch(function(){});
+}else{
+var url=URL.createObjectURL(blob);
+var a=document.createElement("a");a.href=url;a.download=fname;a.click();
+URL.revokeObjectURL(url);
+}
+btn.textContent=${saveBtnLabel};btn.disabled=false;
+},"image/png");
+}).catch(function(){acts.style.display="";btn.textContent=${saveBtnLabel};btn.disabled=false;});
+}
+if(typeof html2canvas!=="undefined"){doSave();}else{
+var s=document.createElement("script");
+s.src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+s.onload=doSave;
+s.onerror=function(){btn.textContent=${saveBtnLabel};btn.disabled=false;};
+document.head.appendChild(s);
+}
+}
+function shareReport(){
+var btn=document.getElementById("shareBtn");
+btn.disabled=true;btn.textContent=${loadingLabel};
+function doShare(){
+var acts=document.querySelector(".actions");acts.style.display="none";
+var rptEl=document.querySelector(".rpt");
+html2canvas(rptEl,{scale:2,useCORS:true,allowTaint:true,backgroundColor:"#ffffff",windowWidth:860,windowHeight:rptEl.scrollHeight,logging:false}).then(function(canvas){
+acts.style.display="";
+canvas.toBlob(function(blob){
+var fname=${dlName};
+var file=new File([blob],fname,{type:"image/png"});
+if(navigator.canShare&&navigator.canShare({files:[file]})){
+navigator.share({title:"寶貝成長報告",files:[file]}).catch(function(){});
+btn.textContent=${shareBtnLabel};btn.disabled=false;
+}else{
+var url=URL.createObjectURL(blob);
+var a=document.createElement("a");a.href=url;a.download=fname;a.click();
+URL.revokeObjectURL(url);
+setTimeout(function(){window.open("https://line.me/R/share?text="+encodeURIComponent("寶貝成長報告已儲存，請開啟圖片分享 📊"),"_blank");},600);
+btn.textContent=${shareBtnLabel};btn.disabled=false;
+}
+},"image/png");
+}).catch(function(){acts.style.display="";btn.textContent=${shareBtnLabel};btn.disabled=false;});
+}
+if(typeof html2canvas!=="undefined"){doShare();}else{
+var s=document.createElement("script");
+s.src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+s.onload=doShare;
+s.onerror=function(){btn.textContent=${shareBtnLabel};btn.disabled=false;};
+document.head.appendChild(s);
+}
+}`;
 }
 
+function _rptGrowthRate(sorted,latest,latestDate,latestAge){
+  var annualH=null,thresh=null,annualLow=false,ref=null,months=null,hDiff=null,refDays=null;
+  if(sorted.length>=2){
+    var bestDiff=Infinity;
+    sorted.slice(0,-1).forEach(function(m){var d=(latestDate-new Date(m.date))/86400000;if(d>=60&&Math.abs(d-365)<bestDiff){bestDiff=Math.abs(d-365);ref=m;}});
+    if(ref){
+      refDays=(latestDate-new Date(ref.date))/86400000;
+      months=(refDays/30).toFixed(1);
+      hDiff=(latest.height-ref.height).toFixed(1);
+      annualH=(parseFloat(hDiff)/refDays*365).toFixed(1);
+      thresh=getMinGrowth(latestAge-parseFloat(months)/2);
+      annualLow=parseFloat(annualH)<thresh.min;
+    }
+  }
+  return {annualH:annualH,thresh:thresh,annualLow:annualLow,ref:ref,months:months,hDiff:hDiff,refDays:refDays};
+}
+function _rptAlertCard(annualH,annualLow,thresh,isEn){
+  var acColor,acBg,acBorder,acTitle,acBody,acNote;
+  if(annualH!==null){
+    if(annualLow){
+      acColor='#AA1A18';acBg='#FFD6D5';acBorder='#E52521';
+      acTitle='<span style="color:#E52521;">⚠ '+(isEn?'GROWTH ALERT':'生長警示')+'</span>';
+      acBody=(isEn?'Height growth: <strong>'+annualH+' cm/yr</strong><br>Below min. <strong>'+thresh.min+' cm/yr</strong>':'身高年化增長：<strong>'+annualH+' cm/年</strong><br>低於標準 <strong>'+thresh.min+' cm/年</strong>');
+      acNote='<span style="color:#6B4C2A;">💡 '+(isEn?'Consult a pediatrician':'建議諮詢兒科醫師')+'</span>';
+    }else{
+      acColor='#1A6B0A';acBg='#BFEFB2';acBorder='#3A9D23';
+      acTitle='<span style="color:#3A9D23;">✓ '+(isEn?'ON TRACK':'成長達標')+'</span>';
+      acBody=(isEn?'Height growth: <strong>'+annualH+' cm/yr</strong><br>Above min. <strong>'+thresh.min+' cm/yr</strong> ✓':'身高年化增長：<strong>'+annualH+' cm/年</strong><br>達標基準 <strong>'+thresh.min+' cm/年</strong> ✓');
+      acNote='<span style="color:#1A6B0A;">⭐ '+(isEn?'Keep it up!':'繼續保持！')+'</span>';
+    }
+  }else{
+    acColor='#0270A0';acBg='#C4ECFF';acBorder='#049CD8';
+    acTitle='<span style="color:#049CD8;">📈 '+(isEn?'TRACKING':'成長追蹤')+'</span>';
+    acBody=(isEn?'Add 2+ measurements<br>to see growth rate':'新增至少 2 筆量測<br>查看生長速度分析');
+    acNote='';
+  }
+  return {acColor:acColor,acBg:acBg,acBorder:acBorder,acTitle:acTitle,acBody:acBody,acNote:acNote};
+}
+function _rptReminders(annualH,annualLow,thresh,hRank,wRank,pred,rptMph,isEn){
+  var rm=[];
+  if(annualH!==null&&annualLow)rm.push(isEn?'<li>⚠️ Height growth (<strong>'+annualH+' cm/yr</strong>) is below the minimum standard of <strong>'+thresh.min+' cm/yr</strong>. Please consult a pediatrician for professional assessment.</li>':'<li>⚠️ 身高年化增長速度（<strong>'+annualH+' cm/年</strong>）低於最低標準（<strong>'+thresh.min+' cm/年</strong>），建議盡快諮詢兒科醫師進行評估。</li>');
+  if(hRank==='low')rm.push(isEn?'<li>📏 Height is below P3. Maintain balanced diet, adequate sleep, and regular physical activity.</li>':'<li>📏 身高位於 P3 以下，建議保持均衡飲食、充足睡眠及規律運動，持續追蹤。</li>');
+  if(wRank==='low')rm.push(isEn?'<li>⚖️ Weight is below P3. Ensure sufficient caloric intake and nutritional balance.</li>':'<li>⚖️ 體重位於 P3 以下，建議確保足夠熱量攝取與營養均衡。</li>');
+  if(hRank==='high')rm.push(isEn?'<li>📏 Height is above P97. Regular monitoring with a healthcare provider is recommended.</li>':'<li>📏 身高位於 P97 以上，建議定期與醫師追蹤評估。</li>');
+  if(wRank==='high')rm.push(isEn?'<li>⚖️ Weight is above P97. Maintain healthy eating habits and regular exercise.</li>':'<li>⚖️ 體重位於 P97 以上，建議維持健康飲食習慣及規律運動。</li>');
+  rm.push(isEn?'<li>📅 Growth assessment is recommended every 3–6 months to track long-term trends.</li>':'<li>📅 建議每 3–6 個月定期量測，追蹤長期生長趨勢。</li>');
+  if(pred&&pred.isExtreme)rm.push(isEn?'<li>⚠️ Height is at an extreme percentile (below P3 or above P97). Genetic prediction may be more reliable — please consult a pediatrician for accurate assessment.</li>':'<li>⚠️ 身高處於極端百分位（P3以下或P97以上），遺傳預測可能更具參考價值，建議諮詢小兒科醫師進行評估。</li>');
+  if(rptMph)rm.push(isEn?'<li>🧬 Genetic predicted height (Mid-Parental Height): <strong>'+rptMph.target+' cm</strong> (range '+rptMph.low+'–'+rptMph.high+' cm).</li>':'<li>🧬 遺傳預測身高（父母中間值法）：<strong>'+rptMph.target+' cm</strong>（範圍 '+rptMph.low+'–'+rptMph.high+' cm）。</li>');
+  return rm;
+}
+function _rptScRows(supplements,sorted,isEn){
+  if(!supplements.length||sorted.length<2)return '';
+  var html='',cmYr2=isEn?' cm/yr':' cm/年';
+  supplements.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(s){
+    var bef2=sorted.filter(function(m){return m.date<s.date;});
+    var aft2=sorted.filter(function(m){return m.date>s.date;});
+    var bR=null,aR=null;
+    if(bef2.length>=2){var bd2=(new Date(bef2[bef2.length-1].date)-new Date(bef2[0].date))/86400000;if(bd2>=14)bR=((bef2[bef2.length-1].height-bef2[0].height)/bd2*365).toFixed(1);}
+    if(aft2.length>=2){var ad2=(new Date(aft2[aft2.length-1].date)-new Date(aft2[0].date))/86400000;if(ad2>=14)aR=((aft2[aft2.length-1].height-aft2[0].height)/ad2*365).toFixed(1);}
+    var df2=bR!==null&&aR!==null?(parseFloat(aR)-parseFloat(bR)).toFixed(1):null;
+    var pos3=df2!==null&&parseFloat(df2)>0;
+    html+='<div class="sc-row">'+
+      '<span class="sc-name">⭐ '+esc(s.name)+'</span>'+
+      '<span class="sc-since">'+(isEn?'since ':'自 ')+fmtDate(s.date)+'</span>'+
+      '<span style="flex:1"></span>'+
+      '<span class="sc-rate sc-bef">'+(isEn?'Before: ':'前：')+(bR!==null?bR+cmYr2.trim():(isEn?'—':'資料不足'))+'</span>'+
+      '<span class="sc-arr">→</span>'+
+      '<span class="sc-rate '+(aR!==null?'sc-aft-ok':'sc-aft-obs')+'">'+(isEn?'After: ':'後：')+(aR!==null?aR+cmYr2.trim():(isEn?'Observing…':'觀察中'))+'</span>'+
+      (df2!==null?'<span class="sc-diff '+(pos3?'sc-pos':'sc-neg')+'">'+(pos3?'▲ +':'▼ ')+df2+cmYr2.trim()+'</span>':'')+
+    '</div>';
+  });
+  return html;
+}
 function buildReportHTML(hImg,wImg){
   var isEn=currentLang==='en';
   var dateStr=new Date().toLocaleDateString(isEn?'en-US':'zh-TW',{year:'numeric',month:'long',day:'numeric'});
@@ -1468,55 +1539,16 @@ function buildReportHTML(hImg,wImg){
   var hRank=getPctRank(latestAge,latest.height,whoH);
   var wRank=getPctRank(latestAge,latest.weight,whoW);
   var pred=predictAdultHeight();
-  // Growth rate — same logic as renderGrowthAnalysis (FIXED: midpoint age for threshold)
-  var annualH=null,thresh=null,annualLow=false,ref=null,months=null,hDiff=null,refDays=null;
-  if(measurements.length>=2){
-    var bestDiff=Infinity;
-    sorted.slice(0,-1).forEach(function(m){var d=(latestDate-new Date(m.date))/86400000;if(d>=60&&Math.abs(d-365)<bestDiff){bestDiff=Math.abs(d-365);ref=m;}});
-    if(ref){
-      refDays=(latestDate-new Date(ref.date))/86400000;
-      months=(refDays/30).toFixed(1);
-      hDiff=(latest.height-ref.height).toFixed(1);
-      annualH=(parseFloat(hDiff)/refDays*365).toFixed(1);
-      thresh=getMinGrowth(latestAge-parseFloat(months)/2);
-      annualLow=parseFloat(annualH)<thresh.min;
-    }
-  }
+  var gr=_rptGrowthRate(sorted,latest,latestDate,latestAge);
+  var annualH=gr.annualH,thresh=gr.thresh,annualLow=gr.annualLow,ref=gr.ref,months=gr.months,hDiff=gr.hDiff,refDays=gr.refDays;
   // Avatar
   var avatarHTML=currentChild._reportPhotoUrl
     ?'<img src="'+currentChild._reportPhotoUrl+'" style="width:80px;height:80px;border-radius:50%;border:4px solid rgba(255,255,255,0.7);object-fit:cover;box-shadow:3px 3px 0 rgba(0,0,0,0.3);flex-shrink:0;" crossorigin="anonymous">'
     :'<div style="width:80px;height:80px;flex-shrink:0;border-radius:50%;border:4px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-size:2.4em;box-shadow:3px 3px 0 rgba(0,0,0,0.3);">'+(gender==='女'?'👧':'👦')+'</div>';
-  // Alert card (right side of hero)
-  var acColor,acBg,acBorder,acTitle,acBody,acNote;
-  if(annualH!==null){
-    if(annualLow){
-      acColor='#AA1A18';acBg='#FFD6D5';acBorder='#E52521';
-      acTitle='<span style="color:#E52521;">⚠ '+(isEn?'GROWTH ALERT':'生長警示')+'</span>';
-      acBody=(isEn?'Height growth: <strong>'+annualH+' cm/yr</strong><br>Below min. <strong>'+thresh.min+' cm/yr</strong>':'身高年化增長：<strong>'+annualH+' cm/年</strong><br>低於標準 <strong>'+thresh.min+' cm/年</strong>');
-      acNote='<span style="color:#6B4C2A;">💡 '+(isEn?'Consult a pediatrician':'建議諮詢兒科醫師')+'</span>';
-    }else{
-      acColor='#1A6B0A';acBg='#BFEFB2';acBorder='#3A9D23';
-      acTitle='<span style="color:#3A9D23;">✓ '+(isEn?'ON TRACK':'成長達標')+'</span>';
-      acBody=(isEn?'Height growth: <strong>'+annualH+' cm/yr</strong><br>Above min. <strong>'+thresh.min+' cm/yr</strong> ✓':'身高年化增長：<strong>'+annualH+' cm/年</strong><br>達標基準 <strong>'+thresh.min+' cm/年</strong> ✓');
-      acNote='<span style="color:#1A6B0A;">⭐ '+(isEn?'Keep it up!':'繼續保持！')+'</span>';
-    }
-  }else{
-    acColor='#0270A0';acBg='#C4ECFF';acBorder='#049CD8';
-    acTitle='<span style="color:#049CD8;">📈 '+(isEn?'TRACKING':'成長追蹤')+'</span>';
-    acBody=(isEn?'Add 2+ measurements<br>to see growth rate':'新增至少 2 筆量測<br>查看生長速度分析');
-    acNote='';
-  }
+  var ac=_rptAlertCard(annualH,annualLow,thresh,isEn);
+  var acColor=ac.acColor,acBg=ac.acBg,acBorder=ac.acBorder,acTitle=ac.acTitle,acBody=ac.acBody,acNote=ac.acNote;
   var rptMph=calcMidParentalHeight();
-  // Reminder bullets
-  var rmBullets=[];
-  if(annualH!==null&&annualLow)rmBullets.push(isEn?'<li>⚠️ Height growth (<strong>'+annualH+' cm/yr</strong>) is below the minimum standard of <strong>'+thresh.min+' cm/yr</strong>. Please consult a pediatrician for professional assessment.</li>':'<li>⚠️ 身高年化增長速度（<strong>'+annualH+' cm/年</strong>）低於最低標準（<strong>'+thresh.min+' cm/年</strong>），建議盡快諮詢兒科醫師進行評估。</li>');
-  if(hRank==='low')rmBullets.push(isEn?'<li>📏 Height is below P3. Maintain balanced diet, adequate sleep, and regular physical activity.</li>':'<li>📏 身高位於 P3 以下，建議保持均衡飲食、充足睡眠及規律運動，持續追蹤。</li>');
-  if(wRank==='low')rmBullets.push(isEn?'<li>⚖️ Weight is below P3. Ensure sufficient caloric intake and nutritional balance.</li>':'<li>⚖️ 體重位於 P3 以下，建議確保足夠熱量攝取與營養均衡。</li>');
-  if(hRank==='high')rmBullets.push(isEn?'<li>📏 Height is above P97. Regular monitoring with a healthcare provider is recommended.</li>':'<li>📏 身高位於 P97 以上，建議定期與醫師追蹤評估。</li>');
-  if(wRank==='high')rmBullets.push(isEn?'<li>⚖️ Weight is above P97. Maintain healthy eating habits and regular exercise.</li>':'<li>⚖️ 體重位於 P97 以上，建議維持健康飲食習慣及規律運動。</li>');
-  rmBullets.push(isEn?'<li>📅 Growth assessment is recommended every 3–6 months to track long-term trends.</li>':'<li>📅 建議每 3–6 個月定期量測，追蹤長期生長趨勢。</li>');
-  if(pred&&pred.isExtreme)rmBullets.push(isEn?'<li>⚠️ Height is at an extreme percentile (below P3 or above P97). Genetic prediction may be more reliable — please consult a pediatrician for accurate assessment.</li>':'<li>⚠️ 身高處於極端百分位（P3以下或P97以上），遺傳預測可能更具參考價值，建議諮詢小兒科醫師進行評估。</li>');
-  if(rptMph)rmBullets.push(isEn?'<li>🧬 Genetic predicted height (Mid-Parental Height): <strong>'+rptMph.target+' cm</strong> (range '+rptMph.low+'–'+rptMph.high+' cm).</li>':'<li>🧬 遺傳預測身高（父母中間值法）：<strong>'+rptMph.target+' cm</strong>（範圍 '+rptMph.low+'–'+rptMph.high+' cm）。</li>');
+  var rmBullets=_rptReminders(annualH,annualLow,thresh,hRank,wRank,pred,rptMph,isEn);
   /* Avatar HTML */
   var photoHTML=currentChild._reportPhotoUrl
     ?'<img src="'+currentChild._reportPhotoUrl+'" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;">'
@@ -1556,29 +1588,7 @@ function buildReportHTML(hImg,wImg){
   var bgUrl=baseHref+'images/header-bg.jpg';
   var contentBgUrl=baseHref+'images/content-bg.jpg';
   var desktopBgUrl=baseHref+'images/desktop-bg.png';
-  /* Supplement comparison rows */
-  var scRowsHTML='';
-  if(supplements.length&&sorted.length>=2){
-    var cmYr2=isEn?' cm/yr':' cm/年';
-    supplements.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(s){
-      var bef2=sorted.filter(function(m){return m.date<s.date;});
-      var aft2=sorted.filter(function(m){return m.date>s.date;});
-      var bR=null,aR=null;
-      if(bef2.length>=2){var bd2=(new Date(bef2[bef2.length-1].date)-new Date(bef2[0].date))/86400000;if(bd2>=14)bR=((bef2[bef2.length-1].height-bef2[0].height)/bd2*365).toFixed(1);}
-      if(aft2.length>=2){var ad2=(new Date(aft2[aft2.length-1].date)-new Date(aft2[0].date))/86400000;if(ad2>=14)aR=((aft2[aft2.length-1].height-aft2[0].height)/ad2*365).toFixed(1);}
-      var df2=bR!==null&&aR!==null?(parseFloat(aR)-parseFloat(bR)).toFixed(1):null;
-      var pos3=df2!==null&&parseFloat(df2)>0;
-      scRowsHTML+='<div class="sc-row">'+
-        '<span class="sc-name">⭐ '+esc(s.name)+'</span>'+
-        '<span class="sc-since">'+(isEn?'since ':'自 ')+fmtDate(s.date)+'</span>'+
-        '<span style="flex:1"></span>'+
-        '<span class="sc-rate sc-bef">'+(isEn?'Before: ':'前：')+(bR!==null?bR+cmYr2.trim():(isEn?'—':'資料不足'))+'</span>'+
-        '<span class="sc-arr">→</span>'+
-        '<span class="sc-rate '+(aR!==null?'sc-aft-ok':'sc-aft-obs')+'">'+(isEn?'After: ':'後：')+(aR!==null?aR+cmYr2.trim():(isEn?'Observing…':'觀察中'))+'</span>'+
-        (df2!==null?'<span class="sc-diff '+(pos3?'sc-pos':'sc-neg')+'">'+(pos3?'▲ +':'▼ ')+df2+cmYr2.trim()+'</span>':'')+
-      '</div>';
-    });
-  }
+  var scRowsHTML=_rptScRows(supplements,sorted,isEn);
   /* ── assemble report HTML from sections ── */
   var headHTML=
     '<!DOCTYPE html><html lang="'+(isEn?'en':'zh-TW')+'"><head>'+
