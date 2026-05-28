@@ -2404,9 +2404,9 @@ function mkAnnotations(){
   return ann;
 }
 function getChartXMax(){
-  if(!measurements.length)return 84;
+  if(!measurements.length)return 120;
   var mo=getAgeMonths(measurements[0].date);
-  return Math.max(84,Math.ceil((mo+6)/6)*6);
+  return Math.max(120,Math.ceil((mo+6)/6)*6);
 }
 function getChartXRange(){
   var isMobile=window.innerWidth<=768;
