@@ -4,6 +4,8 @@
 
 **Live Demo：** https://elenahsieh616.github.io/kids-growup-tracker-fireworks/
 
+![CI](https://github.com/elenahsieh616/kids-growup-tracker-fireworks/actions/workflows/ci.yml/badge.svg)
+
 ---
 
 ## 功能特色
@@ -22,27 +24,35 @@
 
 | 層次 | 技術 |
 |------|------|
-| 前端 | Vanilla HTML / CSS / JavaScript（無框架，單一 `index.html`） |
+| 前端 | Vanilla HTML / CSS / JavaScript（無框架，HTML / CSS / JS 分離） |
 | 後端 | [Supabase](https://supabase.com)（PostgreSQL + RLS + Storage） |
 | 認證 | Google OAuth 2.0（via Supabase Auth） |
 | 圖表 | Chart.js v4.4.0 + chartjs-plugin-annotation |
 | 報告截圖 | html2canvas v1.4.1（懶加載） |
 | 部署 | GitHub Pages |
+| CI/CD | GitHub Actions（ESLint 自動 lint，push / PR 觸發） |
 
 ---
 
 ## 專案結構
 
 ```
-index.html          # 完整 App（CSS + JS 全部內嵌）
+index.html              # App 主頁面（純 HTML 結構）
+style.css               # 全域樣式
+app.js                  # 全部前端邏輯
+tests.html              # 單元測試頁面（核心演算法）
+.eslintrc.json          # ESLint 設定（browser + es2020）
+package.json            # npm scripts（lint）
+.github/
+  workflows/
+    ci.yml              # GitHub Actions CI（自動 lint）
 images/
-  desktop-bg.png    # 桌機背景
-  mobile-bg.png     # 手機背景
-  header-bg.jpg     # App 標題區背景
-  content-bg.jpg    # 報告內容背景
-tests.html          # 單元測試頁面
-Code.gs             # Google Apps Script（輔助工具）
-GrowTracker_PRD.pdf # 產品需求文件
+  desktop-bg.png        # 桌機背景
+  mobile-bg.png         # 手機背景
+  header-bg.jpg         # App 標題區背景
+  content-bg.jpg        # 報告內容背景
+Code.gs                 # Google Apps Script（輔助工具）
+GrowTracker_PRD.pdf     # 產品需求文件
 ```
 
 ---
@@ -59,6 +69,15 @@ python -m http.server 8080
 ```
 
 > **注意：** Google OAuth redirect URI 設定為 GitHub Pages 網址，本地測試時登入會失敗。如需本地測試登入，請在 Supabase Dashboard → Authentication → URL Configuration 加入 `http://localhost:8080`。
+
+---
+
+## Lint
+
+```bash
+npm install
+npm run lint
+```
 
 ---
 
@@ -90,6 +109,6 @@ python -m http.server 8080
 
 ## 資料來源
 
-生長曲線參考數據來自 **WHO Child Growth Standards**（0–84 個月，男女各組）。
+生長曲線參考數據來自 **WHO Child Growth Standards**（0–120 個月，男女各組）。
 
 > 本 App 產出之報告僅供參考，不作為醫療診斷依據。如有任何成長疑慮，建議諮詢兒科醫師進行專業評估。
