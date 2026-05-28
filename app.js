@@ -2090,6 +2090,3 @@ function burstFireworks(srcEl){
     da.onfinish=function(){if(this.effect&&this.effect.target)this.effect.target.remove();};
   }
 }
-</script>
-</body>
-</html>
