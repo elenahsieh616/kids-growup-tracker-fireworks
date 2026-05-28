@@ -260,6 +260,183 @@ test('gap detection: trend vs genetic differ by ≥10cm is flaggable', function(
   return 'gap='+gap.toFixed(1)+' cm';
 });
 
+/* ── Additional data & helpers for extended tests ── */
+var WHO_W_BOY=[
+  [0,2.5,2.9,3.3,3.9,4.4],[1,3.4,3.9,4.5,5.1,5.7],[3,5.0,5.7,6.4,7.2,7.9],
+  [6,6.4,7.1,7.9,8.8,9.7],[12,8.1,9.0,9.9,11.0,12.1],[24,10.8,11.8,12.9,14.1,15.3],
+  [36,12.7,13.8,15.1,16.5,17.8],[48,14.1,15.6,17.0,18.5,20.1],[60,15.4,17.0,18.7,20.5,22.1],
+  [72,16.8,18.5,20.3,22.3,24.2],[84,18.2,20.1,22.0,24.3,26.6]
+];
+var WHO_W_GIRL=[
+  [0,2.4,2.8,3.2,3.7,4.2],[1,3.2,3.6,4.2,4.8,5.4],[3,4.5,5.2,5.8,6.6,7.4],
+  [6,5.7,6.5,7.3,8.2,9.2],[12,7.1,7.9,8.9,9.9,11.0],[24,10.2,11.2,12.2,13.5,14.7],
+  [36,12.0,13.1,14.3,15.7,17.2],[48,13.5,14.8,16.2,17.8,19.5],[60,14.8,16.3,17.9,19.7,21.7],
+  [72,16.2,17.8,19.6,21.7,23.9],[84,17.6,19.4,21.4,23.8,26.3]
+];
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmtDate(s){var p=s.split('-');return p[0]+'/'+p[1]+'/'+p[2];}
+function fmtAge(m){var y=Math.floor(m/12),mo=m%12;if(!y)return mo+'個月';if(!mo)return y+'歲';return y+'歲'+mo+'個月';}
+
+/* ══ Extended Test Suites ══ */
+
+suite('getMinGrowth — max thresholds & boundary values');
+test('m=0 (newborn) max=40', function(){expect(getMinGrowth(0).max).toBe(40);});
+test('m=11 (just before 12) min=20', function(){expect(getMinGrowth(11).min).toBe(20);});
+test('m=23 (just before 24) min=9', function(){expect(getMinGrowth(23).min).toBe(9);});
+test('m=35 (just before 36) min=7', function(){expect(getMinGrowth(35).min).toBe(7);});
+test('12–23m: max=15', function(){expect(getMinGrowth(15).max).toBe(15);});
+test('24–35m: max=11', function(){expect(getMinGrowth(30).max).toBe(11);});
+test('≥36m: max=8', function(){expect(getMinGrowth(60).max).toBe(8);});
+test('large age (120m) still returns ≥36 category', function(){
+  var r=getMinGrowth(120); expect(r.min).toBe(5); expect(r.max).toBe(8);
+});
+
+suite('fmtAgeFull — edge cases');
+test('1 day old = "1D"', function(){
+  expect(fmtAgeFull('2023-05-01','2023-05-02')).toBe('1D');
+});
+test('exactly 1 month contains "1M" and "0D"', function(){
+  var r=fmtAgeFull('2023-01-01','2023-02-01');
+  if(r.indexOf('1M')<0)throw new Error('Missing 1M: '+r);
+  if(r.indexOf('0D')<0)throw new Error('Missing 0D: '+r);
+});
+test('11 months does not show years', function(){
+  var r=fmtAgeFull('2022-01-01','2022-12-01');
+  if(r.indexOf('Y')>=0)throw new Error('Should not have Y: '+r);
+  return r;
+});
+test('born 2020-02-29, measured 2021-03-01 = 1Y0M0D', function(){
+  var r=fmtAgeFull('2020-02-29','2021-03-01');
+  if(r.indexOf('1Y')<0)throw new Error('Expected 1Y: '+r);
+  return r;
+});
+test('1Y2M: born 2020-01-01, measured 2021-03-01', function(){
+  var r=fmtAgeFull('2020-01-01','2021-03-01');
+  if(r.indexOf('1Y')<0)throw new Error('Expected 1Y: '+r);
+  if(r.indexOf('2M')<0)throw new Error('Expected 2M: '+r);
+  return r;
+});
+test('day rollover: born Jan 15, measured Mar 1 = 1M+', function(){
+  var r=fmtAgeFull('2023-01-15','2023-03-01');
+  if(r.indexOf('1M')<0)throw new Error('Expected 1M: '+r);
+  return r;
+});
+
+suite('getPctScore — weight data, age=0, P15/P85, extrapolation');
+test('boy P50 weight at 24m = ~12.9 kg → ~50th pct', function(){
+  var pct=getPctScore(24,12.9,WHO_W_BOY);
+  expect(Math.abs(pct-50)).toBeLessThan(2);
+  return Math.round(pct)+'th';
+});
+test('boy weight far below P3 at 24m → clamped to 3', function(){
+  expect(getPctScore(24,5,WHO_W_BOY)).toBe(3);
+});
+test('girl P50 weight at 12m = ~8.9 kg → ~50th pct', function(){
+  var pct=getPctScore(12,8.9,WHO_W_GIRL);
+  expect(Math.abs(pct-50)).toBeLessThan(2);
+  return Math.round(pct)+'th';
+});
+test('boy age=0, P50 birth height (49.9 cm) → ~50th pct', function(){
+  var pct=getPctScore(0,49.9,WHO_H_BOY);
+  expect(Math.abs(pct-50)).toBeLessThan(2);
+  return Math.round(pct)+'th';
+});
+test('age beyond last data point returns 0–100 without throwing', function(){
+  var pct=getPctScore(100,126,WHO_H_BOY);
+  expect(pct).toBeGreaterThan(0); expect(pct).toBeLessThan(100);
+  return Math.round(pct)+'th';
+});
+test('exact P85 boy height at 24m (90.5 cm) → ~85th pct', function(){
+  var pct=getPctScore(24,90.5,WHO_H_BOY);
+  expect(Math.abs(pct-85)).toBeLessThan(2);
+  return Math.round(pct)+'th';
+});
+test('exact P15 boy height at 24m (85.2 cm) → ~15th pct', function(){
+  var pct=getPctScore(24,85.2,WHO_H_BOY);
+  expect(Math.abs(pct-15)).toBeLessThan(2);
+  return Math.round(pct)+'th';
+});
+
+suite('predictAdultHeight — girl extremes & rounding');
+test('girl P3 (24m, 80.8 cm) → 150.0 cm, not extreme', function(){
+  var r=predictAdultHeightFn('女',24,80.8);
+  expect(r.cm).toBe(150.0); expect(r.isExtreme).toBeFalse();
+  return r.cm+' cm';
+});
+test('girl P97 (24m, 91.2 cm) → 174.5 cm', function(){
+  var r=predictAdultHeightFn('女',24,91.2);
+  expect(r.cm).toBe(174.5); return r.cm+' cm';
+});
+test('girl below P3 (24m, 70 cm) → isExtreme=true', function(){
+  var r=predictAdultHeightFn('女',24,70); expect(r.isExtreme).toBeTrue();
+});
+test('boy at 60m P50 (114.3 cm) → pct near 50', function(){
+  var r=predictAdultHeightFn('男',60,114.3);
+  expect(Math.abs(r.pct-50)).toBeLessThan(5);
+  return 'pct='+r.pct+', cm='+r.cm;
+});
+test('predicted cm rounds to at most 1 decimal place', function(){
+  var r=predictAdultHeightFn('男',36,97.6);
+  var str=r.cm.toString();
+  var dot=str.indexOf('.');
+  if(dot>=0&&str.length-dot-1>1)throw new Error('More than 1 dp: '+str);
+  return str+' cm';
+});
+test('girl P50 (36m, 94.1 cm) → near 163.5 cm adult', function(){
+  var r=predictAdultHeightFn('女',36,94.1);
+  expect(Math.abs(r.cm-163.5)).toBeLessThan(5); return r.cm+' cm';
+});
+
+suite('calcMidParentalHeight — extended edge cases');
+test('both heights zero → null', function(){
+  expect(calcMidParentalHeightFn('男',0,0)).toBe(null);
+});
+test('very tall parents boy (190+175) → target > 185', function(){
+  var r=calcMidParentalHeightFn('男',190,175);
+  expect(r.target).toBeGreaterThan(185); return 'target='+r.target;
+});
+test('very short parents girl (155+142) → target < 150', function(){
+  var r=calcMidParentalHeightFn('女',155,142);
+  expect(r.target).toBeLessThan(150); return 'target='+r.target;
+});
+test('low < target < high always holds', function(){
+  var r=calcMidParentalHeightFn('男',175,162);
+  if(r.low>=r.target)throw new Error('low '+r.low+' >= target '+r.target);
+  if(r.target>=r.high)throw new Error('target '+r.target+' >= high '+r.high);
+});
+test('fractional parent heights produce valid result', function(){
+  var r=calcMidParentalHeightFn('男',175.5,161.5);
+  if(!r||isNaN(r.target))throw new Error('NaN result'); return 'target='+r.target;
+});
+test('range is always ±8.5 regardless of parents height', function(){
+  var r=calcMidParentalHeightFn('女',170,158);
+  expect(r.high-r.low).toBeCloseTo(17,1);
+});
+
+suite('esc — HTML entity escaping');
+test('& → &amp;', function(){expect(esc('a&b')).toBe('a&amp;b');});
+test('< → &lt;', function(){expect(esc('a<b')).toBe('a&lt;b');});
+test('> → &gt;', function(){expect(esc('a>b')).toBe('a&gt;b');});
+test('safe string unchanged', function(){expect(esc('hello world')).toBe('hello world');});
+test('empty string → empty', function(){expect(esc('')).toBe('');});
+test('<b>bold</b> fully escaped', function(){
+  expect(esc('<b>bold</b>')).toBe('&lt;b&gt;bold&lt;/b&gt;');
+});
+
+suite('fmtDate — YYYY-MM-DD to YYYY/MM/DD');
+test('2023-10-25 → 2023/10/25', function(){expect(fmtDate('2023-10-25')).toBe('2023/10/25');});
+test('2020-01-01 → 2020/01/01', function(){expect(fmtDate('2020-01-01')).toBe('2020/01/01');});
+test('maintains zero-padded month/day', function(){expect(fmtDate('2024-03-08')).toBe('2024/03/08');});
+
+suite('fmtAge — months to readable string');
+test('0 months → "0個月"', function(){expect(fmtAge(0)).toBe('0個月');});
+test('6 months → "6個月"', function(){expect(fmtAge(6)).toBe('6個月');});
+test('12 months → "1歲"', function(){expect(fmtAge(12)).toBe('1歲');});
+test('13 months → "1歲1個月"', function(){expect(fmtAge(13)).toBe('1歲1個月');});
+test('24 months → "2歲"', function(){expect(fmtAge(24)).toBe('2歲');});
+test('25 months → "2歲1個月"', function(){expect(fmtAge(25)).toBe('2歲1個月');});
+test('11 months → "11個月" (no years)', function(){expect(fmtAge(11)).toBe('11個月');});
+
 /* ── Render Results ── */
 var totalPass=0,totalFail=0;
 var html='';
