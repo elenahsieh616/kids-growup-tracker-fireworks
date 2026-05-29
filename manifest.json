@@ -6,5 +6,9 @@
   "display": "standalone",
   "background_color": "#060418",
   "theme_color": "#060418",
-  "lang": "zh-TW"
+  "lang": "zh-TW",
+  "icons": [
+    {"src": "images/icon-512.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "images/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
 }
