@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "lint": "eslint app.js"
+    "lint": "eslint app.js i18n.js db.js report.js",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
-    "eslint": "^8.57.0"
+    "eslint": "^8.57.0",
+    "@playwright/test": "^1.44.0"
   }
 }

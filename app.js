@@ -1,4 +1,4 @@
-
+﻿
 /* ── Toast Notifications ── */
 var _toastContainer=(function(){var el=document.createElement('div');el.id='toastContainer';document.body.appendChild(el);return el;})();
 function showToast(msg,type,duration){
@@ -7,7 +7,7 @@ function showToast(msg,type,duration){
   var toast=document.createElement('div');toast.className='toast toast-'+type;
   var icon=document.createElement('span');icon.className='toast-icon';icon.textContent=icons[type]||'ℹ️';
   var msgEl=document.createElement('span');msgEl.className='toast-msg';msgEl.textContent=msg;
-  var btn=document.createElement('button');btn.className='toast-close';btn.textContent='✕';
+  var btn=document.createElement('button');btn.className='toast-close';btn.textContent='✕';btn.setAttribute('aria-label','關閉通知');
   toast.appendChild(icon);toast.appendChild(msgEl);toast.appendChild(btn);
   function remove(){if(toast._gone)return;toast._gone=true;toast.classList.add('removing');setTimeout(function(){if(toast.parentNode)toast.parentNode.removeChild(toast);},260);}
   btn.addEventListener('click',remove);
@@ -15,80 +15,43 @@ function showToast(msg,type,duration){
   setTimeout(remove,duration);
 }
 
-/* ── WHO Data (Boys) ── */
-var WHO_H_BOY=[
-  [0,46.3,48.2,49.9,51.8,53.4],[1,50.8,53.0,54.7,56.5,58.1],[2,54.4,56.5,58.4,60.2,62.0],
-  [3,57.3,59.6,61.4,63.2,65.0],[4,59.7,62.1,63.9,65.7,67.6],[5,61.7,64.0,65.9,67.8,69.7],
-  [6,63.3,65.7,67.6,69.5,71.6],[7,64.8,67.2,69.2,71.1,73.2],[8,66.2,68.6,70.6,72.6,74.7],
-  [9,67.5,69.9,72.0,74.0,76.2],[10,68.7,71.2,73.3,75.4,77.6],[11,69.9,72.4,74.5,76.7,78.9],
-  [12,71.0,73.5,75.7,77.9,80.2],[15,74.0,76.6,79.1,81.4,83.9],[18,76.9,79.7,82.3,84.7,87.4],
-  [21,79.6,82.6,85.1,87.7,90.5],[24,82.3,85.2,87.8,90.5,93.4],[27,84.9,87.9,90.7,93.5,96.5],
-  [30,87.1,90.2,93.0,96.0,99.0],[33,89.2,92.5,95.4,98.6,101.8],[36,91.1,94.6,97.6,100.9,104.3],
-  [39,93.1,96.7,99.9,103.4,107.0],[42,95.0,98.8,102.2,105.8,109.6],[45,96.7,100.7,104.3,108.1,112.1],
-  [48,98.4,102.7,106.4,110.4,114.6],[51,100.1,104.5,108.4,112.6,116.9],[54,101.7,106.3,110.4,114.7,119.2],
-  [57,103.3,108.1,112.3,116.8,121.5],[60,104.9,109.9,114.3,118.9,123.8],
-  [66,107.6,112.5,117.3,122.0,126.8],[72,110.2,115.4,120.2,125.2,130.3],
-  [78,112.8,118.2,123.0,128.3,133.7],[84,115.3,121.0,125.7,131.3,137.0],
-  [90,117.7,123.6,128.4,133.8,139.7],[96,120.1,126.0,131.0,136.3,142.3],
-  [102,122.3,128.5,133.6,139.1,145.3],[108,124.5,130.9,136.2,141.9,148.3],
-  [114,126.5,133.2,138.7,144.7,151.3],[120,128.5,135.5,141.2,147.4,154.3]
-];
-var WHO_W_BOY=[
-  [0,2.5,2.9,3.3,3.9,4.3],[1,3.4,3.9,4.5,5.1,5.7],[2,4.4,5.0,5.6,6.3,7.0],
-  [3,5.1,5.8,6.5,7.3,8.0],[4,5.6,6.4,7.1,8.0,8.7],[5,6.0,6.9,7.6,8.5,9.3],
-  [6,6.4,7.3,8.1,9.0,9.9],[7,6.7,7.6,8.5,9.5,10.3],[8,7.0,7.9,8.8,9.8,10.7],
-  [9,7.2,8.2,9.2,10.2,11.1],[10,7.5,8.5,9.5,10.5,11.5],[11,7.7,8.7,9.7,10.8,11.8],
-  [12,7.8,8.9,9.9,11.0,12.0],[15,8.4,9.5,10.6,11.8,12.9],[18,9.0,10.2,11.3,12.6,13.7],
-  [21,9.6,10.8,12.0,13.3,14.5],[24,10.2,11.5,12.7,14.1,15.3],[27,10.7,12.1,13.4,14.9,16.1],
-  [30,11.3,12.7,14.1,15.6,17.0],[33,11.8,13.3,14.7,16.4,17.8],[36,12.3,13.8,15.3,17.1,18.5],
-  [39,12.7,14.3,15.9,17.7,19.3],[42,13.1,14.8,16.5,18.4,20.1],[45,13.5,15.3,17.1,19.1,20.9],
-  [48,13.9,15.8,17.7,19.8,21.7],[51,14.3,16.3,18.3,20.5,22.5],[54,14.7,16.8,18.9,21.2,23.3],
-  [57,15.2,17.3,19.5,21.9,24.2],[60,15.6,17.9,20.2,22.7,25.1],
-  [66,16.3,18.8,21.3,24.2,27.1],[72,17.0,19.8,22.5,25.8,29.2],
-  [78,17.8,20.8,23.9,27.5,31.5],[84,18.7,21.9,25.4,29.5,34.0],
-  [90,19.3,22.7,26.5,30.9,36.0],[96,19.9,23.4,27.5,32.3,37.9],
-  [102,20.6,24.2,28.6,33.9,40.2],[108,21.2,25.0,29.7,35.5,42.5],
-  [114,21.9,26.0,31.0,37.4,45.2],[120,22.6,26.9,32.3,39.3,47.9]
-];
-var WHO_H_GIRL=[
-  [0,44.8,46.2,49.1,51.9,52.9],[1,49.8,51.5,53.7,55.9,57.3],[2,53.0,54.8,57.1,59.4,61.1],
-  [3,55.6,57.4,59.8,62.2,64.0],[4,57.8,59.6,62.1,64.5,66.4],[5,59.6,61.5,64.0,66.5,68.5],
-  [6,61.2,63.2,65.7,68.2,70.3],[7,62.7,64.8,67.3,69.8,72.0],[8,64.0,66.2,68.7,71.4,73.5],
-  [9,65.3,67.5,70.1,72.8,74.9],[10,66.5,68.8,71.5,74.3,76.4],[11,67.7,70.1,72.8,75.7,77.8],
-  [12,68.9,71.4,74.0,76.9,79.2],[15,72.0,74.8,77.5,80.4,83.0],[18,75.0,77.9,80.7,83.7,86.5],
-  [21,77.5,80.6,83.7,86.7,89.7],[24,80.0,83.2,86.4,89.6,92.9],[27,82.6,85.8,89.1,92.4,96.0],
-  [30,85.0,88.3,91.6,95.0,98.7],[33,87.3,90.6,94.1,97.6,101.3],[36,89.4,93.0,96.4,99.9,103.7],
-  [39,91.6,95.0,98.7,102.3,106.2],[42,93.6,97.2,100.9,104.5,108.5],[45,95.4,99.2,103.0,106.7,110.8],
-  [48,97.2,101.1,105.0,108.8,112.9],[51,99.0,103.0,106.9,110.8,115.0],[54,100.6,104.7,108.8,112.8,117.1],
-  [57,102.4,106.5,110.6,114.7,119.2],[60,104.0,108.2,112.4,116.5,121.2],
-  [66,106.3,110.6,115.3,119.6,124.5],[72,108.7,113.2,118.2,122.8,127.9],
-  [78,111.2,115.8,121.0,126.0,131.3],[84,113.5,118.5,123.8,129.2,134.7],
-  [90,115.8,121.0,126.4,132.0,137.6],[96,118.1,123.5,129.0,134.7,140.4],
-  [102,120.2,125.9,131.6,137.6,143.5],[108,122.2,128.2,134.2,140.4,146.5],
-  [114,124.2,130.5,136.8,143.3,149.5],[120,126.2,132.8,139.3,146.1,152.5]
-];
-var WHO_W_GIRL=[
-  [0,2.4,2.8,3.2,3.7,4.2],[1,3.2,3.6,4.2,4.8,5.5],[2,3.9,4.5,5.1,5.8,6.6],
-  [3,4.5,5.2,5.8,6.6,7.5],[4,5.0,5.7,6.4,7.3,8.2],[5,5.4,6.1,6.9,7.8,8.8],
-  [6,5.7,6.5,7.3,8.2,9.3],[7,6.0,6.8,7.6,8.6,9.7],[8,6.3,7.0,7.9,9.0,10.2],
-  [9,6.5,7.3,8.2,9.3,10.5],[10,6.7,7.5,8.5,9.6,10.9],[11,6.9,7.7,8.7,9.9,11.2],
-  [12,7.0,7.9,8.9,10.1,11.5],[15,7.6,8.5,9.6,10.9,12.4],[18,8.1,9.1,10.2,11.6,13.2],
-  [21,8.6,9.7,10.9,12.3,14.0],[24,9.0,10.2,11.5,13.0,14.8],[27,9.5,10.7,12.0,13.6,15.5],
-  [30,10.0,11.2,12.6,14.3,16.3],[33,10.4,11.7,13.1,14.9,17.0],[36,10.8,12.1,13.6,15.5,17.7],
-  [39,11.2,12.6,14.2,16.1,18.5],[42,11.6,13.1,14.7,16.7,19.2],[45,12.0,13.5,15.2,17.3,19.9],
-  [48,12.3,14.0,15.7,17.9,20.6],[51,12.7,14.4,16.2,18.5,21.3],[54,13.0,14.8,16.7,19.1,22.0],
-  [57,13.4,15.2,17.2,19.7,22.7],[60,13.7,15.6,17.7,20.3,23.4],
-  [66,14.3,16.5,18.9,21.9,25.6],[72,15.0,17.4,20.2,23.6,28.0],
-  [78,15.8,18.4,21.7,25.6,30.7],[84,16.7,19.5,23.3,27.7,33.7],
-  [90,17.2,20.2,24.3,29.1,35.6],[96,17.7,20.9,25.2,30.4,37.5],
-  [102,18.3,21.7,26.3,32.1,40.0],[108,18.8,22.4,27.3,33.7,42.5],
-  [114,19.5,23.3,28.6,35.7,45.4],[120,20.1,24.2,29.9,37.6,48.3]
-];
+/* ── Modal Accessibility ── */
+var _prevFocus=null;
+function _openModalA11y(overlay){
+  _prevFocus=document.activeElement;
+  var box=overlay.querySelector('.modal-box');
+  if(!box)return;
+  var focusable=Array.prototype.slice.call(box.querySelectorAll('button,input,select,textarea,[tabindex]:not([tabindex="-1"])'));
+  var first=focusable[0],last=focusable[focusable.length-1];
+  function trap(e){
+    if(e.key!=='Tab'||!focusable.length)return;
+    if(e.shiftKey){if(document.activeElement===first){e.preventDefault();if(last)last.focus();}}
+    else{if(document.activeElement===last){e.preventDefault();if(first)first.focus();}}
+  }
+  overlay._trap=trap;
+  document.addEventListener('keydown',trap);
+  if(first)setTimeout(function(){first.focus();},30);
+}
+function _closeModalA11y(overlay){
+  if(overlay._trap){document.removeEventListener('keydown',overlay._trap);overlay._trap=null;}
+  if(_prevFocus&&_prevFocus.focus){try{_prevFocus.focus();}catch(e){}}
+  _prevFocus=null;
+}
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape')return;
+  var open=document.querySelector('.modal-overlay:not(.hidden)');
+  if(!open)return;
+  if(open.id==='shareModal')closeShareModal();
+  else if(open.id==='childModal')closeModal();
+  else if(open.id==='editMeasureModal')closeEditMeasureModal();
+  else if(open.id==='editSuppModal')closeEditSuppModal();
+});
 
-/* ── Supabase ── */
-var S_URL='https://gfvccfpzwhwvuoxffafl.supabase.co';
-var S_KEY='sb_publishable_7k8OUBz4clQhV57mSjkNlA_3xb_vTaA';
-var db=supabase.createClient(S_URL,S_KEY);
+/* ── WHO Data ── loaded from data/who.js ── */
+/* WHO_H_BOY, WHO_W_BOY, WHO_H_GIRL, WHO_W_GIRL defined in data/who.js */
+
+/* ── Supabase + DB ── loaded from db.js ── */
+
 
 /* ── Photo helpers ── */
 function getPhotoPath(urlOrPath){
@@ -113,249 +76,8 @@ var photoInitialized=false;
 var EMOJIS=['⭐','🌟','🍄','🔥','💛','🌈','🐢','🐸','👑','🦋','🌸','🐼'];
 var CHILD_BG=[['#E52521','#AA1A18'],['#049CD8','#0270A0'],['#3A9D23','#1E6B10'],['#FBD000','#C89600'],['#FB8C00','#C45000'],['#8E24AA','#5E1A72']];
 
-/* ── i18n ── */
-var currentLang=localStorage.getItem('growLang')||'zh';
-var LANG={
-  zh:{
-    loading:'⭐ 成長魔法啟動中',
-    appTitle:'⭐ 寶貝成長紀錄 ⭐',appSubtitle:'寶貝的成長冒險日記',
-    loginTitle:'登入你的帳號',loginDesc:'資料儲存在雲端<br>換裝置也不怕資料不見！',
-    googleBtn:'使用 Google 帳號登入',
-    homeSubtitle:'選擇寶貝查看成長資料',logoutBtn:'登出',
-    addChild:'新增寶貝',shareBtn:'👥 共享',sharedBadge:'👥 共享',
-    backBtn:'← 返回',heightCm:'身高 cm',weightKg:'體重 kg',ageLabel:'年齡',
-    uploadHint:'點我<br>上傳照片',
-    maleBadge:'♂︎ 男生',femaleBadge:'♀︎ 女生',male:'男生',female:'女生',
-    tabRecords:'成長紀錄',tabChart:'生長曲線',tabSupp:'保健紀錄',
-    t1Title:'⭐ 新增量測',t1Date:'量測日期',t1Height:'身高 (cm)',t1Weight:'體重 (kg)',
-    t1Note:'備註（選填）',t1NotePlaceholder:'例：診所量測、在家量測',t1Save:'⭐ 儲存量測',
-    batchTitle:'⭐ 多筆匯入',
-    batchDesc:'逐筆填入量測紀錄，資料來源欄位可選填（如：愛託付、診所、在家量）。',
-    batchAddRow:'＋ 新增一行',batchImportBtn:'匯入所有資料',batchSrcPlaceholder:'資料來源（選填）',
-    historyTitle:'⭐ 歷史量測紀錄',
-    t2GrowthTitle:'⭐ 生長速度分析',t2HeightChart:'⭐ 身高生長曲線',
-    t2WeightChart:'⭐ 體重生長曲線',t2CorrTitle:'⭐ 保健品 × 生長速度對比',
-    whoSource:'資料來源：衛福部國健署（WHO 生長標準 0–7 歲）',
-    t3AddTitle:'⭐ 新增保健品 / 配方奶',t3Date:'開始日期',t3Type:'類型',
-    t3Name:'品名',t3NamePlaceholder:'例：Appeton 成長奶粉、兒童維生素D3',
-    t3Note:'備註（選填）',t3NotePlaceholder:'例：每天睡前一匙',
-    t3Save:'⭐ 儲存記錄',t3ListTitle:'⭐ 保健品紀錄',
-    suppTypes:['保健品','營養品','成長飲品','配方奶','其他'],
-    shareModalTitleBase:'👥 共享設定',shareEmailPlaceholder:'家人的 Gmail',
-    shareInvite:'邀請',shareNote:'對方用自己的 Google 帳號登入後，即可查看並新增此寶貝的成長紀錄。',
-    shareClose:'關閉',shareLoading:'載入中…',shareEmpty:'尚未共享給任何家人',
-    shareRemove:'移除',shareRemoveConfirm:'確定移除共享？',shareRemoveFail:'移除失敗：',
-    shareAddFail:'新增失敗：',shareEmailInvalid:'請輸入正確的 Email',
-    shareSelf:'無法共享給自己',shareDuplicate:'已共享給此帳號',
-    addChildTitle:'⭐ 新增寶貝',editChildTitle:'⭐ 編輯寶貝',
-    childNameLabel:'寶貝名字',childNamePlaceholder:'例：Boss Baby',
-    childBirthdayLabel:'生日',childGenderLabel:'性別',
-    parentHeightHint:'👨‍👩‍👧 輸入父母身高以計算遺傳預測身高（選填）',
-    fatherHeightLabel:'爸爸身高 cm',motherHeightLabel:'媽媽身高 cm',
-    childCancel:'取消',childSave:'⭐ 儲存',childDelete:'刪除此寶貝的所有資料',
-    childSaveRequire:'請填入名字和生日',childSaveFail:'儲存失敗：',
-    childDeleteFail:'刪除失敗：',
-    mRequire:'請填入日期、身高、體重',mHeightRange:'身高請輸入合理數值（40–200 cm）',
-    mWeightRange:'體重請輸入合理數值（2–100 kg）',mSaveFail:'儲存失敗：',
-    mFutureDate:'量測日期不能是未來日期。',mBeforeBirthday:'量測日期不能早於出生日期。',
-    mDupDate:'此日期已有紀錄，確定要新增？',
-    mDeleteConfirm:'確定要刪除這筆紀錄嗎？',mDeleteFail:'刪除失敗：',
-    gaPrediction:'預測成人身高',gaPredictionNote:'（以目前身高百分位推估，僅供參考）',
-    printBtn:'📄 報告',printReportTitle:'寶貝成長報告',reportBtnText:'生成成長報告',
-    batchKeepOne:'至少保留一行',batchRequire:'請至少填入一筆完整資料',
-    batchImportFail:'匯入失敗：',batchSource:'批次匯入',
-    sRequire:'請填入日期和品名',sSaveFail:'儲存失敗：',
-    sDeleteConfirm:'確定要刪除嗎？',sDeleteFail:'刪除失敗：',
-    noChildTitle:'尚未建立寶貝資料 🌱',noChildSub:'新增寶貝資料後，就可以開始記錄成長囉。',
-    recordsEmpty:'還沒有成長紀錄 🌱',recordsEmptySub:'新增第一筆身高體重後，就可以看到成長曲線。',
-    tDate:'日期',tMonthAge:'月齡',tHeight:'身高',tWeight:'體重',tNote:'備註',tDelete:'刪除',
-    suppEmpty:'還沒有保健品紀錄 🌱',suppEmptySub:'新增保健品或配方奶後，就可以開始追蹤營養補充紀錄。',
-    gaMin2:'需要至少 2 筆量測紀錄才能計算年增長速度。',
-    gaNotEnough:'量測時間跨度不足，請增加更多歷史紀錄。',
-    gaStatDate:'最新量測日期',gaStatAge:'目前年齡',gaAnnual:'年化身高增長',gaAnnualW:'年化體重增長',
-    gaMin:'此年齡最低標準',gaGap:'距達標還差',
-    corrEmpty:'還沒有營養紀錄 🌱',corrEmptySub:'新增保健品或配方奶紀錄後，就可以比較生長變化。',
-    corrNeedMore:'需要至少 2 筆量測紀錄才能對比效果。',
-    corrDesc:'比較開始服用保健品前後的年化身高增長速度。曲線圖上的綠色虛線為各保健品開始日期。',
-    corrBefore:'服用前增長速度',corrAfter:'服用後增長速度',
-    corrInsufficient:'資料不足',corrObserving:'尚在觀察中',corrOtherFactors:'（可能受其他因素影響）',
-    birthday:'出生',
-    warn1:'低於0–1歲兒童的預期範圍，建議進一步就醫評估。',warn2:'低於1–2歲兒童的預期範圍，建議進一步就醫評估。',
-    warn3:'低於2–3歲兒童的預期範圍，建議進一步就醫評估。',warn4:'低於3歲以上兒童的預期範圍，建議至兒童內分泌科評估。',
-    warnHigh1:'高於0–1歲兒童的預期範圍，建議進一步就醫評估。',warnHigh2:'高於1–2歲兒童的預期範圍，建議進一步就醫評估。',
-    warnHigh3:'高於2–3歲兒童的預期範圍，建議進一步就醫評估。',warnHigh4:'高於3歲以上兒童的預期範圍，建議至兒童內分泌科評估。',
-    pLow:'低於P3（偏低）',p3to15:'P3–P15',p15to50:'P15–P50',
-    p50to85:'P50–P85',p85to97:'P85–P97',pHigh:'高於P97（偏高）',
-    chartMonthAge:'月齡（個月）',chartHeight:'身高（cm）',chartWeight:'體重（kg）',
-    deleteAccountBtn:'⚠ 刪除帳號 & 所有資料',
-    deleteAccountWarn:'⚠️ 警告：這會永久刪除此帳號底下的所有寶貝、量測紀錄及保健紀錄，無法復原！\n\n確定要繼續嗎？',
-    deleteAccountWord:'確認刪除',
-    deleteAccountPrompt:'請輸入「確認刪除」來確認永久刪除：',
-    deleteAccountCancel:'已取消。',
-    deleteAccountOk:'✅ 所有資料已刪除，您已登出。\n\n提示：如需完全取消 Google 授權，請至 myaccount.google.com → 安全性 → 第三方應用程式存取。',
-    deleteAccountFail:'刪除失敗：',
-    mSoftWarnDecrease:'⚠ 身高比上次紀錄低了 {d} cm\n上次：{h} cm（{date}）\n身高通常不會減少，請確認是否輸入正確。\n\n確定要繼續儲存嗎？',
-    mSoftWarnJump:'⚠ 身高在 {days} 天內增長了 {d} cm，幅度異常偏大。\n請確認是否輸入正確。\n\n確定要繼續儲存嗎？',
-    mSoftWarnWeight:'⚠ 體重在 {days} 天內變動了 {d} kg，幅度偏大。\n請確認是否輸入正確。\n\n確定要繼續儲存嗎？',
-    backupTitle:'🗂️ 資料備份 / 還原',
-    backupDesc:'將目前寶貝的量測及保健品資料匯出為 JSON 備份檔，或從備份檔案還原資料。',
-    exportBtn:'📤 備份 JSON',importBtn:'📥 還原 JSON',
-    importConfirm:'準備匯入：{m} 筆量測紀錄，{s} 筆保健品記錄。\n（重複日期自動略過）\n\n確定要繼續嗎？',
-    importOk:'✅ 匯入成功！已新增：{m} 筆量測，{s} 筆保健品。',
-    importNone:'沒有新紀錄可匯入（所有日期已存在）。',
-    importInvalid:'無效的備份檔案。',importNewVer:'此備份由較新版本建立，可能有相容性問題，確定要匯入嗎？',
-    importFail:'匯入失敗：',importReadFail:'讀取檔案失敗：',
-    editMeasureTitle:'✏️ 編輯量測紀錄',editSuppTitle:'✏️ 編輯保健品紀錄',editSave:'⭐ 儲存修改',
-    mEditFail:'編輯失敗：',sEditFail:'編輯失敗：'
-  },
-  en:{
-    loading:'⭐ Loading Growth Magic…',
-    appTitle:'⭐ Baby Growth Tracker ⭐',appSubtitle:"Your Baby's Growth Adventure",
-    loginTitle:'Sign in to your account',loginDesc:'Data stored in the cloud<br>Access from any device!',
-    googleBtn:'Sign in with Google',
-    homeSubtitle:'Select a child to view growth data',logoutBtn:'Log Out',
-    addChild:'Add Child',shareBtn:'👥 Share',sharedBadge:'👥 Shared',
-    backBtn:'← Back',heightCm:'Height cm',weightKg:'Weight kg',ageLabel:'Age',
-    uploadHint:'Tap to<br>Upload Photo',
-    maleBadge:'♂︎ Boy',femaleBadge:'♀︎ Girl',male:'Boy',female:'Girl',
-    tabRecords:'Records',tabChart:'Charts',tabSupp:'Supplements',
-    t1Title:'⭐ Add Measurement',t1Date:'Date',t1Height:'Height (cm)',t1Weight:'Weight (kg)',
-    t1Note:'Note (optional)',t1NotePlaceholder:'e.g. Clinic, Home',t1Save:'⭐ Save',
-    batchTitle:'⭐ Batch Import',
-    batchDesc:'Enter multiple records. Source field is optional (e.g. Clinic, Home).',
-    batchAddRow:'＋ Add Row',batchImportBtn:'Import All',batchSrcPlaceholder:'Source (optional)',
-    historyTitle:'⭐ Measurement History',
-    t2GrowthTitle:'⭐ Growth Rate',t2HeightChart:'⭐ Height Growth Chart',
-    t2WeightChart:'⭐ Weight Growth Chart',t2CorrTitle:'⭐ Growth Impact',
-    whoSource:'Source: WHO Child Growth Standards (0–7 years)',
-    t3AddTitle:'⭐ Add Supplement / Formula',t3Date:'Start Date',t3Type:'Type',
-    t3Name:'Product Name',t3NamePlaceholder:'e.g. Vitamin D3, Growth Formula',
-    t3Note:'Note (optional)',t3NotePlaceholder:'e.g. One scoop before bed',
-    t3Save:'⭐ Save Record',t3ListTitle:'⭐ Supplement Records',
-    suppTypes:['Supplement','Nutrition','Growth Drink','Formula','Other'],
-    shareModalTitleBase:'👥 Sharing Settings',shareEmailPlaceholder:"Family member's Gmail",
-    shareInvite:'Invite',shareNote:'Once invited, they can sign in with their own Google account to view and add records.',
-    shareClose:'Close',shareLoading:'Loading…',shareEmpty:'Not shared with anyone yet',
-    shareRemove:'Remove',shareRemoveConfirm:'Remove this share?',shareRemoveFail:'Remove failed: ',
-    shareAddFail:'Failed to add: ',shareEmailInvalid:'Please enter a valid email',
-    shareSelf:'Cannot share with yourself',shareDuplicate:'Already shared with this account',
-    addChildTitle:'⭐ Add Child',editChildTitle:'⭐ Edit Child',
-    childNameLabel:"Child's Name",childNamePlaceholder:'e.g. Boss Baby',
-    childBirthdayLabel:'Birthday',childGenderLabel:'Gender',
-    parentHeightHint:'👨‍👩‍👧 Enter parent heights for genetic height prediction (optional)',
-    fatherHeightLabel:"Father's Height cm",motherHeightLabel:"Mother's Height cm",
-    childCancel:'Cancel',childSave:'⭐ Save',childDelete:'Delete all data for this child',
-    childSaveRequire:'Please enter name and birthday',childSaveFail:'Save failed: ',
-    childDeleteFail:'Delete failed: ',
-    mRequire:'Please enter date, height and weight',mHeightRange:'Height must be 40–200 cm',
-    mWeightRange:'Weight must be 2–100 kg',mSaveFail:'Save failed: ',
-    mFutureDate:'Measurement date cannot be in the future.',mBeforeBirthday:'Measurement date cannot be before the birthday.',
-    mDupDate:'A record already exists for this date. Add anyway?',
-    mDeleteConfirm:'Delete this record?',mDeleteFail:'Delete failed: ',
-    gaPrediction:'Predicted Adult Height',gaPredictionNote:'(estimated from current height percentile, for reference only)',
-    printBtn:'📄 Report',printReportTitle:'Baby Growth Report',reportBtnText:'Generate Report',
-    batchKeepOne:'Keep at least one row',batchRequire:'Please fill in at least one complete record',
-    batchImportFail:'Import failed: ',batchSource:'Batch',
-    sRequire:'Please enter date and product name',sSaveFail:'Save failed: ',
-    sDeleteConfirm:'Delete this record?',sDeleteFail:'Delete failed: ',
-    noChildTitle:'No baby profile yet 🌱',noChildSub:"Add your little one's profile to start tracking growth.",
-    recordsEmpty:'No growth records yet 🌱',recordsEmptySub:'Add the first height and weight record to see the growth chart.',
-    tDate:'Date',tMonthAge:'Age',tHeight:'Height',tWeight:'Weight',tNote:'Note',tDelete:'Del',
-    suppEmpty:'No supplement records yet 🌱',suppEmptySub:'Add supplements or formula records to start tracking nutrition history.',
-    gaMin2:'At least 2 measurements are needed to calculate annual growth rate.',
-    gaNotEnough:'Not enough history. Please add more records.',
-    gaStatDate:'Latest measurement',gaStatAge:'Current age',gaAnnual:'Annual height growth',gaAnnualW:'Annual weight growth',
-    gaMin:'Min. standard for this age',gaGap:'Short of target',
-    corrEmpty:'No supplement records yet 🌱',corrEmptySub:'Add supplements or formula records to compare growth changes.',
-    corrNeedMore:'At least 2 measurements are needed to compare effects.',
-    corrDesc:'Comparing annualized height growth before and after starting each supplement. Green dashed lines on the chart show start dates.',
-    corrBefore:'Growth before',corrAfter:'Growth after',
-    corrInsufficient:'Insufficient data',corrObserving:'Still observing',corrOtherFactors:'(may be influenced by other factors)',
-    birthday:'born',
-    warn1:'Below the expected range for children aged 0–1 years. Consider medical evaluation.',
-    warn2:'Below the expected range for children aged 1–2 years. Consider medical evaluation.',
-    warn3:'Below the expected range for children aged 2–3 years. Consider medical evaluation.',
-    warn4:'Below the expected range for children over 3 years old. Consider pediatric endocrinology evaluation.',
-    warnHigh1:'Above the expected range for children aged 0–1 years. Consider medical evaluation.',
-    warnHigh2:'Above the expected range for children aged 1–2 years. Consider medical evaluation.',
-    warnHigh3:'Above the expected range for children aged 2–3 years. Consider medical evaluation.',
-    warnHigh4:'Above the expected range for children over 3 years old. Consider pediatric endocrinology evaluation.',
-    pLow:'Below P3 (Low)',p3to15:'P3–P15',p15to50:'P15–P50',
-    p50to85:'P50–P85',p85to97:'P85–P97',pHigh:'Above P97 (High)',
-    chartMonthAge:'Age (months)',chartHeight:'Height (cm)',chartWeight:'Weight (kg)',
-    deleteAccountBtn:'⚠ Delete Account & All Data',
-    deleteAccountWarn:'⚠️ WARNING: This will PERMANENTLY delete all children, measurements, and supplement records. This cannot be undone!\n\nAre you sure?',
-    deleteAccountWord:'DELETE',
-    deleteAccountPrompt:'Type "DELETE" to confirm permanent deletion:',
-    deleteAccountCancel:'Cancelled.',
-    deleteAccountOk:'✅ All data deleted. You have been signed out.\n\nNote: To fully revoke Google login access, visit myaccount.google.com → Security → Third-party apps.',
-    deleteAccountFail:'Delete failed: ',
-    mSoftWarnDecrease:'⚠ Height is {d} cm LOWER than the last record\nLast: {h} cm ({date})\nHeight rarely decreases — please check your entry.\n\nSave anyway?',
-    mSoftWarnJump:'⚠ Height increased by {d} cm in only {days} days.\nThis seems unusually large — please confirm.\n\nSave anyway?',
-    mSoftWarnWeight:'⚠ Weight changed by {d} kg in {days} days.\nThis seems large — please confirm.\n\nSave anyway?',
-    backupTitle:'🗂️ Backup / Restore',
-    backupDesc:'Export current child\'s records as a JSON backup, or restore from a backup file.',
-    exportBtn:'📤 Export JSON',importBtn:'📥 Import JSON',
-    importConfirm:'Ready to import: {m} measurements, {s} supplements.\n(Duplicates are skipped)\n\nProceed?',
-    importOk:'✅ Import successful! Added: {m} measurements, {s} supplements.',
-    importNone:'No new records to import (all dates already exist).',
-    importInvalid:'Invalid backup file.',importNewVer:'This backup was created by a newer version. Import anyway?',
-    importFail:'Import failed: ',importReadFail:'Failed to read file: ',
-    editMeasureTitle:'✏️ Edit Measurement',editSuppTitle:'✏️ Edit Supplement',editSave:'⭐ Save Changes',
-    mEditFail:'Edit failed: ',sEditFail:'Edit failed: '
-  }
-};
-function t(k){return (LANG[currentLang]&&LANG[currentLang][k]!==undefined)?LANG[currentLang][k]:(LANG.zh[k]||k);}
-function setLang(lang){
-  currentLang=lang;localStorage.setItem('growLang',lang);
-  applyLang();
-  renderChildCards();
-  if(currentChild){
-    updateHeroFromChild();renderRecords();renderGrowthAnalysis();
-    renderSupplements();renderSuppCorrelation();
-    if(hChart||wChart)renderCharts();
-  }
-}
-function applyLang(){
-  // Update data-i18n elements (textContent)
-  document.querySelectorAll('[data-i18n]').forEach(function(el){
-    var k=el.getAttribute('data-i18n');var v=t(k);if(v!==undefined)el.textContent=v;
-  });
-  // Update data-i18n-html elements (innerHTML)
-  document.querySelectorAll('[data-i18n-html]').forEach(function(el){
-    var k=el.getAttribute('data-i18n-html');var v=t(k);if(v!==undefined)el.innerHTML=v;
-  });
-  // Update data-i18n-placeholder elements
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
-    var k=el.getAttribute('data-i18n-placeholder');var v=t(k);if(v!==undefined)el.placeholder=v;
-  });
-  // Update supplement type options
-  var suppTypes=t('suppTypes');
-  document.querySelectorAll('[data-i18n-opt]').forEach(function(el){
-    var i=parseInt(el.getAttribute('data-i18n-opt'));
-    if(suppTypes[i]!==undefined)el.textContent=suppTypes[i];
-  });
-  // Update gender options in child modal
-  document.querySelectorAll('[data-i18n-gopt]').forEach(function(el){
-    var k=el.getAttribute('data-i18n-gopt');el.textContent=t(k);
-  });
-  // Update active lang buttons
-  ['loginLangZh','homeLangZh'].forEach(function(id){
-    var el=document.getElementById(id);if(el)el.classList.toggle('active',currentLang==='zh');
-  });
-  ['loginLangEn','homeLangEn'].forEach(function(id){
-    var el=document.getElementById(id);if(el)el.classList.toggle('active',currentLang==='en');
-  });
-  // Update html lang attribute
-  document.documentElement.lang=currentLang==='en'?'en':'zh-TW';
-}
+/* ── i18n ── loaded from i18n.js ── */
 
-/* ── Loading ── */
-function showLoading(){document.getElementById('loadingOverlay').classList.remove('hidden');}
-function hideLoading(){document.getElementById('loadingOverlay').classList.add('hidden');}
-
-/* ── Init lang ── */
-applyLang();
 
 /* ── Auth ── */
 // If user was previously logged in (session in localStorage), show loading overlay immediately.
@@ -536,93 +258,7 @@ function importJSON(){
   inp.click();
 }
 
-/* ── DB Helpers ── */
-async function db_getChildren(){
-  var r1=await db.from('children').select('*').eq('user_id',currentUser.id).order('created_at');
-  var own=(r1.data||[]).map(function(c){return Object.assign({},c,{_isOwner:true});});
-  var r2=await db.from('child_shares').select('id,child_id').eq('shared_with_email',currentUser.email);
-  var shares=r2.data||[];
-  var sharedChildren=[];
-  if(shares.length){
-    var ids=shares.map(function(s){return s.child_id;});
-    var shareMap={};
-    shares.forEach(function(s){shareMap[s.child_id]=s.id;});
-    var r3=await db.from('children').select('*').in('id',ids);
-    sharedChildren=(r3.data||[]).map(function(c){
-      return Object.assign({},c,{_isOwner:false,_shareId:shareMap[c.id]});
-    });
-  }
-  return own.concat(sharedChildren);
-}
-async function db_getShares(childId){
-  var r=await db.from('child_shares').select('*').eq('child_id',childId).eq('owner_id',currentUser.id);
-  return r.data||[];
-}
-async function db_addShare(childId,email){
-  var r=await db.from('child_shares').insert({child_id:childId,owner_id:currentUser.id,shared_with_email:email}).select().single();
-  if(r.error)throw r.error;
-  return r.data;
-}
-async function db_removeShare(shareId){
-  var r=await db.from('child_shares').delete().eq('id',shareId).eq('owner_id',currentUser.id);
-  if(r.error)throw r.error;
-}
-async function db_insertChild(obj){
-  var r=await db.from('children').insert(Object.assign({},obj,{user_id:currentUser.id})).select().single();
-  if(r.error) throw r.error;
-  return r.data;
-}
-async function db_updateChild(id,obj){
-  var r=await db.from('children').update(obj).eq('id',id);
-  if(r.error) throw r.error;
-}
-async function db_deleteChild(childId){
-  await db.from('supplements').delete().eq('child_id',childId);
-  await db.from('measurements').delete().eq('child_id',childId);
-  await db.storage.from('child-photos').remove([currentUser.id+'/'+childId+'.jpg']);
-  var r=await db.from('children').delete().eq('id',childId);
-  if(r.error) throw r.error;
-}
-async function db_getM(childId){
-  var r=await db.from('measurements').select('id,date,height,weight,note').eq('child_id',childId).order('date',{ascending:false});
-  return r.data||[];
-}
-async function db_insertM(obj){
-  var r=await db.from('measurements').insert({date:obj.date,height:obj.height,weight:obj.weight,note:obj.note||null,child_id:currentChild.id,user_id:currentUser.id}).select('id,date,height,weight,note').single();
-  if(r.error) throw r.error;
-  return r.data;
-}
-async function db_insertMBatch(arr){
-  var rows=arr.map(function(r){return{date:r.date,height:r.height,weight:r.weight,note:r.note||null,child_id:currentChild.id,user_id:currentUser.id};});
-  var r=await db.from('measurements').insert(rows).select('id,date,height,weight,note');
-  if(r.error) throw r.error;
-  return r.data||[];
-}
-async function db_deleteM(id){
-  var r=await db.from('measurements').delete().eq('id',id);
-  if(r.error) throw r.error;
-}
-async function db_getS(childId){
-  var r=await db.from('supplements').select('id,date,type,name,note').eq('child_id',childId).order('date',{ascending:false});
-  return r.data||[];
-}
-async function db_insertS(obj){
-  var r=await db.from('supplements').insert({date:obj.date,type:obj.type,name:obj.name,note:obj.note||null,child_id:currentChild.id}).select('id,date,type,name,note').single();
-  if(r.error) throw r.error;
-  return r.data;
-}
-async function db_deleteS(id){
-  var r=await db.from('supplements').delete().eq('id',id);
-  if(r.error) throw r.error;
-}
-async function db_updateM(id,obj){
-  var r=await db.from('measurements').update(obj).eq('id',id);
-  if(r.error) throw r.error;
-}
-async function db_updateS(id,obj){
-  var r=await db.from('supplements').update(obj).eq('id',id);
-  if(r.error) throw r.error;
-}
+/* ── DB helpers ── loaded from db.js ── */
 
 /* ── Edit Measurement ── */
 function editMeasurement(id){
@@ -633,9 +269,11 @@ function editMeasurement(id){
   document.getElementById('editMeasureHeight').value=m.height;
   document.getElementById('editMeasureWeight').value=m.weight;
   document.getElementById('editMeasureNote').value=m.note||'';
-  document.getElementById('editMeasureModal').classList.remove('hidden');
+  var ov=document.getElementById('editMeasureModal');
+  ov.classList.remove('hidden');
+  _openModalA11y(ov);
 }
-function closeEditMeasureModal(){document.getElementById('editMeasureModal').classList.add('hidden');}
+function closeEditMeasureModal(){var ov=document.getElementById('editMeasureModal');ov.classList.add('hidden');_closeModalA11y(ov);}
 async function saveMeasurementEdit(){
   var id=document.getElementById('editMeasureId').value;
   var date=document.getElementById('editMeasureDate').value;
@@ -666,9 +304,11 @@ function editSupplement(id){
   document.getElementById('editSuppType').value=s.type;
   document.getElementById('editSuppName').value=s.name;
   document.getElementById('editSuppNote').value=s.note||'';
-  document.getElementById('editSuppModal').classList.remove('hidden');
+  var ov=document.getElementById('editSuppModal');
+  ov.classList.remove('hidden');
+  _openModalA11y(ov);
 }
-function closeEditSuppModal(){document.getElementById('editSuppModal').classList.add('hidden');}
+function closeEditSuppModal(){var ov=document.getElementById('editSuppModal');ov.classList.add('hidden');_closeModalA11y(ov);}
 async function saveSupplementEdit(){
   var id=document.getElementById('editSuppId').value;
   var date=document.getElementById('editSuppDate').value;
@@ -690,10 +330,10 @@ async function saveSupplementEdit(){
 
 /* ── Photo ── */
 function initPhoto(){
-  document.getElementById('photoRing').addEventListener('click',function(){
-    if(currentChild&&!currentChild._isOwner)return;
-    document.getElementById('photoFileInput').click();
-  });
+  function triggerPhoto(){if(currentChild&&!currentChild._isOwner)return;document.getElementById('photoFileInput').click();}
+  var ring=document.getElementById('photoRing');
+  ring.addEventListener('click',triggerPhoto);
+  ring.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();triggerPhoto();}});
   document.getElementById('photoFileInput').addEventListener('change',async function(){
     var file=this.files[0];if(!file)return;
     showLoading();
@@ -883,7 +523,9 @@ function openAddModal(){
   document.getElementById('motherHeight').value='';
   document.getElementById('deleteChildBtn').style.display='none';
   renderEmojiGrid();
-  document.getElementById('childModal').classList.remove('hidden');
+  var _cmOv=document.getElementById('childModal');
+  _cmOv.classList.remove('hidden');
+  _openModalA11y(_cmOv);
   setupChildFormKeyNav();
 }
 function openEditModal(childId){
@@ -897,7 +539,9 @@ function openEditModal(childId){
   document.getElementById('motherHeight').value=child.mother_height||getParentHeights(childId).mother||'';
   document.getElementById('deleteChildBtn').style.display='';
   renderEmojiGrid();
-  document.getElementById('childModal').classList.remove('hidden');
+  var _emOv=document.getElementById('childModal');
+  _emOv.classList.remove('hidden');
+  _openModalA11y(_emOv);
   setupChildFormKeyNav();
 }
 function renderEmojiGrid(){
@@ -906,7 +550,7 @@ function renderEmojiGrid(){
   }).join('');
 }
 function selectEmoji(e){selectedEmoji=e;renderEmojiGrid();}
-function closeModal(){document.getElementById('childModal').classList.add('hidden');}
+function closeModal(){var ov=document.getElementById('childModal');ov.classList.add('hidden');_closeModalA11y(ov);}
 
 async function saveChild(){
   var name=document.getElementById('childName').value.trim();
@@ -1258,384 +902,8 @@ async function generateReport(){
     },150);
   },50);
 }
-/* ── Report CSS helper ── */
-function _rptCSS(cbg,dbg){
-  return `*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:"Zen Maru Gothic","Noto Sans TC","PingFang TC",sans-serif;background:#f0f2f8;color:#1a2e6b;font-size:14px;}
-.rpt{max-width:860px;margin:0 auto;background:white;box-shadow:0 0 40px rgba(0,0,0,0.12);overflow:hidden;}
-.rpt-hdr{position:relative;text-align:center;padding:44px 32px 36px;overflow:hidden;background:url("${cbg}") center/cover no-repeat;border-bottom:none;}
-.rpt-hdr::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,4,20,0.46) 0%,rgba(10,6,30,0.18) 50%,rgba(6,4,20,0.32) 100%);}
-.rpt-hdr::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent 0%,transparent 10%,rgba(140,85,235,0.08) 18%,rgba(175,110,255,0.38) 28%,rgba(210,155,255,0.62) 37%,rgba(250,210,120,0.75) 44%,rgba(255,243,200,0.88) 50%,rgba(250,210,120,0.75) 56%,rgba(210,155,255,0.62) 63%,rgba(175,110,255,0.38) 72%,rgba(140,85,235,0.08) 82%,transparent 90%,transparent 100%);box-shadow:0 0 4px rgba(185,135,255,0.55),0 0 10px rgba(185,135,255,0.35),0 0 22px rgba(185,135,255,0.20),0 0 45px rgba(175,125,255,0.10),0 0 80px rgba(165,115,255,0.05),0 0 5px rgba(255,210,120,0.40),0 0 14px rgba(255,200,100,0.22),0 0 34px rgba(255,188,90,0.10);pointer-events:none;z-index:1;}
-.rpt-title{position:relative;z-index:1;font-family:"Zen Maru Gothic","Noto Sans TC",sans-serif;font-size:28px;font-weight:700;color:#FFD166;letter-spacing:6px;line-height:1.7;text-shadow:2px 2px 0 rgba(10,5,30,0.9),0 0 28px rgba(255,210,80,0.75);}
-.rpt-date{position:relative;z-index:1;font-size:13px;color:rgba(255,220,185,0.88);margin-top:6px;font-weight:500;}
-.actions{display:flex;gap:8px;padding:10px 20px;background:#f5f6fa;border-bottom:1px solid rgba(30,50,120,0.12);justify-content:flex-end;}
-.btn-print{padding:8px 18px;border-radius:10px;font-weight:900;cursor:pointer;font-size:13px;background:linear-gradient(160deg,#049CD8,#0388C4);color:white;border:none;}
-.btn-save{padding:8px 18px;border-radius:10px;font-weight:900;cursor:pointer;font-size:13px;background:linear-gradient(160deg,#3A9D23,#2A7B1A);color:white;border:none;}
-.btn-share{padding:8px 18px;border-radius:10px;font-weight:900;cursor:pointer;font-size:13px;background:linear-gradient(160deg,#06C755,#04A348);color:white;border:none;display:flex;align-items:center;gap:6px;}
-.rpt-profile{display:flex;align-items:flex-start;gap:16px;padding:22px 24px;background:linear-gradient(180deg,rgba(6,4,18,0.50),rgba(8,5,22,0.40)),url("${cbg}") center bottom/cover;border-bottom:2px solid rgba(255,210,80,0.35);}
-.prof-left{display:flex;align-items:flex-start;gap:14px;flex:1;min-width:0;}
-.prof-photo{width:96px;height:96px;border-radius:50%;border:3px solid #FFD166;flex-shrink:0;overflow:hidden;background:rgba(150,165,210,0.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;box-shadow:0 0 18px rgba(255,209,102,0.65),0 0 6px rgba(255,209,102,0.40),0 4px 18px rgba(0,0,0,0.50);}
-.prof-photo img{width:100%;height:100%;object-fit:cover;}
-.prof-photo-txt{font-size:10px;color:rgba(180,185,225,0.85);font-weight:700;}
-.prof-info{flex:1;min-width:0;}
-.prof-name{font-family:"Zen Maru Gothic","Noto Sans TC",sans-serif;font-size:22px;font-weight:700;color:#FFE878;letter-spacing:5px;line-height:1.35;text-shadow:0 0 14px rgba(255,210,60,0.45);}
-.prof-sub{margin-top:4px;font-size:12px;color:rgba(215,205,255,0.85);font-weight:600;}
-.stat-boxes{display:flex;gap:7px;margin-top:10px;}
-.stat-box{flex:0 0 auto;background:linear-gradient(160deg,#1a2e6b,#2a4a9a);border-radius:12px;padding:8px 14px;text-align:center;border:1.5px solid rgba(100,140,255,0.25);}
-.stat-v{font-size:18px;font-weight:700;color:#FFD166;line-height:1.25;}
-.stat-l{font-size:10px;color:rgba(200,215,255,0.82);margin-top:3px;font-weight:600;}
-.alert-wrap{background:white;border-radius:14px;padding:14px 16px;width:230px;flex-shrink:0;box-shadow:0 4px 24px rgba(0,0,0,0.60),0 0 0 1px rgba(255,255,255,0.15);border:none;}
-.alert-ttl{font-size:12px;font-weight:900;margin-bottom:8px;}
-.alert-bd{border-radius:8px;padding:9px 11px;font-size:12px;font-weight:700;line-height:1.65;}
-.alert-note{margin-top:8px;font-size:12px;font-weight:700;line-height:1.5;color:#3a2060;}
-.rpt-body{padding:18px 22px;background:white;}
-.two-col{display:grid;grid-template-columns:230px 1fr;gap:14px;margin-bottom:16px;}
-.dk-card{background:#ffffe2;border-radius:16px;overflow:hidden;box-shadow:0 4px 22px rgba(20,40,100,0.14);}
-.dk-head{padding:9px 15px;font-size:13px;font-weight:900;color:#FFD166;background:linear-gradient(135deg,#0f1e52,#1a2e6b);border-bottom:1px solid rgba(26,46,107,0.18);font-family:"Zen Maru Gothic","Noto Sans TC",sans-serif;}
-.dk-body{padding:10px 13px 13px;}
-.sr{display:flex;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(26,46,107,0.10);gap:4px;}
-.sr:last-child{border-bottom:none;}
-.si{flex:0 0 16px;font-size:11px;}
-.sl{flex:0 0 52px;color:#7a8ab8;font-weight:600;font-size:11px;}
-.sv{flex:1;font-weight:700;font-size:12.5px;color:#1a2e6b;}
-.sv-sub{display:block;font-size:11px;color:#b07820;font-weight:600;margin-top:1px;}
-.stat-note{font-size:10px;color:#8a9ab8;font-weight:600;padding-top:6px;line-height:1.5;}
-.chart-col{display:flex;flex-direction:column;gap:10px;}
-.chart-card{background:#fff;border:1.5px solid rgba(30,60,150,0.15);border-radius:16px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,0.07);}
-.chart-hdr{padding:9px 15px;font-size:13px;font-weight:900;color:#fff;background:linear-gradient(135deg,#0f1e52,#1a2e6b);border-bottom:1px solid rgba(30,80,180,0.18);font-family:"Zen Maru Gothic","Noto Sans TC",sans-serif;}
-.chart-hdr-w{background:linear-gradient(135deg,#0a4f52,#12787a)!important;border-bottom-color:rgba(20,130,135,0.25)!important;}
-.chart-card img{width:100%;display:block;max-height:230px;object-fit:contain;background:#fff;}
-.chart-empty{display:flex;align-items:center;justify-content:center;padding:28px;color:#8a9acc;font-size:13px;}
-.sec-title{font-family:"Zen Maru Gothic","Noto Sans TC",sans-serif;font-size:14px;font-weight:900;color:#1a2e6b;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid rgba(30,60,150,0.18);}
-.sc-row{display:flex;align-items:center;gap:8px;padding:9px 14px;background:white;border:1.5px solid rgba(30,60,150,0.12);border-radius:10px;margin-bottom:7px;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
-.sc-name{font-weight:900;font-size:13px;color:#1a2e6b;flex-shrink:0;font-family:"Zen Maru Gothic",sans-serif;}
-.sc-since{font-size:11px;color:#7a8aaa;font-weight:600;flex-shrink:0;}
-.sc-arr{color:#b07a00;font-weight:900;font-size:14px;}
-.sc-rate{border-radius:6px;padding:4px 9px;font-weight:700;font-size:12px;white-space:nowrap;}
-.sc-bef{background:rgba(30,60,150,0.08);color:#1a2e6b;}.sc-aft-ok{background:rgba(30,100,50,0.12);color:#1a6b0a;border:1px solid rgba(58,157,35,0.35);}.sc-aft-obs{background:rgba(30,60,150,0.06);color:#6678aa;}
-.sc-diff{font-weight:900;font-size:13px;white-space:nowrap;}.sc-pos{color:#2a8b20;}.sc-neg{color:#c52020;}
-.rmsec{background:#ffeff1;border:1.5px solid rgba(200,100,140,0.18);border-radius:16px;overflow:hidden;margin-bottom:14px;box-shadow:0 4px 16px rgba(0,0,0,0.06);}
-.rmsec-hdr{padding:9px 16px;background:linear-gradient(135deg,#1a2e6b,#2a4a9a);border-bottom:1px solid rgba(30,80,180,0.18);font-size:13px;font-weight:900;color:#fff;font-family:"Zen Maru Gothic","Noto Sans TC",sans-serif;}
-.rmsec-body{padding:11px 16px;}.rmsec-body ul{padding-left:18px;font-size:13px;font-weight:600;line-height:2.0;color:#2a3060;}.rmsec-body li{margin-bottom:3px;}
-.rpt-src{padding:9px 14px;background:rgba(30,60,150,0.04);border:1px solid rgba(30,60,150,0.10);border-radius:10px;font-size:12px;color:#6678aa;font-weight:600;margin-bottom:14px;line-height:1.8;}
-.rpt-footer{background:linear-gradient(180deg,rgba(6,4,18,0.35),rgba(8,5,22,0.50)),url("${dbg}") center top/cover no-repeat;border-top:1px solid rgba(255,210,80,0.28);padding:20px 24px;font-size:12px;color:rgba(210,205,250,0.88);line-height:1.8;}
-@media screen and (max-width:600px){.two-col{grid-template-columns:1fr!important;}.rpt-profile{flex-direction:column;}.alert-wrap{width:100%!important;}.stat-boxes{gap:5px;}}
-@page{size:A4;margin:10mm;}
-@media print{
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
-  .actions{display:none!important;}
-  html,body{margin:0!important;padding:0!important;background:white!important;}
-  .rpt{max-width:100%!important;margin:0!important;box-shadow:none!important;}
-  .rpt-hdr{padding:12px 16px 8px!important;}.rpt-hdr::after{display:none!important;}
-  .rpt-title{font-size:17px!important;line-height:1.3!important;}
-  .rpt-date{margin-top:2px!important;font-size:10px!important;}
-  .rpt-profile{padding:8px 14px!important;gap:10px!important;flex-direction:row!important;}
-  .prof-photo{width:60px!important;height:60px!important;flex-shrink:0!important;}
-  .prof-name{font-size:15px!important;}.prof-sub{font-size:10px!important;margin-top:2px!important;}
-  .stat-boxes{margin-top:5px!important;gap:4px!important;}
-  .stat-box{padding:5px 10px!important;border-radius:8px!important;}
-  .stat-v{font-size:13px!important;}.stat-l{font-size:8.5px!important;}
-  .alert-wrap{width:170px!important;padding:7px 10px!important;flex-shrink:0!important;}
-  .alert-ttl{margin-bottom:4px!important;font-size:10px!important;}
-  .alert-bd{padding:6px 8px!important;font-size:10px!important;line-height:1.45!important;}
-  .alert-note{margin-top:4px!important;font-size:10px!important;}
-  .rpt-body{padding:8px 16px!important;}
-  .two-col{grid-template-columns:175px 1fr!important;gap:10px!important;margin-bottom:10px!important;}
-  .dk-head{padding:5px 10px!important;font-size:10.5px!important;}.dk-body{padding:4px 8px 6px!important;}
-  .sr{padding:2px 0!important;}.si{font-size:9.5px!important;}.sl{font-size:9.5px!important;}
-  .sv{font-size:11px!important;}.sv-sub{font-size:9.5px!important;}
-  .stat-note{font-size:9px!important;padding-top:3px!important;}
-  .chart-col{gap:8px!important;}.chart-hdr{padding:4px 10px!important;font-size:10.5px!important;}
-  .chart-card img{max-height:200px!important;}
-  .sec-title{font-size:11px!important;margin-bottom:5px!important;padding-bottom:3px!important;}
-  .sc-row{padding:5px 9px!important;margin-bottom:4px!important;font-size:10px!important;}
-  .sc-name{font-size:10px!important;}.sc-since{font-size:9px!important;}.sc-rate{font-size:9.5px!important;padding:2px 6px!important;}.sc-diff{font-size:10px!important;}
-  .rmsec{margin-bottom:8px!important;}.rmsec-hdr{padding:5px 12px!important;font-size:10.5px!important;}
-  .rmsec-body{padding:5px 12px 7px!important;}
-  .rmsec-body ul{line-height:1.7!important;font-size:10.5px!important;padding-left:13px!important;}
-  .rmsec-body li{margin-bottom:1px!important;}
-  .rpt-src{padding:5px 10px!important;margin-bottom:8px!important;font-size:10px!important;line-height:1.5!important;}
-  .rpt-footer{padding:10px 16px!important;font-size:10px!important;line-height:1.6!important;}
-}`;
-}
+/* ── Report helpers + buildReportHTML ── loaded from report.js ── */
 
-/* ── Report inline script helper ── */
-function _rptScript(dlName,saveBtnLabel,shareBtnLabel,loadingLabel,isMobileDev){
-  return `function saveAsImg(){
-var btn=document.getElementById("saveBtn");
-btn.disabled=true;btn.textContent=${loadingLabel};
-function doSave(){
-var acts=document.querySelector(".actions");acts.style.display="none";
-var rptEl=document.querySelector(".rpt");
-html2canvas(rptEl,{scale:2,useCORS:true,allowTaint:true,backgroundColor:"#ffffff",windowWidth:860,windowHeight:rptEl.scrollHeight,logging:false}).then(function(canvas){
-acts.style.display="";
-canvas.toBlob(function(blob){
-var fname=${dlName};
-var isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-if(isMobile&&navigator.canShare&&navigator.canShare({files:[new File([blob],fname,{type:"image/png"})]})){
-navigator.share({files:[new File([blob],fname,{type:"image/png"})],title:"寶貝成長報告"}).catch(function(){});
-}else{
-var url=URL.createObjectURL(blob);
-var a=document.createElement("a");a.href=url;a.download=fname;a.click();
-URL.revokeObjectURL(url);
-}
-btn.textContent=${saveBtnLabel};btn.disabled=false;
-},"image/png");
-}).catch(function(){acts.style.display="";btn.textContent=${saveBtnLabel};btn.disabled=false;});
-}
-if(typeof html2canvas!=="undefined"){doSave();}else{
-var s=document.createElement("script");
-s.src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-s.onload=doSave;
-s.onerror=function(){btn.textContent=${saveBtnLabel};btn.disabled=false;};
-document.head.appendChild(s);
-}
-}
-function shareReport(){
-var btn=document.getElementById("shareBtn");
-btn.disabled=true;btn.textContent=${loadingLabel};
-function doShare(){
-var acts=document.querySelector(".actions");acts.style.display="none";
-var rptEl=document.querySelector(".rpt");
-html2canvas(rptEl,{scale:2,useCORS:true,allowTaint:true,backgroundColor:"#ffffff",windowWidth:860,windowHeight:rptEl.scrollHeight,logging:false}).then(function(canvas){
-acts.style.display="";
-canvas.toBlob(function(blob){
-var fname=${dlName};
-var file=new File([blob],fname,{type:"image/png"});
-if(navigator.canShare&&navigator.canShare({files:[file]})){
-navigator.share({title:"寶貝成長報告",files:[file]}).catch(function(){});
-btn.textContent=${shareBtnLabel};btn.disabled=false;
-}else{
-var url=URL.createObjectURL(blob);
-var a=document.createElement("a");a.href=url;a.download=fname;a.click();
-URL.revokeObjectURL(url);
-setTimeout(function(){window.open("https://line.me/R/share?text="+encodeURIComponent("寶貝成長報告已儲存，請開啟圖片分享 📊"),"_blank");},600);
-btn.textContent=${shareBtnLabel};btn.disabled=false;
-}
-},"image/png");
-}).catch(function(){acts.style.display="";btn.textContent=${shareBtnLabel};btn.disabled=false;});
-}
-if(typeof html2canvas!=="undefined"){doShare();}else{
-var s=document.createElement("script");
-s.src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
-s.onload=doShare;
-s.onerror=function(){btn.textContent=${shareBtnLabel};btn.disabled=false;};
-document.head.appendChild(s);
-}
-}`;
-}
-
-function _rptGrowthRate(sorted,latest,latestDate,latestAge){
-  var annualH=null,thresh=null,annualLow=false,ref=null,months=null,hDiff=null,refDays=null;
-  if(sorted.length>=2){
-    var bestDiff=Infinity;
-    sorted.slice(0,-1).forEach(function(m){var d=(latestDate-new Date(m.date))/86400000;if(d>=60&&Math.abs(d-365)<bestDiff){bestDiff=Math.abs(d-365);ref=m;}});
-    if(ref){
-      refDays=(latestDate-new Date(ref.date))/86400000;
-      months=(refDays/30).toFixed(1);
-      hDiff=(latest.height-ref.height).toFixed(1);
-      annualH=(parseFloat(hDiff)/refDays*365).toFixed(1);
-      thresh=getMinGrowth(latestAge-parseFloat(months)/2);
-      annualLow=parseFloat(annualH)<thresh.min;
-    }
-  }
-  return {annualH:annualH,thresh:thresh,annualLow:annualLow,ref:ref,months:months,hDiff:hDiff,refDays:refDays};
-}
-function _rptAlertCard(annualH,annualLow,thresh,isEn){
-  var acColor,acBg,acBorder,acTitle,acBody,acNote;
-  if(annualH!==null){
-    if(annualLow){
-      acColor='#AA1A18';acBg='#FFD6D5';acBorder='#E52521';
-      acTitle='<span style="color:#E52521;">⚠ '+(isEn?'GROWTH ALERT':'生長警示')+'</span>';
-      acBody=(isEn?'Height growth: <strong>'+annualH+' cm/yr</strong><br>Below min. <strong>'+thresh.min+' cm/yr</strong>':'身高年化增長：<strong>'+annualH+' cm/年</strong><br>低於標準 <strong>'+thresh.min+' cm/年</strong>');
-      acNote='<span style="color:#6B4C2A;">💡 '+(isEn?'Consult a pediatrician':'建議諮詢兒科醫師')+'</span>';
-    }else{
-      acColor='#1A6B0A';acBg='#BFEFB2';acBorder='#3A9D23';
-      acTitle='<span style="color:#3A9D23;">✓ '+(isEn?'ON TRACK':'成長達標')+'</span>';
-      acBody=(isEn?'Height growth: <strong>'+annualH+' cm/yr</strong><br>Above min. <strong>'+thresh.min+' cm/yr</strong> ✓':'身高年化增長：<strong>'+annualH+' cm/年</strong><br>達標基準 <strong>'+thresh.min+' cm/年</strong> ✓');
-      acNote='<span style="color:#1A6B0A;">⭐ '+(isEn?'Keep it up!':'繼續保持！')+'</span>';
-    }
-  }else{
-    acColor='#0270A0';acBg='#C4ECFF';acBorder='#049CD8';
-    acTitle='<span style="color:#049CD8;">📈 '+(isEn?'TRACKING':'成長追蹤')+'</span>';
-    acBody=(isEn?'Add 2+ measurements<br>to see growth rate':'新增至少 2 筆量測<br>查看生長速度分析');
-    acNote='';
-  }
-  return {acColor:acColor,acBg:acBg,acBorder:acBorder,acTitle:acTitle,acBody:acBody,acNote:acNote};
-}
-function _rptReminders(annualH,annualLow,thresh,hRank,wRank,pred,rptMph,isEn){
-  var rm=[];
-  if(annualH!==null&&annualLow)rm.push(isEn?'<li>⚠️ Height growth (<strong>'+annualH+' cm/yr</strong>) is below the minimum standard of <strong>'+thresh.min+' cm/yr</strong>. Please consult a pediatrician for professional assessment.</li>':'<li>⚠️ 身高年化增長速度（<strong>'+annualH+' cm/年</strong>）低於最低標準（<strong>'+thresh.min+' cm/年</strong>），建議盡快諮詢兒科醫師進行評估。</li>');
-  if(hRank==='low')rm.push(isEn?'<li>📏 Height is below P3. Maintain balanced diet, adequate sleep, and regular physical activity.</li>':'<li>📏 身高位於 P3 以下，建議保持均衡飲食、充足睡眠及規律運動，持續追蹤。</li>');
-  if(wRank==='low')rm.push(isEn?'<li>⚖️ Weight is below P3. Ensure sufficient caloric intake and nutritional balance.</li>':'<li>⚖️ 體重位於 P3 以下，建議確保足夠熱量攝取與營養均衡。</li>');
-  if(hRank==='high')rm.push(isEn?'<li>📏 Height is above P97. Regular monitoring with a healthcare provider is recommended.</li>':'<li>📏 身高位於 P97 以上，建議定期與醫師追蹤評估。</li>');
-  if(wRank==='high')rm.push(isEn?'<li>⚖️ Weight is above P97. Maintain healthy eating habits and regular exercise.</li>':'<li>⚖️ 體重位於 P97 以上，建議維持健康飲食習慣及規律運動。</li>');
-  rm.push(isEn?'<li>📅 Growth assessment is recommended every 3–6 months to track long-term trends.</li>':'<li>📅 建議每 3–6 個月定期量測，追蹤長期生長趨勢。</li>');
-  if(pred&&pred.isExtreme)rm.push(isEn?'<li>⚠️ Height is at an extreme percentile (below P3 or above P97). Genetic prediction may be more reliable — please consult a pediatrician for accurate assessment.</li>':'<li>⚠️ 身高處於極端百分位（P3以下或P97以上），遺傳預測可能更具參考價值，建議諮詢小兒科醫師進行評估。</li>');
-  if(rptMph)rm.push(isEn?'<li>🧬 Genetic predicted height (Mid-Parental Height): <strong>'+rptMph.target+' cm</strong> (range '+rptMph.low+'–'+rptMph.high+' cm).</li>':'<li>🧬 遺傳預測身高（父母中間值法）：<strong>'+rptMph.target+' cm</strong>（範圍 '+rptMph.low+'–'+rptMph.high+' cm）。</li>');
-  return rm;
-}
-function _rptScRows(supplements,sorted,isEn){
-  if(!supplements.length||sorted.length<2)return '';
-  var html='',cmYr2=isEn?' cm/yr':' cm/年';
-  supplements.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(s){
-    var bef2=sorted.filter(function(m){return m.date<s.date;});
-    var aft2=sorted.filter(function(m){return m.date>s.date;});
-    var bR=null,aR=null;
-    if(bef2.length>=2){var bd2=(new Date(bef2[bef2.length-1].date)-new Date(bef2[0].date))/86400000;if(bd2>=14)bR=((bef2[bef2.length-1].height-bef2[0].height)/bd2*365).toFixed(1);}
-    if(aft2.length>=2){var ad2=(new Date(aft2[aft2.length-1].date)-new Date(aft2[0].date))/86400000;if(ad2>=14)aR=((aft2[aft2.length-1].height-aft2[0].height)/ad2*365).toFixed(1);}
-    var df2=bR!==null&&aR!==null?(parseFloat(aR)-parseFloat(bR)).toFixed(1):null;
-    var pos3=df2!==null&&parseFloat(df2)>0;
-    html+='<div class="sc-row">'+
-      '<span class="sc-name">⭐ '+esc(s.name)+'</span>'+
-      '<span class="sc-since">'+(isEn?'since ':'自 ')+fmtDate(s.date)+'</span>'+
-      '<span style="flex:1"></span>'+
-      '<span class="sc-rate sc-bef">'+(isEn?'Before: ':'前：')+(bR!==null?bR+cmYr2.trim():(isEn?'—':'資料不足'))+'</span>'+
-      '<span class="sc-arr">→</span>'+
-      '<span class="sc-rate '+(aR!==null?'sc-aft-ok':'sc-aft-obs')+'">'+(isEn?'After: ':'後：')+(aR!==null?aR+cmYr2.trim():(isEn?'Observing…':'觀察中'))+'</span>'+
-      (df2!==null?'<span class="sc-diff '+(pos3?'sc-pos':'sc-neg')+'">'+(pos3?'▲ +':'▼ ')+df2+cmYr2.trim()+'</span>':'')+
-    '</div>';
-  });
-  return html;
-}
-function buildReportHTML(hImg,wImg){
-  var isEn=currentLang==='en';
-  var dateStr=new Date().toLocaleDateString(isEn?'en-US':'zh-TW',{year:'numeric',month:'long',day:'numeric'});
-  var dateShort=new Date().toISOString().slice(0,10).replace(/-/g,'.');
-  var name=currentChild.name;
-  var gender=currentChild.gender;
-  var bday=currentChild.birthday;
-  var bdayFmt=bday.replace(/-/g,'.');
-  var sorted=measurements.slice().sort(function(a,b){return a.date.localeCompare(b.date);});
-  var latest=sorted[sorted.length-1];
-  var latestAge=getAgeMonths(latest.date);
-  var latestDate=new Date(latest.date);
-  var ageStr=fmtAgeFull(bday,latest.date);
-  var whoH=gender==='女'?WHO_H_GIRL:WHO_H_BOY;
-  var whoW=gender==='女'?WHO_W_GIRL:WHO_W_BOY;
-  var hRank=getPctRank(latestAge,latest.height,whoH);
-  var wRank=getPctRank(latestAge,latest.weight,whoW);
-  var pred=predictAdultHeight();
-  var gr=_rptGrowthRate(sorted,latest,latestDate,latestAge);
-  var annualH=gr.annualH,thresh=gr.thresh,annualLow=gr.annualLow,ref=gr.ref,hDiff=gr.hDiff,refDays=gr.refDays;
-  var ac=_rptAlertCard(annualH,annualLow,thresh,isEn);
-  var acColor=ac.acColor,acBg=ac.acBg,acBorder=ac.acBorder,acTitle=ac.acTitle,acBody=ac.acBody,acNote=ac.acNote;
-  var rptMph=calcMidParentalHeight();
-  var rmBullets=_rptReminders(annualH,annualLow,thresh,hRank,wRank,pred,rptMph,isEn);
-  /* Avatar HTML */
-  var photoHTML=currentChild._reportPhotoUrl
-    ?'<img src="'+currentChild._reportPhotoUrl+'" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;">'
-    :'<span style="font-size:1.9em;opacity:0.70;">📷</span><span class="prof-photo-txt">'+(isEn?'Photo':'寶貝照片')+'</span>';
-  /* Age formatted for display */
-  var ageDisplay=(function(){
-    var b=new Date(bday),d=new Date(latest.date);
-    var y=d.getFullYear()-b.getFullYear(),mo=d.getMonth()-b.getMonth(),da=d.getDate()-b.getDate();
-    if(da<0){mo--;da+=new Date(d.getFullYear(),d.getMonth(),0).getDate();}
-    if(mo<0){y--;mo+=12;}
-    if(isEn)return(y?y+'Y ':'')+(mo?mo+'M':'');
-    return(y?'<span style="font-size:1.1em;font-weight:900;color:#FFD166;">'+y+'</span> 歲 ':'')+(mo?'<span style="font-size:1.1em;font-weight:900;color:#FFD166;">'+mo+'</span> 個月':'');
-  })();
-  /* Stat row helper */
-  var sRow=function(icon,lbl,val,sub,vStyle){
-    return '<div class="sr"><span class="si">'+icon+'</span><span class="sl">'+lbl+'</span><span class="sv"'+(vStyle?' style="'+vStyle+'"':'')+'>'+val+(sub?'<span class="sv-sub">'+sub+'</span>':'')+'</span></div>';
-  };
-  var wDiffVal=ref?(parseFloat(latest.weight)-parseFloat(ref.weight)).toFixed(1):null;
-  var statsHTML=
-    sRow('🗓',isEn?'Date':'量測日期',fmtDate(latest.date))+
-    sRow('⏱',isEn?'Age':'年齡',ageStr)+
-    sRow('📏',isEn?'Height':'身高',latest.height+' cm',hRank==='low'?(isEn?'(Below P3 · Low)':'(低於P3 · 偏低)'):hRank==='high'?(isEn?'(Above P97 · High)':'(高於P97 · 偏高)'):null)+
-    sRow('⚖️',isEn?'Weight':'體重',latest.weight+' kg',wRank==='low'?(isEn?'(Below P3 · Low)':'(低於P3 · 偏低)'):wRank==='high'?(isEn?'(Above P97)':'(高於P97)'):null)+
-    (ref?sRow('➕',isEn?'Growth Δ':'增長差',(parseFloat(hDiff)>=0?'+':'')+hDiff+' cm / '+(parseFloat(wDiffVal)>=0?'+':'')+wDiffVal+' kg','('+fmtDate(ref.date)+')',parseFloat(hDiff)>=0?'color:#4CAF50;':'color:#EF5350;'):'')+
-    (annualH!==null?sRow('🔴',isEn?'Annual Height':'年化身高增長',annualH+(isEn?' cm/yr':' cm/年'),null,annualLow?'color:#E52521;font-weight:900;':'color:#4CAF50;font-weight:900;'):'')+
-    (ref&&refDays?sRow('📈',isEn?'Annual Weight':'年化體重增長',(parseFloat(wDiffVal)/refDays*365).toFixed(1)+(isEn?' kg/yr':' kg/年')):'')+
-    (thresh?sRow('⬇️',isEn?'Min. Std':'最低標準',thresh.min+(isEn?' cm/yr':' cm/年')):'')+
-    (annualH!==null&&annualLow?sRow('📊',isEn?'Gap':'距標準差',(thresh.min-parseFloat(annualH)).toFixed(1)+(isEn?' cm/yr':' cm/年'),null,'color:#E52521;font-weight:900;'):'')+
-    (rptMph?sRow('🧬',isEn?'Genetic':'遺傳預測',rptMph.target+' cm','('+rptMph.low+'–'+rptMph.high+')','color:#FB8C00;'):'');
-  var safeName=esc(name);
-  var dlName=JSON.stringify(name+'_report_'+new Date().toISOString().slice(0,10)+'.png');
-  var isMobileDev=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  var saveBtnLabel=JSON.stringify('📱 '+(isMobileDev?(isEn?'Save / Share':'儲存／分享'):(isEn?'Save as Image':'儲存圖片')));
-  var shareBtnLabel=JSON.stringify(isEn?'Share to LINE':'分享到 LINE');
-  var loadingLabel=JSON.stringify('⏳ '+(isEn?'Loading...':'載入中...'));
-  var baseHref=window.location.href.replace(/[^/]*$/,'');
-  var contentBgUrl=baseHref+'images/content-bg.jpg';
-  var desktopBgUrl=baseHref+'images/desktop-bg.png';
-  var scRowsHTML=_rptScRows(supplements,sorted,isEn);
-  /* ── assemble report HTML from sections ── */
-  var headHTML=
-    '<!DOCTYPE html><html lang="'+(isEn?'en':'zh-TW')+'"><head>'+
-    '<meta charset="UTF-8"><meta name="viewport" content="width=860">'+
-    '<base href="'+baseHref+'">'+
-    '<title>'+(isEn?safeName+"'s Growth Report":safeName+' 成長報告')+'</title>'+
-    '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Zen+Maru+Gothic:wght@700&display=swap" rel="stylesheet">'+
-    '<style>'+_rptCSS(contentBgUrl,desktopBgUrl)+'</style></head><body>';
-
-  var heroHTML=
-    '<div class="rpt">'+
-      '<div class="rpt-hdr">'+
-        '<div class="rpt-title">⭐ '+(isEn?safeName+"'s Growth Report":'寶貝成長紀錄')+' ⭐</div>'+
-        '<div class="rpt-date">📅 '+dateStr+'</div>'+
-      '</div>'+
-      '<div class="actions">'+
-        '<button class="btn-print" onclick="window.print()">🖨️ '+(isEn?'Print':'列印')+'</button>'+
-        '<button class="btn-save" id="saveBtn" onclick="saveAsImg()">📱 '+(isMobileDev?(isEn?'Save / Share':'儲存／分享'):(isEn?'Save as Image':'儲存圖片'))+'</button>'+
-        (!isMobileDev?'<button class="btn-share" id="shareBtn" onclick="shareReport()">'+(isEn?'Share to LINE':'分享到 LINE')+'</button>':'')+
-      '</div>'+
-      '<div class="rpt-profile">'+
-        '<div class="prof-left">'+
-          '<div class="prof-photo">'+photoHTML+'</div>'+
-          '<div class="prof-info">'+
-            '<div class="prof-name">'+safeName+'</div>'+
-            '<div class="prof-sub">'+(isEn?(gender==='女'?'♀ Girl':'♂ Boy'):(gender==='女'?'♀ 女生':'♂ 男生'))+' · '+(isEn?'Born '+fmtDate(bday):'生日 '+bdayFmt)+'</div>'+
-            '<div class="stat-boxes">'+
-              '<div class="stat-box"><div class="stat-v">'+latest.height+'</div><div class="stat-l">'+(isEn?'Height cm':'身高 cm')+'</div></div>'+
-              '<div class="stat-box"><div class="stat-v">'+latest.weight+'</div><div class="stat-l">'+(isEn?'Weight kg':'體重 kg')+'</div></div>'+
-              '<div class="stat-box"><div class="stat-v" style="font-size:14px;line-height:1.35;">'+ageDisplay+'</div><div class="stat-l">'+(isEn?'Age':'年齡')+'</div></div>'+
-            '</div>'+
-          '</div>'+
-        '</div>'+
-        '<div class="alert-wrap">'+
-          '<div class="alert-ttl">'+acTitle+'</div>'+
-          '<div class="alert-bd" style="background:'+acBg+';border:2px solid '+acBorder+';color:'+acColor+';">'+acBody+'</div>'+
-          (acNote?'<div class="alert-note">'+acNote+'</div>':'')+
-        '</div>'+
-      '</div>';
-
-  var bodyHTML=
-      '<div class="rpt-body">'+
-        '<div class="two-col">'+
-          '<div class="dk-card">'+
-            '<div class="dk-head">⭐ '+(isEn?'Growth Stats':'成長數據')+'</div>'+
-            '<div class="dk-body">'+statsHTML+(pred?'<div class="stat-note">'+t('gaPredictionNote')+'</div>':'')+
-            '</div>'+
-          '</div>'+
-          '<div class="chart-col">'+
-            (hImg?'<div class="chart-card"><div class="chart-hdr">⭐ '+(isEn?'Height Curve':'身高曲線')+'</div><img src="'+hImg+'" alt="height chart"></div>':'<div class="chart-card chart-empty">'+(isEn?'No chart data':'尚無圖表')+'</div>')+
-            (wImg?'<div class="chart-card"><div class="chart-hdr chart-hdr-w">💗 '+(isEn?'Weight Curve':'體重曲線')+'</div><img src="'+wImg+'" alt="weight chart"></div>':'')+
-          '</div>'+
-        '</div>'+
-        (scRowsHTML?'<div style="margin-bottom:16px;"><div class="sec-title">⭐ '+(isEn?'Supplement × Growth':'保健品 × 生長對比')+'</div>'+scRowsHTML+'</div>':'')+
-        '<div class="rmsec">'+
-          '<div class="rmsec-hdr">📋 '+(isEn?'Report Reminders':'報告提醒')+'</div>'+
-          '<div class="rmsec-body"><ul>'+rmBullets.join('')+'</ul></div>'+
-        '</div>'+
-        '<div class="rpt-src">'+
-          '📅 '+(isEn?'Report Date: ':'報告日期：')+dateStr+'<br>'+
-          (isEn?'Growth standard: WHO Child Growth Standards (0–7 years) · Taiwan Ministry of Health and Welfare':'生長標準資料來源：衛福部國健署（WHO 生長標準 0–7 歲）')+
-        '</div>'+
-      '</div>';
-
-  var footerHTML=
-      '<div class="rpt-footer">'+
-        '⚠️ '+(isEn?'This report is for reference only and does not constitute medical advice. If you have any growth concerns, please consult a pediatrician for professional assessment.':'本報告僅供參考，不作為醫療診斷依據。如有任何成長疑慮，請諮詢兒科醫師進行專業評估。')+'<br>'+
-        '<span style="color:rgba(160,155,215,0.55);font-size:0.88em;">⭐ Baby Growth Tracker · '+dateShort+'</span>'+
-      '</div>'+
-    '</div>';
-
-  var scriptHTML='<scr'+'ipt>'+_rptScript(dlName,saveBtnLabel,shareBtnLabel,loadingLabel,isMobileDev)+'<'+'/scr'+'ipt></body></html>';
-
-  return headHTML+heroHTML+bodyHTML+footerHTML+scriptHTML;
-}
 function _hexAlpha(hex,a){var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return'rgba('+r+','+g+','+b+','+a+')';}
 function mkWho(who,colors,isMobile){
   var op=isMobile?0.65:0.90;
@@ -1835,11 +1103,15 @@ async function openShareModal(childId){
   var child=children.find(function(c){return c.id===childId;});
   document.getElementById('shareModalTitle').textContent=t('shareModalTitleBase')+' — '+(child?esc(child.name):'');
   document.getElementById('shareEmailInput').value='';
-  document.getElementById('shareModal').classList.remove('hidden');
+  var _smOv=document.getElementById('shareModal');
+  _smOv.classList.remove('hidden');
+  _openModalA11y(_smOv);
   await refreshShareList();
 }
 function closeShareModal(){
-  document.getElementById('shareModal').classList.add('hidden');
+  var ov=document.getElementById('shareModal');
+  ov.classList.add('hidden');
+  _closeModalA11y(ov);
   sharingChildId=null;
 }
 async function refreshShareList(){
