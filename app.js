@@ -1095,6 +1095,13 @@ function toggleCollapse(id){
     if(id==='corrCard') renderSuppCorrelation();
   }
 }
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter'&&e.key!==' ')return;
+  var t=document.activeElement;
+  if(!t||!t.classList.contains('collapse-header'))return;
+  e.preventDefault();
+  t.click();
+});
 
 /* ── Share Modal ── */
 var sharingChildId=null;

@@ -9,6 +9,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="兒童成長追蹤 Web App，記錄身高體重、對照 WHO 標準、一鍵產出成長報告。Baby Growth Tracker — track height &amp; weight against WHO standards.">
   <link rel="preconnect" href="https://gfvccfpzwhwvuoxffafl.supabase.co">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -103,7 +104,7 @@
   <!-- Tab 1 -->
   <div class="tab-content active" id="tab-records">
     <div class="card" id="addMeasureCard">
-      <div class="collapse-header" onclick="toggleCollapse('addMeasureCard')">
+      <div class="collapse-header" role="button" tabindex="0" onclick="toggleCollapse('addMeasureCard')">
         <div class="card-title" style="margin-bottom:0;"><span data-i18n="t1Title">⭐ 新增量測</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
@@ -118,7 +119,7 @@
       </div>
     </div>
     <div class="card collapsed" id="batchCard">
-      <div class="collapse-header" onclick="toggleCollapse('batchCard')">
+      <div class="collapse-header" role="button" tabindex="0" onclick="toggleCollapse('batchCard')">
         <div class="card-title" style="margin-bottom:0;"><span data-i18n="batchTitle">⭐ 多筆匯入</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
@@ -140,7 +141,7 @@
       </div>
     </div>
     <div class="card collapsed" id="historyCard">
-      <div class="collapse-header" onclick="toggleCollapse('historyCard')">
+      <div class="collapse-header" role="button" tabindex="0" onclick="toggleCollapse('historyCard')">
         <div class="card-title" style="margin-bottom:0;" data-i18n="historyTitle">⭐ 歷史量測紀錄</div>
         <span class="collapse-arrow">▼</span>
       </div>
@@ -149,7 +150,7 @@
       </div>
     </div>
     <div class="card collapsed" id="backupCard">
-      <div class="collapse-header" onclick="toggleCollapse('backupCard')">
+      <div class="collapse-header" role="button" tabindex="0" onclick="toggleCollapse('backupCard')">
         <div class="card-title" style="margin-bottom:0;" data-i18n="backupTitle">🗂️ 資料備份 / 還原</div>
         <span class="collapse-arrow">▼</span>
       </div>
@@ -169,7 +170,7 @@
       <button class="btn btn-secondary" onclick="generateReport()" style="font-size:0.65em;padding:10px 18px;">📄 <span data-i18n="reportBtnText">生成成長報告</span></button>
     </div>
     <div class="card" id="growthCard">
-      <div class="collapse-header" onclick="toggleCollapse('growthCard')">
+      <div class="collapse-header" role="button" tabindex="0" onclick="toggleCollapse('growthCard')">
         <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2GrowthTitle">⭐ 年增長分析</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
@@ -178,7 +179,7 @@
       </div>
     </div>
     <div class="card card-chart" id="heightChartCard">
-      <div class="collapse-header" onclick="toggleCollapse('heightChartCard')">
+      <div class="collapse-header" role="button" tabindex="0" onclick="toggleCollapse('heightChartCard')">
         <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2HeightChart">⭐ 身高生長曲線</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
@@ -193,7 +194,7 @@
       </div>
     </div>
     <div class="card card-chart" id="weightChartCard">
-      <div class="collapse-header" onclick="toggleCollapse('weightChartCard')">
+      <div class="collapse-header" role="button" tabindex="0" onclick="toggleCollapse('weightChartCard')">
         <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2WeightChart">⭐ 體重生長曲線</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
@@ -207,7 +208,7 @@
       </div>
     </div>
     <div class="card card-chart" id="corrCard">
-      <div class="collapse-header" onclick="toggleCollapse('corrCard')">
+      <div class="collapse-header" role="button" tabindex="0" onclick="toggleCollapse('corrCard')">
         <div class="card-title" style="margin-bottom:0;"><span data-i18n="t2CorrTitle">⭐ 保健品 × 生長速度對比</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
@@ -220,7 +221,7 @@
   <!-- Tab 3 -->
   <div class="tab-content" id="tab-supplements">
     <div class="card" id="addSuppCard">
-      <div class="collapse-header" onclick="toggleCollapse('addSuppCard')">
+      <div class="collapse-header" role="button" tabindex="0" onclick="toggleCollapse('addSuppCard')">
         <div class="card-title" style="margin-bottom:0;"><span data-i18n="t3AddTitle">⭐ 新增保健品 / 配方奶</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
@@ -243,7 +244,7 @@
       </div>
     </div>
     <div class="card collapsed" id="suppListCard">
-      <div class="collapse-header" onclick="toggleCollapse('suppListCard')">
+      <div class="collapse-header" role="button" tabindex="0" onclick="toggleCollapse('suppListCard')">
         <div class="card-title" style="margin-bottom:0;"><span data-i18n="t3ListTitle">⭐ 保健品紀錄</span></div>
         <span class="collapse-arrow">▼</span>
       </div>
