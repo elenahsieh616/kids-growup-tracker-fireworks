@@ -1052,7 +1052,11 @@ function getAgeMonths(dateStr){
   if(d.getDate()<b.getDate())m--;
   return Math.max(0,m);
 }
-function fmtAge(m){var y=Math.floor(m/12),mo=m%12;if(!y)return mo+'個月';if(!mo)return y+'歲';return y+'歲'+mo+'個月';}
+function fmtAge(m){
+  var y=Math.floor(m/12),mo=m%12;
+  if(currentLang==='en'){if(!y)return mo+'mo';if(!mo)return y+'yr';return y+'yr '+mo+'mo';}
+  if(!y)return mo+'個月';if(!mo)return y+'歲';return y+'歲'+mo+'個月';
+}
 function fmtAgeYear(birthdayStr){var b=new Date(birthdayStr),d=new Date();var y=d.getFullYear()-b.getFullYear(),mo=d.getMonth()-b.getMonth(),da=d.getDate()-b.getDate();if(da<0)mo--;if(mo<0)y--;return y+'Y';}
 function fmtAgeFull(birthdayStr,toDateStr){
   var b=new Date(birthdayStr),d=toDateStr?new Date(toDateStr):new Date();
