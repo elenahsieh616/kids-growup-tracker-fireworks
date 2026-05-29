@@ -78,6 +78,70 @@ var CHILD_BG=[['#E52521','#AA1A18'],['#049CD8','#0270A0'],['#3A9D23','#1E6B10'],
 
 /* ── i18n ── loaded from i18n.js ── */
 
+/* ── Custom Date Select (replaces <input type="date"> for full locale control) ── */
+var _DS_M_ZH=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+var _DS_M_EN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var _dsReg={};
+function _pad2(n){return String(n).padStart(2,'0');}
+function _dsMoHTML(){var n=currentLang==='en'?_DS_M_EN:_DS_M_ZH;return n.map(function(v,i){return'<option value="'+(i+1)+'">'+v+'</option>';}).join('');}
+function _dsYrHTML(a,b){var h='';for(var y=b;y>=a;y--)h+='<option value="'+y+'">'+y+'</option>';return h;}
+function _dsDyHTML(y,m){var n=new Date(y,m,0).getDate(),h='';for(var d=1;d<=n;d++)h+='<option value="'+d+'">'+d+'</option>';return h;}
+function initDateSel(id,minY,maxY){
+  var wrap=document.getElementById(id+'-wrap');if(!wrap)return;
+  var now=new Date(),cy=now.getFullYear();
+  if(!minY)minY=cy-12;if(!maxY)maxY=cy;
+  var hid=wrap.querySelector('input');
+  if(!hid){hid=document.createElement('input');hid.type='hidden';wrap.appendChild(hid);}
+  var ys=document.createElement('select');ys.className='ds-y';ys.setAttribute('aria-label',currentLang==='en'?'Year':'年');
+  var ms=document.createElement('select');ms.className='ds-m';ms.setAttribute('aria-label',currentLang==='en'?'Month':'月');
+  var ds=document.createElement('select');ds.className='ds-d';ds.setAttribute('aria-label',currentLang==='en'?'Day':'日');
+  ys.innerHTML=_dsYrHTML(minY,maxY);ms.innerHTML=_dsMoHTML();
+  function sync(){hid.value=ys.value+'-'+_pad2(+ms.value)+'-'+_pad2(+ds.value);}
+  function reDays(){var c=+ds.value||1;ds.innerHTML=_dsDyHTML(+ys.value,+ms.value);ds.value=Math.min(c,new Date(+ys.value,+ms.value,0).getDate());sync();}
+  ys.addEventListener('change',reDays);ms.addEventListener('change',reDays);ds.addEventListener('change',sync);
+  wrap.appendChild(ys);wrap.appendChild(ms);wrap.appendChild(ds);
+  _dsReg[id]={ys:ys,ms:ms,ds:ds,hid:hid,minY:minY,maxY:maxY,reDays:reDays,sync:sync};
+  setDateSel(id,now.toISOString().slice(0,10));
+}
+function setDateSel(id,val){
+  var r=_dsReg[id];
+  if(!r){var h=document.getElementById(id);if(h)h.value=val||'';return;}
+  if(!val)val=new Date().toISOString().slice(0,10);
+  var p=val.split('-');if(p.length!==3)return;
+  r.ys.value=+p[0];r.ms.value=+p[1];r.reDays();r.ds.value=+p[2];r.sync();
+}
+function refreshDateSelLang(){
+  Object.keys(_dsReg).forEach(function(id){
+    var r=_dsReg[id];var y=r.ys.value,m=r.ms.value,d=r.ds.value;
+    r.ys.innerHTML=_dsYrHTML(r.minY,r.maxY);r.ms.innerHTML=_dsMoHTML();
+    r.ys.value=y;r.ms.value=m;r.reDays();r.ds.value=d;r.sync();
+  });
+  document.querySelectorAll('.b-date-wrap').forEach(function(w){if(w._rf)w._rf();});
+}
+function _initBatchDS(wrap){
+  if(!wrap||wrap._dsInit)return;wrap._dsInit=true;
+  var now=new Date(),cy=now.getFullYear(),minY=cy-12;
+  var hid=document.createElement('input');hid.type='hidden';hid.className='b-date';wrap.appendChild(hid);
+  var ys=document.createElement('select');ys.className='ds-y';ys.setAttribute('aria-label',currentLang==='en'?'Year':'年');
+  var ms=document.createElement('select');ms.className='ds-m';ms.setAttribute('aria-label',currentLang==='en'?'Month':'月');
+  var ds=document.createElement('select');ds.className='ds-d';ds.setAttribute('aria-label',currentLang==='en'?'Day':'日');
+  ys.innerHTML=_dsYrHTML(minY,cy);ms.innerHTML=_dsMoHTML();
+  function sync(){hid.value=ys.value+'-'+_pad2(+ms.value)+'-'+_pad2(+ds.value);}
+  function reDays(){var c=+ds.value||1;ds.innerHTML=_dsDyHTML(+ys.value,+ms.value);ds.value=Math.min(c,new Date(+ys.value,+ms.value,0).getDate());sync();}
+  ys.addEventListener('change',reDays);ms.addEventListener('change',reDays);ds.addEventListener('change',sync);
+  wrap.appendChild(ys);wrap.appendChild(ms);wrap.appendChild(ds);
+  var t=now.toISOString().slice(0,10).split('-');ys.value=+t[0];ms.value=+t[1];reDays();ds.value=+t[2];sync();
+  wrap._rf=function(){var y=ys.value,m=ms.value,d=ds.value;ys.innerHTML=_dsYrHTML(minY,cy);ms.innerHTML=_dsMoHTML();ys.value=y;ms.value=m;reDays();ds.value=d;sync();};
+}
+(function(){
+  var cy=new Date().getFullYear();
+  initDateSel('measureDate',cy-12,cy);
+  initDateSel('suppDate',cy-12,cy);
+  initDateSel('childBirthday',cy-15,cy);
+  initDateSel('editMeasureDate',cy-12,cy);
+  initDateSel('editSuppDate',cy-12,cy);
+  _initBatchDS(document.querySelector('.b-date-wrap'));
+})();
 
 /* ── Auth ── */
 // If user was previously logged in (session in localStorage), show loading overlay immediately.
@@ -152,7 +216,7 @@ function setupMobileFormUX(){
   });
 }
 function setupChildFormKeyNav(){
-  var cFields=['childName','childBirthday','childGender','fatherHeight','motherHeight'];
+  var cFields=['childName','childGender','fatherHeight','motherHeight'];
   cFields.forEach(function(id,i){
     var el=document.getElementById(id);
     if(!el||el.dataset.keyinit)return;
@@ -265,7 +329,7 @@ function editMeasurement(id){
   var m=measurements.find(function(m){return m.id===id;});
   if(!m)return;
   document.getElementById('editMeasureId').value=id;
-  document.getElementById('editMeasureDate').value=m.date;
+  setDateSel('editMeasureDate',m.date);
   document.getElementById('editMeasureHeight').value=m.height;
   document.getElementById('editMeasureWeight').value=m.weight;
   document.getElementById('editMeasureNote').value=m.note||'';
@@ -300,7 +364,7 @@ function editSupplement(id){
   var s=supplements.find(function(s){return s.id===id;});
   if(!s)return;
   document.getElementById('editSuppId').value=id;
-  document.getElementById('editSuppDate').value=s.date;
+  setDateSel('editSuppDate',s.date);
   document.getElementById('editSuppType').value=s.type;
   document.getElementById('editSuppName').value=s.name;
   document.getElementById('editSuppNote').value=s.note||'';
@@ -439,8 +503,8 @@ async function enterChild(childId){
   document.querySelectorAll('.nav-btn')[0].classList.add('active');
   updateHeroFromChild();
   var today=new Date().toISOString().split('T')[0];
-  document.getElementById('measureDate').value=today;
-  document.getElementById('suppDate').value=today;
+  setDateSel('measureDate',today);
+  setDateSel('suppDate',today);
   showLoading();
   try{
     measurements=await db_getM(childId);
@@ -517,7 +581,7 @@ function openAddModal(){
   editingChildId=null;selectedEmoji=EMOJIS[0];
   document.getElementById('modalTitle').textContent=t('addChildTitle');
   document.getElementById('childName').value='';
-  document.getElementById('childBirthday').value='';
+  setDateSel('childBirthday',new Date(new Date().setFullYear(new Date().getFullYear()-1)).toISOString().slice(0,10));
   document.getElementById('childGender').value='男';
   document.getElementById('fatherHeight').value='';
   document.getElementById('motherHeight').value='';
@@ -533,7 +597,7 @@ function openEditModal(childId){
   editingChildId=childId;selectedEmoji=child.emoji||EMOJIS[0];
   document.getElementById('modalTitle').textContent=t('editChildTitle');
   document.getElementById('childName').value=child.name;
-  document.getElementById('childBirthday').value=child.birthday;
+  setDateSel('childBirthday',child.birthday);
   document.getElementById('childGender').value=child.gender;
   document.getElementById('fatherHeight').value=child.father_height||getParentHeights(childId).father||'';
   document.getElementById('motherHeight').value=child.mother_height||getParentHeights(childId).mother||'';
@@ -643,8 +707,9 @@ async function deleteMeasurement(id){
 }
 function addBatchRow(){
   var d=document.createElement('div');d.className='batch-row';
-  d.innerHTML='<input type="date" class="b-date"><input type="number" placeholder="'+t('heightCm')+'" step="0.1" class="b-height" inputmode="decimal"><input type="number" placeholder="'+t('weightKg')+'" step="0.1" class="b-weight" inputmode="decimal"><input type="text" placeholder="'+t('batchSrcPlaceholder')+'" class="b-note" autocomplete="off"><button class="btn btn-danger" onclick="removeBatchRow(this)">✕</button>';
+  d.innerHTML='<div class="ds-container b-date-wrap"></div><input type="number" placeholder="'+t('heightCm')+'" step="0.1" class="b-height" inputmode="decimal"><input type="number" placeholder="'+t('weightKg')+'" step="0.1" class="b-weight" inputmode="decimal"><input type="text" placeholder="'+t('batchSrcPlaceholder')+'" class="b-note" autocomplete="off"><button class="btn btn-danger" onclick="removeBatchRow(this)">✕</button>';
   document.getElementById('batchRows').appendChild(d);
+  _initBatchDS(d.querySelector('.b-date-wrap'));
 }
 function removeBatchRow(btn){
   if(document.querySelectorAll('.batch-row').length<=1){showToast(t('batchKeepOne'),'warning');return;}
@@ -665,7 +730,8 @@ async function importBatch(){
     measurements=measurements.concat(newMs).sort(function(a,b){return b.date.localeCompare(a.date);});
   } catch(e){showToast(t('batchImportFail')+(e.message||e),'error');hideLoading();return;}
   hideLoading();
-  document.getElementById('batchRows').innerHTML='<div class="batch-row"><input type="date" class="b-date"><input type="number" placeholder="'+t('heightCm')+'" step="0.1" class="b-height" inputmode="decimal"><input type="number" placeholder="'+t('weightKg')+'" step="0.1" class="b-weight" inputmode="decimal"><input type="text" placeholder="'+t('batchSrcPlaceholder')+'" class="b-note" autocomplete="off"><button class="btn btn-danger" onclick="removeBatchRow(this)">✕</button></div>';
+  document.getElementById('batchRows').innerHTML='<div class="batch-row"><div class="ds-container b-date-wrap"></div><input type="number" placeholder="'+t('heightCm')+'" step="0.1" class="b-height" inputmode="decimal"><input type="number" placeholder="'+t('weightKg')+'" step="0.1" class="b-weight" inputmode="decimal"><input type="text" placeholder="'+t('batchSrcPlaceholder')+'" class="b-note" autocomplete="off"><button class="btn btn-danger" onclick="removeBatchRow(this)">✕</button></div>';
+  _initBatchDS(document.querySelector('.b-date-wrap'));
   renderRecords();renderGrowthAnalysis();renderCharts();updateHeroStats();
   showToast(currentLang==='en'?'✅ Successfully imported '+records.length+' record(s)!':'✅ 成功匯入 '+records.length+' 筆！','success');
 }

@@ -109,7 +109,7 @@
         <span class="collapse-arrow">▼</span>
       </div>
       <div class="collapse-body">
-        <div class="form-group" style="margin-bottom:11px;"><label data-i18n="t1Date">量測日期</label><input type="date" id="measureDate"></div>
+        <div class="form-group" style="margin-bottom:11px;"><label data-i18n="t1Date">量測日期</label><div class="ds-container" id="measureDate-wrap"><input type="hidden" id="measureDate"></div></div>
         <div class="form-grid" style="grid-template-columns:1fr 1fr;margin-bottom:11px;">
           <div class="form-group"><label data-i18n="t1Height">身高 (cm)</label><input type="number" id="measureHeight" placeholder="90.5" step="0.1" min="40" max="200" inputmode="decimal" autocomplete="off"></div>
           <div class="form-group"><label data-i18n="t1Weight">體重 (kg)</label><input type="number" id="measureWeight" placeholder="13.2" step="0.1" min="2" max="100" inputmode="decimal" autocomplete="off"></div>
@@ -127,7 +127,7 @@
         <p style="font-size:0.82em;color:var(--muted);margin-bottom:13px;line-height:1.5;font-weight:600;" data-i18n="batchDesc">逐筆填入量測紀錄，資料來源欄位可選填（如：愛託付、診所、在家量）。</p>
         <div id="batchRows">
           <div class="batch-row">
-            <input type="date" class="b-date">
+            <div class="ds-container b-date-wrap"></div>
             <input type="number" data-i18n-placeholder="heightCm" placeholder="身高 cm" step="0.1" class="b-height" inputmode="decimal">
             <input type="number" data-i18n-placeholder="weightKg" placeholder="體重 kg" step="0.1" class="b-weight" inputmode="decimal">
             <input type="text" data-i18n-placeholder="batchSrcPlaceholder" placeholder="資料來源（選填）" class="b-note">
@@ -227,7 +227,7 @@
       </div>
       <div class="collapse-body">
         <div class="form-grid col2">
-          <div class="form-group"><label data-i18n="t3Date">開始日期</label><input type="date" id="suppDate"></div>
+          <div class="form-group"><label data-i18n="t3Date">開始日期</label><div class="ds-container" id="suppDate-wrap"><input type="hidden" id="suppDate"></div></div>
           <div class="form-group"><label data-i18n="t3Type">類型</label>
             <select id="suppType">
               <option value="保健品" data-i18n-opt="0">保健品</option>
@@ -284,7 +284,7 @@
     <div class="emoji-grid" id="emojiGrid"></div>
     <div class="form-group" style="margin-bottom:11px;"><label data-i18n="childNameLabel">寶貝名字</label><input type="text" id="childName" data-i18n-placeholder="childNamePlaceholder" placeholder="例：Boss Baby"></div>
     <div class="form-grid col2">
-      <div class="form-group"><label data-i18n="childBirthdayLabel">生日</label><input type="date" id="childBirthday"></div>
+      <div class="form-group"><label data-i18n="childBirthdayLabel">生日</label><div class="ds-container" id="childBirthday-wrap"><input type="hidden" id="childBirthday"></div></div>
       <div class="form-group"><label data-i18n="childGenderLabel">性別</label>
         <select id="childGender">
           <option value="男" data-i18n-gopt="male">男生</option>
@@ -310,7 +310,7 @@
   <div class="modal-box">
     <div class="modal-title" id="editMeasureModalTitle" data-i18n="editMeasureTitle">✏️ 編輯量測紀錄</div>
     <input type="hidden" id="editMeasureId">
-    <div class="form-group" style="margin-bottom:11px;"><label data-i18n="t1Date">量測日期</label><input type="date" id="editMeasureDate"></div>
+    <div class="form-group" style="margin-bottom:11px;"><label data-i18n="t1Date">量測日期</label><div class="ds-container" id="editMeasureDate-wrap"><input type="hidden" id="editMeasureDate"></div></div>
     <div class="form-grid col2" style="margin-bottom:11px;">
       <div class="form-group"><label data-i18n="t1Height">身高 (cm)</label><input type="number" id="editMeasureHeight" step="0.1" min="40" max="200" inputmode="decimal" autocomplete="off"></div>
       <div class="form-group"><label data-i18n="t1Weight">體重 (kg)</label><input type="number" id="editMeasureWeight" step="0.1" min="2" max="100" inputmode="decimal" autocomplete="off"></div>
@@ -329,7 +329,7 @@
     <div class="modal-title" id="editSuppModalTitle" data-i18n="editSuppTitle">✏️ 編輯保健品紀錄</div>
     <input type="hidden" id="editSuppId">
     <div class="form-grid col2" style="margin-bottom:11px;">
-      <div class="form-group"><label data-i18n="t3Date">開始日期</label><input type="date" id="editSuppDate"></div>
+      <div class="form-group"><label data-i18n="t3Date">開始日期</label><div class="ds-container" id="editSuppDate-wrap"><input type="hidden" id="editSuppDate"></div></div>
       <div class="form-group"><label data-i18n="t3Type">類型</label>
         <select id="editSuppType">
           <option value="保健品" data-i18n-opt="0">保健品</option>

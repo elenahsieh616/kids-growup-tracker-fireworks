@@ -233,10 +233,8 @@ function applyLang(){
   });
   // Update html lang attribute
   document.documentElement.lang=currentLang==='en'?'en':'zh-TW';
-  // Set lang on each date input so desktop browsers render locale-appropriate format
-  document.querySelectorAll('input[type="date"]').forEach(function(el){
-    el.lang=currentLang==='en'?'en':'zh-TW';
-  });
+  // Refresh custom date select month labels
+  if(typeof refreshDateSelLang==='function')refreshDateSelLang();
 }
 
 /* ── Loading ── */

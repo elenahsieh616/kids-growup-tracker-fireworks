@@ -249,8 +249,9 @@ tbody tr:hover td { background:rgba(255,230,140,0.12);transition:background 0.12
 .supp-note { font-size:0.82em;color:rgba(200,185,255,0.78);margin-top:3px; }
 
 /* ── Batch ── */
-.batch-row { display:grid;grid-template-columns:120px 82px 82px 1fr auto;gap:7px;margin-bottom:8px;align-items:center; }
-.batch-row input { padding:7px 9px;font-size:0.82em; }
+.batch-row { display:grid;grid-template-columns:auto 82px 82px 1fr auto;gap:7px;margin-bottom:8px;align-items:center; }
+.batch-row input,.batch-row .ds-container select { padding:7px 5px;font-size:0.82em; }
+.batch-row .ds-container { gap:3px; }
 
 /* ── Collapse ── */
 .collapse-header { cursor:pointer;user-select:none;display:flex;justify-content:space-between;align-items:center; }
@@ -258,6 +259,13 @@ tbody tr:hover td { background:rgba(255,230,140,0.12);transition:background 0.12
 .collapsed .collapse-arrow { transform:rotate(-90deg); }
 .collapse-body { margin-top:11px; }
 .collapsed .collapse-body { display:none; }
+
+/* ── Custom Date Select ── */
+.ds-container { display:flex;gap:4px; }
+.ds-container select { flex:1;min-width:0; }
+.ds-y { flex:1.4 !important; }
+.ds-m { flex:1.2 !important; }
+.ds-d { flex:0.9 !important; }
 
 .empty { text-align:center;padding:20px 20px;color:rgba(200,185,255,0.72);font-family:var(--pixel);font-size:0.75em;font-weight:600;line-height:2.2; }
 .empty-sub { display:block;font-family:inherit;font-size:1.15em;font-weight:600;margin-top:6px;line-height:1.6;color:#BBA870; }
@@ -281,7 +289,7 @@ tbody tr:hover td { background:rgba(255,230,140,0.12);transition:background 0.12
   html[lang="en"] .app-title { font-size:1.2em;letter-spacing:1px; }
   .form-grid.col2 { grid-template-columns:1fr; }
   .batch-row { display:flex;flex-wrap:wrap;gap:5px; }
-  .batch-row .b-date { flex-basis:100%; }
+  .batch-row .b-date-wrap { flex-basis:100%; }
   .batch-row .b-height,.batch-row .b-weight { flex:1;min-width:0; }
   .batch-row .b-note { flex:1;min-width:0; }
   .hero-name { font-size:0.95em;letter-spacing:3px;text-shadow:1px 1px 0 rgba(10,5,30,0.80),0 0 7px rgba(255,210,80,0.40); }
