@@ -1,5 +1,5 @@
 /* Service Worker — Baby Growth Tracker */
-var CACHE = 'grow-tracker-v2';
+var CACHE = 'grow-tracker-v3';
 var STATIC = [
   './',
   './index.html',
