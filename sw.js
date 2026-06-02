@@ -1,5 +1,5 @@
 /* Service Worker — Baby Growth Tracker */
-var CACHE = 'grow-tracker-v3';
+var CACHE = 'grow-tracker-v4';
 var STATIC = [
   './',
   './index.html',
@@ -10,6 +10,7 @@ var STATIC = [
   './report.js',
   './data/who.js',
   './images/icon-512.png',
+  'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js',
   './images/desktop-bg.png',
   './images/mobile-bg.png',
   './images/header-bg.jpg',
