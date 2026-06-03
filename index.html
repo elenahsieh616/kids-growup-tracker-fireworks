@@ -118,7 +118,7 @@
           <div class="form-group"><label data-i18n="t1Weight">體重 (kg)</label><input type="number" id="measureWeight" placeholder="13.2" step="0.1" min="2" max="100" inputmode="decimal" autocomplete="off"></div>
         </div>
         <div class="form-group" style="margin-bottom:12px;"><label data-i18n="t1Note">備註（選填）</label><input type="text" id="measureNote" data-i18n-placeholder="t1NotePlaceholder" placeholder="例：診所量測、在家量測" autocomplete="off"></div>
-        <button class="btn btn-primary btn-full" onclick="addMeasurement();burstFireworks(this)" data-i18n="t1Save">⭐ 儲存量測</button>
+        <button class="btn btn-primary btn-full" onclick="addMeasurement(this)" data-i18n="t1Save">⭐ 儲存量測</button>
       </div>
     </div>
     <div class="card collapsed" id="batchCard">
@@ -243,7 +243,7 @@
         </div>
         <div class="form-group" style="margin-bottom:10px;"><label data-i18n="t3Name">品名</label><input type="text" id="suppName" placeholder="例：Appeton 成長奶粉、兒童維生素D3" data-i18n-placeholder="t3NamePlaceholder"></div>
         <div class="form-group" style="margin-bottom:12px;"><label data-i18n="t3Note">備註（選填）</label><textarea id="suppNote" data-i18n-placeholder="t3NotePlaceholder" placeholder="例：每天睡前一匙" rows="2" style="resize:vertical;"></textarea></div>
-        <button class="btn btn-primary btn-full" onclick="addSupplement();burstFireworks(this)" data-i18n="t3Save">⭐ 儲存記錄</button>
+        <button class="btn btn-primary btn-full" onclick="addSupplement(this)" data-i18n="t3Save">⭐ 儲存記錄</button>
       </div>
     </div>
     <div class="card collapsed" id="suppListCard">

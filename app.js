@@ -658,7 +658,7 @@ async function deleteChildConfirm(){
 }
 
 /* ── Measurements ── */
-async function addMeasurement(){
+async function addMeasurement(srcEl){
   if(!currentChild)return;
   var date=document.getElementById('measureDate').value;
   var height=parseFloat(document.getElementById('measureHeight').value);
@@ -690,6 +690,7 @@ async function addMeasurement(){
     measurements.sort(function(a,b){return b.date.localeCompare(a.date);});
   } catch(e){showToast(t('mSaveFail')+(e.message||e),'error');hideLoading();return;}
   hideLoading();
+  burstFireworks(srcEl);
   document.getElementById('measureHeight').value='';
   document.getElementById('measureWeight').value='';
   document.getElementById('measureNote').value='';
@@ -734,10 +735,11 @@ async function importBatch(){
   _initBatchDS(document.querySelector('.b-date-wrap'));
   renderRecords();renderGrowthAnalysis();renderCharts();updateHeroStats();
   showToast(currentLang==='en'?'✅ Successfully imported '+records.length+' record(s)!':'✅ 成功匯入 '+records.length+' 筆！','success');
+  burstFireworks(null);
 }
 
 /* ── Supplements ── */
-async function addSupplement(){
+async function addSupplement(srcEl){
   if(!currentChild)return;
   var date=document.getElementById('suppDate').value;
   var type=document.getElementById('suppType').value;
@@ -751,6 +753,7 @@ async function addSupplement(){
     supplements.sort(function(a,b){return b.date.localeCompare(a.date);});
   } catch(e){showToast(t('sSaveFail')+(e.message||e),'error');hideLoading();return;}
   hideLoading();
+  burstFireworks(srcEl);
   document.getElementById('suppName').value='';document.getElementById('suppNote').value='';
   renderSupplements();renderSuppCorrelation();
 }
@@ -1357,56 +1360,69 @@ async function removeShare(shareId){
   });
 })();
 
-/* ══ Ehon Save Animation (Japanese picture-book style) ══ */
+/* ══ Fireworks burst on save — powered by GSAP ══ */
 function burstFireworks(srcEl){
+  if(typeof gsap==='undefined')return;
   var r=srcEl?srcEl.getBoundingClientRect():{left:window.innerWidth/2,top:window.innerHeight/2,width:0,height:0};
   var cx=r.left+r.width/2, cy=r.top+r.height/2;
-  /* Floating star emoji drifting upward */
-  var starGlyphs=['⭐','✨','🌟','💫','⭐','✨','🌟'];
-  for(var i=0;i<14;i++){
-    var el=document.createElement('div');
-    var fsz=(0.9+Math.random()*0.9).toFixed(2);
-    el.style.cssText='position:fixed;pointer-events:none;z-index:3500;font-size:'+fsz+'em;line-height:1;left:'+cx+'px;top:'+cy+'px;transform:translate(-50%,-50%) scale(0.4);opacity:0;';
-    document.body.appendChild(el);
-    el.textContent=starGlyphs[i%starGlyphs.length];
-    var dx=(Math.random()-0.5)*90;
-    var dy=-(55+Math.random()*90);
-    var rot=(Math.random()*50-25).toFixed(0);
-    var anim=el.animate([
-      {transform:'translate(-50%,-50%) scale(0.3) rotate(0deg)',opacity:0},
-      {transform:'translate(calc(-50% + '+dx*0.35+'px),calc(-50% + '+dy*0.4+'px)) scale(1.2) rotate('+(rot/2)+'deg)',opacity:1,offset:0.22},
-      {transform:'translate(calc(-50% + '+dx+'px),calc(-50% + '+dy+'px)) scale(0.6) rotate('+rot+'deg)',opacity:0}
-    ],{duration:1100+Math.random()*500,easing:'ease-out',fill:'forwards',delay:i*35});
-    anim.onfinish=function(){if(this.effect&&this.effect.target)this.effect.target.remove();};
+  var cols=['#FFD166','#FF9FD2','#ADE8FF','#C3FFC7','#FFB3C6','#FFFAAA','#FF7EB3','#A8EDEA'];
+  var glyphs=['⭐','✨','🌟','💫'];
+
+  /* Flash at origin */
+  var flash=document.createElement('div');
+  flash.style.cssText='position:fixed;left:'+cx+'px;top:'+cy+'px;width:10px;height:10px;border-radius:50%;background:#FFD166;pointer-events:none;z-index:3500;transform:translate(-50%,-50%);box-shadow:0 0 18px #FFD166';
+  document.body.appendChild(flash);
+  gsap.to(flash,{duration:0.3,scale:9,opacity:0,ease:'power2.out',onComplete:function(){flash.remove();}});
+
+  /* Burst particles — shoot out in all directions then fall with gravity */
+  var count=32;
+  for(var i=0;i<count;i++){
+    var angle=(i/count)*Math.PI*2;
+    var speed=55+Math.random()*75;
+    var dx=Math.cos(angle)*speed;
+    var dy=Math.sin(angle)*speed;
+    var col=cols[Math.floor(Math.random()*cols.length)];
+    var sz=3+Math.random()*5;
+    var p=document.createElement('div');
+    p.style.cssText='position:fixed;left:'+cx+'px;top:'+cy+'px;width:'+sz+'px;height:'+sz+'px;border-radius:50%;background:'+col+';pointer-events:none;z-index:3499;box-shadow:0 0 '+(sz*2)+'px '+col;
+    document.body.appendChild(p);
+    var delay=Math.random()*0.07;
+    (function(el,ddx,ddy,d){
+      gsap.timeline({delay:d})
+        .to(el,{duration:0.45+Math.random()*0.2,x:ddx,y:ddy,ease:'power2.out'})
+        .to(el,{duration:0.5+Math.random()*0.25,y:'+='+(35+Math.random()*45),opacity:0,ease:'power1.in',onComplete:function(){el.remove();}});
+    })(p,dx,dy,delay);
   }
-  /* Soft bubble rings expanding gently */
-  var ringCols=['rgba(255,210,80,0.72)','rgba(255,160,200,0.60)','rgba(160,200,255,0.55)'];
+
+  /* Star / emoji glyphs drifting upward */
+  for(var g=0;g<8;g++){
+    var em=document.createElement('div');
+    em.textContent=glyphs[g%glyphs.length];
+    var gdx=(Math.random()-0.5)*130;
+    var gdy=-(50+Math.random()*100);
+    em.style.cssText='position:fixed;left:'+cx+'px;top:'+cy+'px;pointer-events:none;z-index:3501;font-size:'+(0.85+Math.random()*0.85)+'em;line-height:1;';
+    document.body.appendChild(em);
+    (function(el,ex,ey,idx){
+      gsap.fromTo(el,
+        {opacity:0,scale:0.3,x:0,y:0,rotation:0},
+        {duration:0.85+Math.random()*0.45,x:ex,y:ey,opacity:1,scale:1,rotation:(Math.random()-0.5)*70,ease:'power2.out',delay:idx*0.045,
+         onComplete:function(){gsap.to(el,{duration:0.35,opacity:0,y:'+=22',ease:'power1.in',onComplete:function(){el.remove();}});}}
+      );
+    })(em,gdx,gdy,g);
+  }
+
+  /* Expanding ring shockwaves */
+  var ringCols=['rgba(255,210,80,0.75)','rgba(255,160,200,0.60)','rgba(160,200,255,0.55)'];
   for(var ri=0;ri<3;ri++){
     var ring=document.createElement('div');
-    var rsz=28+ri*18;
-    ring.style.cssText='position:fixed;left:'+cx+'px;top:'+cy+'px;width:'+rsz+'px;height:'+rsz+'px;border-radius:50%;border:2px solid '+ringCols[ri]+';pointer-events:none;z-index:3498;transform:translate(-50%,-50%) scale(0.2);opacity:0;background:rgba(255,240,190,'+(0.10-ri*0.03)+');';
+    var rsz=22+ri*14;
+    ring.style.cssText='position:fixed;left:'+cx+'px;top:'+cy+'px;width:'+rsz+'px;height:'+rsz+'px;border-radius:50%;border:2px solid '+ringCols[ri]+';pointer-events:none;z-index:3498;transform:translate(-50%,-50%)';
     document.body.appendChild(ring);
-    var ra=ring.animate([
-      {transform:'translate(-50%,-50%) scale(0.2)',opacity:0.85},
-      {transform:'translate(-50%,-50%) scale(2.8)',opacity:0}
-    ],{duration:700+ri*180,easing:'cubic-bezier(0.2,0.8,0.4,1)',fill:'forwards',delay:ri*80});
-    ra.onfinish=function(){if(this.effect&&this.effect.target)this.effect.target.remove();};
-  }
-  /* Pastel glowing dots floating upward */
-  var dotCols=['#FFD166','#FF9FD2','#ADE8FF','#C3FFC7','#FFB3C6','#FFFAAA'];
-  for(var di=0;di<18;di++){
-    var dot=document.createElement('div');
-    var dsz=3.5+Math.random()*5;
-    var dc=dotCols[di%dotCols.length];
-    var ddx=(Math.random()-0.5)*70;
-    var ddy=-(30+Math.random()*75);
-    dot.style.cssText='position:fixed;pointer-events:none;z-index:3499;border-radius:50%;width:'+dsz+'px;height:'+dsz+'px;background:'+dc+';box-shadow:0 0 '+(dsz*2.2)+'px '+dc+',0 0 '+(dsz*4)+'px rgba(255,240,200,0.3);left:'+cx+'px;top:'+cy+'px;transform:translate(-50%,-50%);opacity:0;';
-    document.body.appendChild(dot);
-    var da=dot.animate([
-      {transform:'translate(calc(-50%),calc(-50%)) scale(0.2)',opacity:0},
-      {transform:'translate(calc(-50% + '+ddx*0.3+'px),calc(-50% + '+ddy*0.4+'px)) scale(1.1)',opacity:0.92,offset:0.28},
-      {transform:'translate(calc(-50% + '+ddx+'px),calc(-50% + '+ddy+'px)) scale(0.3)',opacity:0}
-    ],{duration:900+Math.random()*400,easing:'ease-out',fill:'forwards',delay:di*18});
-    da.onfinish=function(){if(this.effect&&this.effect.target)this.effect.target.remove();};
+    (function(el,idx){
+      gsap.fromTo(el,
+        {scale:0.2,opacity:0.9},
+        {duration:0.65+idx*0.15,scale:4+idx,opacity:0,ease:'power1.out',delay:idx*0.09,onComplete:function(){el.remove();}}
+      );
+    })(ring,ri);
   }
 }
