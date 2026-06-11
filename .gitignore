@@ -1,0 +1,15 @@
+# 依賴與鎖檔（執行時走 CDN，node 套件僅供 lint/測試本機用）
+node_modules/
+package-lock.json
+
+# 測試輸出
+test-results/
+playwright-report/
+
+# 本機 Claude 設定（不該進版控）
+.claude/
+
+# 系統/暫存
+.DS_Store
+Thumbs.db
+*.tmp
