@@ -249,7 +249,7 @@ db.auth.onAuthStateChange(async function(event,session){
 });
 
 async function signIn(){
-  await db.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://elenahsieh616.github.io/kids-growup-tracker-fireworks/'}});
+  await db.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});
 }
 async function signOut(){
   if(!confirm('確定要登出嗎？')) return;
@@ -862,45 +862,8 @@ function renderCharts(){
   }
   renderHeightChart();renderWeightChart();
 }
-// WHO 2007 reference: adult height percentiles at 18 years (boys) / 18 years (girls)
-var ADULT_H_REF={
-  boy: {p3:161.5,p15:167.0,p50:176.5,p85:183.5,p97:188.0},
-  girl:{p3:150.0,p15:155.5,p50:163.5,p85:170.0,p97:174.5}
-};
-function getPctScore(am,val,data){
-  var lo=data[0],hi=data[data.length-1];
-  for(var i=0;i<data.length-1;i++){if(data[i][0]<=am&&data[i+1][0]>=am){lo=data[i];hi=data[i+1];break;}}
-  var fr=lo[0]===hi[0]?0:(am-lo[0])/(hi[0]-lo[0]);
-  var p=function(k){return lo[k]+fr*(hi[k]-lo[k]);};
-  var refs=[{pct:3,v:p(1)},{pct:15,v:p(2)},{pct:50,v:p(3)},{pct:85,v:p(4)},{pct:97,v:p(5)}];
-  if(val<=refs[0].v)return 3;if(val>=refs[4].v)return 97;
-  for(var j=0;j<4;j++){if(val>=refs[j].v&&val<=refs[j+1].v){var t=(val-refs[j].v)/(refs[j+1].v-refs[j].v);return refs[j].pct+t*(refs[j+1].pct-refs[j].pct);}}
-  return 50;
-}
-function predictAdultHeight(){
-  if(!currentChild||measurements.length<2)return null;
-  var latest=measurements[0],am=getAgeMonths(latest.date);
-  if(am<6)return null;
-  var whoH=currentChild.gender==='女'?WHO_H_GIRL:WHO_H_BOY;
-  var rawPct=getPctScore(am,latest.height,whoH);
-  var isExtreme=rawPct<=3||rawPct>=97;
-  var pct=Math.max(3,Math.min(97,rawPct));
-  var ref=currentChild.gender==='女'?ADULT_H_REF.girl:ADULT_H_REF.boy;
-  var pcts=[3,15,50,85,97],vals=[ref.p3,ref.p15,ref.p50,ref.p85,ref.p97];
-  var adultH=ref.p50;
-  if(pct<=3)adultH=ref.p3;
-  else if(pct>=97)adultH=ref.p97;
-  else for(var i=0;i<4;i++){if(pct>=pcts[i]&&pct<=pcts[i+1]){var t2=(pct-pcts[i])/(pcts[i+1]-pcts[i]);adultH=vals[i]+t2*(vals[i+1]-vals[i]);break;}}
-  return{cm:Math.round(adultH*10)/10,pct:Math.round(rawPct),isExtreme:isExtreme};
-}
-function calcMidParentalHeight(){
-  if(!currentChild)return null;
-  var ph=getParentHeights(currentChild.id);
-  if(!ph.father||!ph.mother)return null;
-  var avg=(ph.father+ph.mother)/2;
-  var target=currentChild.gender==='女'?35.2+0.76*avg:79.3+0.56*avg;
-  return{target:Math.round(target*10)/10,low:Math.round((target-8.5)*10)/10,high:Math.round((target+8.5)*10)/10};
-}
+/* ── Growth & height prediction logic moved to growth.js ──
+   ADULT_H_REF, getPctScore, predictAdultHeight, calcMidParentalHeight */
 async function generateReport(){
   if(!currentChild||measurements.length===0){
     showToast(currentLang==='en'?'Please add measurement records first.':'請先新增量測紀錄。','warning');
@@ -1136,7 +1099,7 @@ function fmtAgeFull(birthdayStr,toDateStr){
   return(y?y+'Y':'')+(mo||y?mo+'M':'')+(da+'D');
 }
 function fmtDate(s){var p=s.split('-');return p[0]+'/'+p[1]+'/'+p[2];}
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function getPctLabel(am,val,data){
   var lo=data[0],hi=data[data.length-1];
   for(var i=0;i<data.length-1;i++){if(data[i][0]<=am&&data[i+1][0]>=am){lo=data[i];hi=data[i+1];break;}}

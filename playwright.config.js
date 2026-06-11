@@ -13,4 +13,10 @@ module.exports = defineConfig({
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile', use: { ...devices['Pixel 5'] } },
   ],
+  webServer: {
+    command: 'npx -y http-server . -p 8080 -c-1 --silent',
+    url: 'http://localhost:8080',
+    reuseExistingServer: !process.env.CI,
+    timeout: 60000,
+  },
 });

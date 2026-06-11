@@ -57,7 +57,7 @@ tests.html              # 核心演算法單元測試頁
 package.json            # npm scripts（lint）
 .github/
   workflows/
-    ci.yml              # GitHub Actions CI（自動 lint）
+    ci.yml              # GitHub Actions CI（lint + Playwright e2e）
 data/
   who.js                # WHO 生長標準資料（0–120 個月，男女各組）
 images/
@@ -67,7 +67,7 @@ images/
   header-bg.jpg         # App 標題區背景
   content-bg.jpg        # 報告內容背景
 GrowTracker_PRD.md      # 產品需求文件（Markdown）
-Code.gs                 # Google Apps Script（輔助工具）
+supabase_rls.sql        # Supabase RLS 安全政策（貼進 SQL Editor 執行）
 ```
 
 ---
