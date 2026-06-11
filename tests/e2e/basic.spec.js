@@ -7,15 +7,15 @@ test.describe('Baby Growth Tracker — smoke tests', () => {
 
   test('login screen is visible on first load', async ({ page }) => {
     await expect(page.locator('#loginScreen')).toBeVisible();
-    await expect(page.locator('.app-title')).toContainText('寶貝成長紀錄');
+    await expect(page.locator('#loginScreen .app-title')).toContainText('寶貝成長紀錄');
   });
 
   test('language toggle switches between zh and en', async ({ page }) => {
-    await expect(page.locator('.app-title')).toContainText('寶貝成長紀錄');
+    await expect(page.locator('#loginScreen .app-title')).toContainText('寶貝成長紀錄');
     await page.locator('#loginLangEn').click();
-    await expect(page.locator('.app-title')).toContainText('Baby Growth Tracker');
+    await expect(page.locator('#loginScreen .app-title')).toContainText('Baby Growth Tracker');
     await page.locator('#loginLangZh').click();
-    await expect(page.locator('.app-title')).toContainText('寶貝成長紀錄');
+    await expect(page.locator('#loginScreen .app-title')).toContainText('寶貝成長紀錄');
   });
 
   test('page title is correct', async ({ page }) => {
