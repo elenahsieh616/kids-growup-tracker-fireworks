@@ -299,7 +299,7 @@ function buildReportHTML(hImg,wImg){
   var loadingLabel=JSON.stringify('⏳ '+(isEn?'Loading...':'載入中...'));
   var baseHref=window.location.href.replace(/[^/]*$/,'');
   var contentBgUrl=baseHref+'images/content-bg.jpg';
-  var desktopBgUrl=baseHref+'images/desktop-bg.png';
+  var desktopBgUrl=baseHref+'images/desktop-bg.webp';
   var scRowsHTML=_rptScRows(supplements,sorted,isEn);
   /* ── assemble report HTML from sections ── */
   var headHTML=
