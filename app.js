@@ -897,7 +897,8 @@ function calcMidParentalHeight(){
   if(!currentChild)return null;
   var ph=getParentHeights(currentChild.id);
   if(!ph.father||!ph.mother)return null;
-  var target=currentChild.gender==='女'?(ph.father+ph.mother-13)/2:(ph.father+ph.mother+13)/2;
+  var avg=(ph.father+ph.mother)/2;
+  var target=currentChild.gender==='女'?35.2+0.76*avg:79.3+0.56*avg;
   return{target:Math.round(target*10)/10,low:Math.round((target-8.5)*10)/10,high:Math.round((target+8.5)*10)/10};
 }
 async function generateReport(){

@@ -102,7 +102,8 @@ function predictAdultHeightFn(gender,ageMonths,heightCm){
 
 function calcMidParentalHeightFn(gender,fatherH,motherH){
   if(!fatherH||!motherH)return null;
-  var target=gender==='女'?(fatherH+motherH-13)/2:(fatherH+motherH+13)/2;
+  var avg=(fatherH+motherH)/2;
+  var target=gender==='女'?35.2+0.76*avg:79.3+0.56*avg;
   return{target:Math.round(target*10)/10,low:Math.round((target-8.5)*10)/10,high:Math.round((target+8.5)*10)/10};
 }
 
@@ -238,13 +239,13 @@ test('returns pct as integer', function(){
 });
 
 suite('calcMidParentalHeight — genetic height prediction');
-test('boy target = (fatherH + motherH + 13) / 2', function(){
+test('boy target = 79.3 + 0.56 × parentAvg (Taiwan)', function(){
   var r=calcMidParentalHeightFn('男',175,162);
-  expect(r.target).toBe((175+162+13)/2);
+  expect(r.target).toBe(Math.round((79.3+0.56*((175+162)/2))*10)/10);
 });
-test('girl target = (fatherH + motherH - 13) / 2', function(){
+test('girl target = 35.2 + 0.76 × parentAvg (Taiwan)', function(){
   var r=calcMidParentalHeightFn('女',175,162);
-  expect(r.target).toBe((175+162-13)/2);
+  expect(r.target).toBe(Math.round((35.2+0.76*((175+162)/2))*10)/10);
 });
 test('range is ±8.5 cm', function(){
   var r=calcMidParentalHeightFn('男',175,162);
@@ -254,9 +255,9 @@ test('returns null when either height missing', function(){
   expect(calcMidParentalHeightFn('男',null,162)).toBe(null);
   expect(calcMidParentalHeightFn('男',175,null)).toBe(null);
 });
-test('realistic boy parents (175+162): target = 175', function(){
+test('realistic boy parents (175+162): target = 173.7', function(){
   var r=calcMidParentalHeightFn('男',175,162);
-  expect(r.target).toBe(175);
+  expect(r.target).toBe(173.7);
 });
 test('gap detection: trend vs genetic differ by ≥10cm is flaggable', function(){
   var trend=predictAdultHeightFn('男',24,82.3);   // P3 boy → 161.5
@@ -397,9 +398,9 @@ suite('calcMidParentalHeight — extended edge cases');
 test('both heights zero → null', function(){
   expect(calcMidParentalHeightFn('男',0,0)).toBe(null);
 });
-test('very tall parents boy (190+175) → target > 185', function(){
+test('very tall parents boy (190+175) → target > 180', function(){
   var r=calcMidParentalHeightFn('男',190,175);
-  expect(r.target).toBeGreaterThan(185); return 'target='+r.target;
+  expect(r.target).toBeGreaterThan(180); return 'target='+r.target;
 });
 test('very short parents girl (155+142) → target < 150', function(){
   var r=calcMidParentalHeightFn('女',155,142);
