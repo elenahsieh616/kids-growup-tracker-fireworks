@@ -61,11 +61,17 @@ function getPhotoPath(urlOrPath){
   if(idx!==-1)return urlOrPath.slice(idx+marker.length).split('?')[0];
   return urlOrPath.split('?')[0];
 }
+var _signedUrlCache={}; // path -> {url, exp}; signed URLs valid 1hr, cached 50min
 async function getSignedPhotoUrl(path){
   if(!path)return null;
+  var now=Date.now(),hit=_signedUrlCache[path];
+  if(hit&&hit.exp>now)return hit.url;
   var r=await db.storage.from('child-photos').createSignedUrl(path,3600);
-  return(r.error||!r.data)?null:r.data.signedUrl;
+  if(r.error||!r.data)return null;
+  _signedUrlCache[path]={url:r.data.signedUrl,exp:now+3000000}; // 50min
+  return r.data.signedUrl;
 }
+function invalidateSignedUrl(path){if(path)delete _signedUrlCache[path];}
 
 /* ── State ── */
 var currentUser=null;
@@ -414,6 +420,7 @@ async function uploadPhoto(file){
   if(up.error){throw up.error;}
   await db.from('children').update({photo_url:path}).eq('id',currentChild.id);
   currentChild.photo_url=path;
+  invalidateSignedUrl(path); // 換新照片 → 丟掉舊快取，拿到新 token 才會更新顯示
   var signedUrl=await getSignedPhotoUrl(path);
   if(signedUrl)showPhoto(signedUrl);
 }
