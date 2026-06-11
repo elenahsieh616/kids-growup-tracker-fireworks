@@ -99,7 +99,38 @@ create policy supplements_all on public.supplements
   with check (public.has_child_access(child_id));
 
 -- ════════════════════════════════════════════════════════════════
--- 儲存空間（child-photos bucket）的存取建議在後台
--- Storage → Policies 另外設定：路徑為 {user_id}/{child_id}.jpg，
--- 限定 (storage.foldername(name))[1] = auth.uid()::text。
+-- 儲存空間 child-photos（照片桶）—— defense-in-depth
+-- ────────────────────────────────────────────────────────────────
+-- 現況：桶已是 private（外部/匿名無法存取，已實測）。
+-- 以下政策再多一層：限制「已登入使用者」只能存取自己 + 被共享孩子的照片，
+-- 避免有人猜路徑直接讀別人的照片。
+-- 照片路徑格式：{user_id}/{child_id}.jpg
+--
+-- 前置：確認桶存在且為 private（後台 Storage → child-photos → 非 public）。
 -- ════════════════════════════════════════════════════════════════
+
+-- 擁有者：對自己資料夾（{auth.uid()}/...）可讀可寫
+drop policy if exists child_photos_owner_all on storage.objects;
+create policy child_photos_owner_all on storage.objects
+  for all to authenticated
+  using (
+    bucket_id = 'child-photos'
+    and (storage.foldername(name))[1] = (select auth.uid()::text)
+  )
+  with check (
+    bucket_id = 'child-photos'
+    and (storage.foldername(name))[1] = (select auth.uid()::text)
+  );
+
+-- 被共享者：只能「讀」被分享孩子的照片（檔名去掉 .jpg = child_id）
+drop policy if exists child_photos_shared_read on storage.objects;
+create policy child_photos_shared_read on storage.objects
+  for select to authenticated
+  using (
+    bucket_id = 'child-photos'
+    and exists (
+      select 1 from public.child_shares s
+      where s.child_id::text = regexp_replace(storage.filename(name), '\.jpg$', '')
+        and lower(s.shared_with_email) = lower(auth.jwt() ->> 'email')
+    )
+  );
