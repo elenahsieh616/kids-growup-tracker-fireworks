@@ -26,33 +26,19 @@
 <h1>🧪 Baby Growth Tracker — Unit Tests</h1>
 <div class="sub">Core algorithm tests: getMinGrowth · fmtAgeFull · getPctScore · predictAdultHeight · calcMidParentalHeight</div>
 <div id="results"></div>
+<!-- 載入真正的程式碼（單一來源），測試直接驗證實際使用的函式 -->
+<script src="data/who.js"></script>
+<script src="growth.js"></script>
 <script>
 
-/* ── Paste core functions (no DOM/Supabase deps) ── */
+/* ── 來自實際程式碼（growth.js + who.js）的函式：別名給測試用 ──
+   WHO_H_BOY/GIRL ← who.js   ADULT_H_REF / getPctScore ← growth.js
+   純函式 predictAdultHeightFromValues / calcMidParentalHeightFromValues ← growth.js
+   不再複製公式，改公式只要動 growth.js 一處，測試自動跟著驗證。 */
+var predictAdultHeightFn=predictAdultHeightFromValues;
+var calcMidParentalHeightFn=calcMidParentalHeightFromValues;
 
-var WHO_H_BOY=[
-  [0,46.3,48.2,49.9,51.8,53.4],[1,50.8,53.0,54.7,56.5,58.1],[2,54.4,56.5,58.4,60.2,62.0],
-  [3,57.3,59.6,61.4,63.2,65.0],[6,63.3,65.7,67.6,69.5,71.6],[12,71.0,73.5,75.7,77.9,80.2],
-  [24,82.3,85.2,87.8,90.5,93.4],[36,91.1,94.6,97.6,100.9,104.3],[48,98.4,102.7,106.4,110.4,114.6],
-  [60,104.9,109.9,114.3,118.9,123.8],[72,110.2,115.4,120.2,125.2,130.3],[84,115.3,121.0,125.7,131.3,137.0],
-  [90,117.7,123.6,128.4,133.8,139.7],[96,120.1,126.0,131.0,136.3,142.3],
-  [102,122.3,128.5,133.6,139.1,145.3],[108,124.5,130.9,136.2,141.9,148.3],
-  [114,126.5,133.2,138.7,144.7,151.3],[120,128.5,135.5,141.2,147.4,154.3]
-];
-var WHO_H_GIRL=[
-  [0,45.6,47.3,49.1,50.9,52.5],[1,49.8,51.7,53.5,55.3,56.9],[2,53.0,55.0,56.8,58.6,60.3],
-  [3,55.6,57.7,59.5,61.4,63.2],[6,61.2,63.3,65.3,67.3,69.2],[12,68.9,71.3,73.7,76.0,78.4],
-  [24,80.8,83.5,86.0,88.7,91.2],[36,88.6,91.4,94.1,97.0,99.9],[48,95.5,98.7,101.6,104.7,107.7],
-  [60,101.5,104.9,108.0,111.2,114.4],[72,107.0,110.5,113.8,117.1,120.4],[84,112.2,115.8,119.2,122.7,126.2],
-  [90,115.8,121.0,126.4,132.0,137.6],[96,118.1,123.5,129.0,134.7,140.4],
-  [102,120.2,125.9,131.6,137.6,143.5],[108,122.2,128.2,134.2,140.4,146.5],
-  [114,124.2,130.5,136.8,143.3,149.5],[120,126.2,132.8,139.3,146.1,152.5]
-];
-var ADULT_H_REF={
-  boy:{p3:161.5,p15:167.0,p50:176.5,p85:183.5,p97:188.0},
-  girl:{p3:150.0,p15:155.5,p50:163.5,p85:170.0,p97:174.5}
-};
-
+/* ── 仍為測試本地副本（這些定義在 app.js，含 DOM/Supabase 依賴，無法在此載入）── */
 function getMinGrowth(m){
   if(m<12)return{min:20,max:40};
   if(m<24)return{min:9,max:15};
@@ -73,38 +59,6 @@ function getAgeMonths(birthdayStr,dateStr){
   var m=(d.getFullYear()-b.getFullYear())*12+(d.getMonth()-b.getMonth());
   if(d.getDate()<b.getDate())m--;
   return Math.max(0,m);
-}
-
-function getPctScore(am,val,data){
-  var lo=data[0],hi=data[data.length-1];
-  for(var i=0;i<data.length-1;i++){if(data[i][0]<=am&&data[i+1][0]>=am){lo=data[i];hi=data[i+1];break;}}
-  var fr=lo[0]===hi[0]?0:(am-lo[0])/(hi[0]-lo[0]);
-  var p=function(k){return lo[k]+fr*(hi[k]-lo[k]);};
-  var refs=[{pct:3,v:p(1)},{pct:15,v:p(2)},{pct:50,v:p(3)},{pct:85,v:p(4)},{pct:97,v:p(5)}];
-  if(val<=refs[0].v)return 3;if(val>=refs[4].v)return 97;
-  for(var j=0;j<4;j++){if(val>=refs[j].v&&val<=refs[j+1].v){var t=(val-refs[j].v)/(refs[j+1].v-refs[j].v);return refs[j].pct+t*(refs[j+1].pct-refs[j].pct);}}
-  return 50;
-}
-
-function predictAdultHeightFn(gender,ageMonths,heightCm){
-  var whoH=gender==='女'?WHO_H_GIRL:WHO_H_BOY;
-  var rawPct=getPctScore(ageMonths,heightCm,whoH);
-  var isExtreme=rawPct<=3||rawPct>=97;
-  var pct=Math.max(3,Math.min(97,rawPct));
-  var ref=gender==='女'?ADULT_H_REF.girl:ADULT_H_REF.boy;
-  var pcts=[3,15,50,85,97],vals=[ref.p3,ref.p15,ref.p50,ref.p85,ref.p97];
-  var adultH=ref.p50;
-  if(pct<=3)adultH=ref.p3;
-  else if(pct>=97)adultH=ref.p97;
-  else for(var i=0;i<4;i++){if(pct>=pcts[i]&&pct<=pcts[i+1]){var t=(pct-pcts[i])/(pcts[i+1]-pcts[i]);adultH=vals[i]+t*(vals[i+1]-vals[i]);break;}}
-  return{cm:Math.round(adultH*10)/10,pct:Math.round(rawPct),isExtreme:isExtreme};
-}
-
-function calcMidParentalHeightFn(gender,fatherH,motherH){
-  if(!fatherH||!motherH)return null;
-  var avg=(fatherH+motherH)/2;
-  var target=gender==='女'?35.2+0.76*avg:79.3+0.56*avg;
-  return{target:Math.round(target*10)/10,low:Math.round((target-8.5)*10)/10,high:Math.round((target+8.5)*10)/10};
 }
 
 /* ── Test Runner ── */
@@ -154,8 +108,9 @@ test('exactly 2 years = 2Y0M0D', function(){expect(fmtAgeFull('2022-01-01','2024
 test('2 years 3 months 15 days', function(){expect(fmtAgeFull('2020-01-01','2022-04-16')).toBe('2Y3M15D');});
 test('under 1 year = 0Y omitted', function(){expect(fmtAgeFull('2023-06-01','2023-09-15')).toContain('M');});
 test('month rollover handled correctly', function(){
+  // 3/31 → 4/30 = 30 天大（0 個月）；驗證借位後得 30D 而非負數
   var r=fmtAgeFull('2021-03-31','2021-04-30');
-  expect(r).toContain('M');
+  expect(r).toBe('30D');
 });
 test('same day = 0D', function(){
   var r=fmtAgeFull('2020-05-15','2020-05-15');
@@ -190,7 +145,7 @@ test('above P97 clamps to 97', function(){
   expect(pct).toBe(97);
 });
 test('girl 12m P50 height returns ~50', function(){
-  var pct=getPctScore(12,73.7,WHO_H_GIRL);
+  var pct=getPctScore(12,74.0,WHO_H_GIRL);
   expect(Math.abs(pct-50)).toBeLessThan(2);
 });
 test('interpolates correctly between months', function(){
@@ -365,13 +320,14 @@ test('exact P15 boy height at 24m (85.2 cm) → ~15th pct', function(){
 });
 
 suite('predictAdultHeight — girl extremes & rounding');
-test('girl P3 (24m, 80.8 cm) → 150.0 cm, not extreme', function(){
-  var r=predictAdultHeightFn('女',24,80.8);
-  expect(r.cm).toBe(150.0); expect(r.isExtreme).toBeFalse();
+test('girl at P3 (24m, 80.0 cm) → 150.0 cm, flagged extreme', function(){
+  // 剛好落在 P3：cm 對應 150.0，且 pct<=3 依設計標記為 extreme
+  var r=predictAdultHeightFn('女',24,80.0);
+  expect(r.cm).toBe(150.0); expect(r.isExtreme).toBeTrue();
   return r.cm+' cm';
 });
-test('girl P97 (24m, 91.2 cm) → 174.5 cm', function(){
-  var r=predictAdultHeightFn('女',24,91.2);
+test('girl P97 (24m, 92.9 cm) → 174.5 cm', function(){
+  var r=predictAdultHeightFn('女',24,92.9);
   expect(r.cm).toBe(174.5); return r.cm+' cm';
 });
 test('girl below P3 (24m, 70 cm) → isExtreme=true', function(){
@@ -389,8 +345,8 @@ test('predicted cm rounds to at most 1 decimal place', function(){
   if(dot>=0&&str.length-dot-1>1)throw new Error('More than 1 dp: '+str);
   return str+' cm';
 });
-test('girl P50 (36m, 94.1 cm) → near 163.5 cm adult', function(){
-  var r=predictAdultHeightFn('女',36,94.1);
+test('girl P50 (36m, 96.4 cm) → near 163.5 cm adult', function(){
+  var r=predictAdultHeightFn('女',36,96.4);
   expect(Math.abs(r.cm-163.5)).toBeLessThan(5); return r.cm+' cm';
 });
 

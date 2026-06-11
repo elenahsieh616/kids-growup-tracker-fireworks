@@ -725,11 +725,18 @@ function removeBatchRow(btn){
 }
 async function importBatch(){
   if(!currentChild)return;
-  var records=[];
-  document.querySelectorAll('.batch-row').forEach(function(row){
-    var d=row.querySelector('.b-date').value,h=parseFloat(row.querySelector('.b-height').value),w=parseFloat(row.querySelector('.b-weight').value),n=row.querySelector('.b-note').value.trim();
-    if(d&&!isNaN(h)&&!isNaN(w))records.push({date:d,height:h,weight:w,note:n||t('batchSource')});
+  var records=[],bad=null;
+  document.querySelectorAll('.batch-row').forEach(function(row,i){
+    if(bad)return;
+    var d=row.querySelector('.b-date').value,hs=row.querySelector('.b-height').value.trim(),ws=row.querySelector('.b-weight').value.trim(),n=row.querySelector('.b-note').value.trim();
+    if(!d&&!hs&&!ws)return; // 整列空白 → 略過
+    var h=parseFloat(hs),w=parseFloat(ws);
+    if(!d||isNaN(h)||isNaN(w)){bad={row:i+1,msg:t('batchRequire')};return;}
+    if(h<40||h>200){bad={row:i+1,msg:t('mHeightRange')};return;}
+    if(w<2||w>100){bad={row:i+1,msg:t('mWeightRange')};return;}
+    records.push({date:d,height:h,weight:w,note:n||t('batchSource')});
   });
+  if(bad){showToast((currentLang==='en'?'Row '+bad.row+': ':'第 '+bad.row+' 列：')+bad.msg,'error');return;}
   if(!records.length){showToast(t('batchRequire'),'warning');return;}
   if(!confirm(currentLang==='en'?'Import '+records.length+' record(s)?':'確定要匯入 '+records.length+' 筆資料嗎？'))return;
   showLoading();

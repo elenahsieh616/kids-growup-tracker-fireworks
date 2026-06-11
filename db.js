@@ -6,9 +6,13 @@ var db=supabase.createClient(S_URL,S_KEY);
 
 /* ── DB Helpers ── */
 async function db_getChildren(){
-  var r1=await db.from('children').select('*').eq('user_id',currentUser.id).order('created_at');
+  // 兩個查詢互相獨立 → 並行，登入後清單載入更快
+  var results=await Promise.all([
+    db.from('children').select('*').eq('user_id',currentUser.id).order('created_at'),
+    db.from('child_shares').select('id,child_id').eq('shared_with_email',currentUser.email)
+  ]);
+  var r1=results[0],r2=results[1];
   var own=(r1.data||[]).map(function(c){return Object.assign({},c,{_isOwner:true});});
-  var r2=await db.from('child_shares').select('id,child_id').eq('shared_with_email',currentUser.email);
   var shares=r2.data||[];
   var sharedChildren=[];
   if(shares.length){
